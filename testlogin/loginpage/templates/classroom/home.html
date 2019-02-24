@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Title</h2>
+  <p class="lead">
+    If you already have an account, go ahead and <a href="{% url 'login' %}">log in</a>. If you are new, get started
+    by creating a <a href="{% url 'student_signup' %}">student account</a> or a <a href="{% url 'professor_signup' %}">professor account</a>.
+  </p>
+  <hr>
+  <h3>About</h3>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae corporis officia possimus? Reiciendis ipsam quos nostrum delectus, veritatis hic tenetur, vero blanditiis optio dolore perferendis natus consequuntur dignissimos atque expedita ut quo nobis explicabo consequatur animi ratione quaerat ad qui. Delectus velit excepturi quasi similique voluptates cupiditate aliquam accusamus consectetur expedita quidem doloremque praesentium, fugit odit deleniti deserunt repellendus illo voluptatum dolore neque ipsa a tempora dignissimos animi consequatur nam! Impedit repellendus, non natus vel dolore nobis consequatur similique excepturi!
+  </p>
+{% endblock %}
