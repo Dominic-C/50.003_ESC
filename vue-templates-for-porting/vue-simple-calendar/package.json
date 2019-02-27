@@ -1,0 +1,72 @@
+{
+	"name": "vue-simple-calendar",
+	"version": "4.2.1",
+	"description": "Simple calendar event control",
+	"author": "richardtallent <richard@tallent.us>",
+	"license": "MIT",
+	"main": "dist/CalendarView.umd.js",
+	"repository": "https://github.com/richardtallent/vue-simple-calendar",
+	"private": false,
+	"scripts": {
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build",
+		"bundle": "vue-cli-service build --target lib --name CalendarView ./src/components/bundle.js",
+		"lint": "vue-cli-service lint"
+	},
+	"dependencies": {
+		"vue": "^2.5.22"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "^3.3.0",
+		"@vue/cli-plugin-eslint": "^3.3.0",
+		"@vue/cli-service": "^3.3.1",
+		"@vue/eslint-config-prettier": "^4.0.1",
+		"eslint": "^5.12.1",
+		"node-sass": "^4.11.0",
+		"sass-loader": "^7.1.0",
+		"vue-template-compiler": "^2.5.22"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/recommended",
+			"@vue/prettier"
+		],
+		"rules": {
+			"vue/html-indent": [
+				"warn",
+				"tab"
+			],
+			"no-console": "warn",
+			"vue/max-attributes-per-line": "off"
+		},
+		"parserOptions": {
+			"parser": "babel-eslint"
+		}
+	},
+	"postcss": {
+		"plugins": {
+			"autoprefixer": {}
+		}
+	},
+	"browserslist": [
+		"> 1%",
+		"ie >= 11"
+	],
+	"prettier": {
+		"useTabs": true,
+		"semi": false,
+		"singleQuote": false,
+		"bracketSpacing": true,
+		"trailingComma": "es5"
+	},
+	"stylelint": {
+		"extends": "stylelint-config-standard",
+		"rules": {
+			"indentation": "tab"
+		}
+	}
+}
