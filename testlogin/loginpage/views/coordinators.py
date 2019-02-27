@@ -10,28 +10,28 @@ from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, TemplateView)
 
-from ..decorators import professor_required
-from ..forms import TeacherSignUpForm
+from ..decorators import coordinator_required
+from ..forms import CoordinatorSignUpForm
 from ..models import User
 
 
-class TeacherSignUpView(CreateView):
+class CoordinatorSignUpView(CreateView):
     model = User
-    form_class = TeacherSignUpForm
+    form_class = CoordinatorSignUpForm
     template_name = 'registration/signup_form.html'
 
     def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'teacher'
+        kwargs['user_type'] = 'coordinator'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('teachers:professor_main')
+        return redirect('coordinators:coordinator_main')
 
 
-@method_decorator([login_required, professor_required], name='dispatch')
-class ProfessorMainView(TemplateView):
-    template_name = 'classroom/teachers/professor_main.html'
+@method_decorator([login_required, coordinator_required], name='dispatch')
+class CoordinatorMainView(TemplateView):
+    template_name = 'classroom/coordinators/coordinator_main.html'
 
 

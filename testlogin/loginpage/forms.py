@@ -30,3 +30,13 @@ class StudentSignUpForm(UserCreationForm):
         student = Student.objects.create(user=user)
         return user
 
+class CoordinatorSignUpForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.user_type = 3
+        if commit:
+            user.save()
+        return user
