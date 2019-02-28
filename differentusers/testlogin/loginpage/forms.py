@@ -5,6 +5,15 @@ from django.forms.utils import ValidationError
 
 from loginpage.models import Student, User
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }    
+
+
 
 class ProfessorSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -12,7 +21,7 @@ class ProfessorSignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.user_type = 1
+        user.user_type = usertypes['professor']
         if commit:
             user.save()
         return user
@@ -25,7 +34,7 @@ class StudentSignUpForm(UserCreationForm):
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
-        user.user_type = 5
+        user.user_type = usertypes['student']
         user.save()
         student = Student.objects.create(user=user)
         return user
@@ -36,7 +45,7 @@ class CoordinatorSignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.user_type = 3
+        user.user_type = usertypes['coursecoordinators']
         if commit:
             user.save()
         return user
