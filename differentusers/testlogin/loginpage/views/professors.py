@@ -8,11 +8,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView, TemplateView)
+                                  UpdateView, TemplateView, FormView)
 
 from ..decorators import professor_required
-from ..forms import ProfessorSignUpForm
-from ..models import User
+from ..forms import ProfessorSignUpForm, SubmitCourseDetails
+from ..models import User, Preferences
 
 
 class ProfessorSignUpView(CreateView):
@@ -34,4 +34,25 @@ class ProfessorSignUpView(CreateView):
 class ProfessorMainView(TemplateView):
     template_name = 'classroom/professors/professor_main.html'
 
+
+
+@method_decorator([login_required, professor_required], name='dispatch')
+class SubmitCourseDetailsView(CreateView):
+    model = Preferences
+    fields = ['subject_code', 'subject_name', 'cohort_size', 'cohort_num']
+    template_name = 'coursedetails/submitdetails.html'
+
+    def form_valid(self, form):
+        details = form.save(commit=False)
+        details.first_name = self.request.user.first_name
+        details.last_name = self.request.user.last_name
+        details.user_type = self.request.user.user_type
+        details.save()
+        return redirect('professors:details')
+    
+
+@method_decorator([login_required, professor_required], name='dispatch')
+class DetailsView(ListView):
+    template_name = 'coursedetails/detailslist.html'
+    queryset = Preferences.objects.all()
 

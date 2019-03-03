@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.forms.utils import ValidationError
 
-from loginpage.models import Student, User
+from loginpage.models import Student, User, Preferences
 
 usertypes = { 
     'professor': 1, 
@@ -16,18 +16,27 @@ usertypes = {
 
 
 class ProfessorSignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=50, required=True)
+    last_name = forms.CharField(max_length=50, required=True)
+
     class Meta(UserCreationForm.Meta):
         model = User
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.user_type = usertypes['professor']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
         if commit:
             user.save()
         return user
 
 
 class StudentSignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=50, required=True)
+    last_name = forms.CharField(max_length=50, required=True)
+
+
     class Meta(UserCreationForm.Meta):
         model = User
 
@@ -35,17 +44,30 @@ class StudentSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.user_type = usertypes['student']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
         user.save()
         student = Student.objects.create(user=user)
         return user
 
 class CoordinatorSignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=50, required=True)
+    last_name = forms.CharField(max_length=50, required=True)
+
     class Meta(UserCreationForm.Meta):
         model = User
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
         user.user_type = usertypes['coursecoordinators']
         if commit:
             user.save()
         return user
+
+class SubmitCourseDetails(forms.ModelForm):
+
+    class Meta:
+        model = Preferences
+        fields = ['subject_code', 'subject_name', 'cohort_size', 'cohort_num']

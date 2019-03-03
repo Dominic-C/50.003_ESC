@@ -1,18 +1,12 @@
-.logo {
-  font-family: cursive;
-}
-
 .logo a {
   color: #212529;
   text-decoration: none;
+  font-family: 'Pacifico', cursive;
+  line-height: 1.2
 }
 
-footer {
-  font-size: .9rem;
-}
-
-footer a {
-  color: #212529;
+.logo{
+  font-family: 'Pacifico', cursive;
 }
 
 .list-group-formset label {
