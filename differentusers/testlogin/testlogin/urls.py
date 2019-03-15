@@ -21,7 +21,7 @@ from django.conf.urls import include
 from loginpage.views import classroom, students, professors, coordinators
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', include('loginpage.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/signup/', classroom.SignUpView.as_view(), name='signup'),
