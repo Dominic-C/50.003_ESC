@@ -24,6 +24,7 @@ class Student(models.Model):
 
 
 class Preferences(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='userpref')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=5)

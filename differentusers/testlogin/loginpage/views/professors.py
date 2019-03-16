@@ -47,6 +47,7 @@ class SubmitCourseDetailsView(CreateView):
         details.first_name = self.request.user.first_name
         details.last_name = self.request.user.last_name
         details.user_type = self.request.user.user_type
+        details.created_by = self.request.user
         details.save()
         return redirect('professors:details')
     
@@ -54,5 +55,10 @@ class SubmitCourseDetailsView(CreateView):
 @method_decorator([login_required, professor_required], name='dispatch')
 class DetailsView(ListView):
     template_name = 'coursedetails/detailslist.html'
-    queryset = Preferences.objects.all()
+    # queryset = Preferences.objects.all()
+
+    def get_queryset(self):
+        # returns Preferences submited by the current User
+        return Preferences.objects.filter(created_by=self.request.user)
+
 
