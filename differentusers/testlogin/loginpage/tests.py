@@ -37,11 +37,40 @@ class StudentModelTest(TestCase):
     def test_student_str(self):
     	self.assertEqual(str(self.student), "barry")
 
-# class PreferencesFormTest(TestCase):
-#     def test_preferences_form(self):
-#         form = RenewBookForm()
-#         self.assertTrue(form.fields['renewal_date'].label == None or form.fields['renewal_date'].label == 'renewal date')
+class PreferencesFormTest(TestCase):
+    def test_preferences_form_label(self):
+        form = SubmitCourseDetails()
+        self.assertEqual(form.fields['subject_code'].label, "Subject code")
+        self.assertEqual(form.fields['subject_name'].label, "Subject name")
+        self.assertEqual(form.fields['cohort_size'].label, "Cohort size")
+        self.assertEqual(form.fields['cohort_num'].label, "Cohort num")
+        
+    
+    def test_preferences_form_empty_cohortnum_field(self):
+    	form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
+    		'cohort_size': 50}) 
+    	self.assertFalse(form.is_valid())
 
-#     def test_renew_form_date_field_help_text(self):
-#         form = RenewBookForm()
-#         self.assertEqual(form.fields['renewal_date'].help_text, 'Enter a date between now and 4 weeks (default 3).')
+    def test_preferences_form_empty_cohortsize_field(self):
+    	form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
+    		'cohort_num': 10}) 
+    	self.assertFalse(form.is_valid())
+
+    def test_preferences_form_empty_subjectcode_field(self):
+    	form = SubmitCourseDetails(data={'subject_name' : "CSE", 'cohort_num': 10,
+    		'cohort_size': 50}) 
+    	self.assertFalse(form.is_valid())
+
+    def test_preferences_form_empty_subjectname_field(self):
+    	form = SubmitCourseDetails(data={'subject_code': "50.005",'cohort_size': 50 ,
+    		'cohort_num': 10}) 
+    	self.assertFalse(form.is_valid())
+
+    def test_preferences_form_valid(self):
+    	user = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
+        	username="bob", password="sutd1234")
+    	form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
+    		'cohort_size': 50, 'cohort_num': 9, 'created_by': user, 'first_name':user.first_name,
+    		'last_name': user.last_name, 'user_type':user.user_type}) 
+
+    	self.assertTrue(form.is_valid())
