@@ -78,3 +78,7 @@ class DetailsEditView(UpdateView):
         details.created_by = self.request.user
         details.save()
         return redirect('professors:details')
+
+    def get_queryset(self):
+        # only allow current User to edit the details he has submitted
+        return Preferences.objects.filter(created_by=self.request.user)
