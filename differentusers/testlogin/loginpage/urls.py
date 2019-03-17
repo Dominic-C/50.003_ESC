@@ -12,7 +12,8 @@ urlpatterns = [
     path('professors/', include(([
         path('', professors.ProfessorMainView.as_view(), name='professor_main'),
         path('submitdetails', professors.SubmitCourseDetailsView.as_view(), name='submitdetails'),
-        path('details', professors.DetailsView.as_view(), name='details'),
+        path('details', professors.DetailsListView.as_view(), name='details'),
+        path('details/edit/<int:pk>', professors.DetailsEditView.as_view(), name='editdetails'),
 
     ], 'classroom'), namespace='professors')),
 

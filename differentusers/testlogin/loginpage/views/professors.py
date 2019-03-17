@@ -11,7 +11,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, TemplateView, FormView)
 
 from ..decorators import professor_required
-from ..forms import ProfessorSignUpForm, SubmitCourseDetails
+from ..forms import ProfessorSignUpForm, SubmitCourseDetails, SubmitCourseDetails
 from ..models import User, Preferences
 
 
@@ -53,7 +53,7 @@ class SubmitCourseDetailsView(CreateView):
     
 
 @method_decorator([login_required, professor_required], name='dispatch')
-class DetailsView(ListView):
+class DetailsListView(ListView):
     template_name = 'coursedetails/detailslist.html'
     # queryset = Preferences.objects.all()
 
@@ -62,3 +62,19 @@ class DetailsView(ListView):
         return Preferences.objects.filter(created_by=self.request.user)
 
 
+
+@method_decorator([login_required, professor_required], name='dispatch')
+class DetailsEditView(UpdateView):
+    model = Preferences
+    template_name = 'coursedetails/editdetails.html'
+    # form_class = SubmitCourseDetails
+    fields = ['subject_code', 'subject_name', 'cohort_size', 'cohort_num']
+
+    def form_valid(self, form):
+        details = form.save(commit=False)
+        details.first_name = self.request.user.first_name
+        details.last_name = self.request.user.last_name
+        details.user_type = self.request.user.user_type
+        details.created_by = self.request.user
+        details.save()
+        return redirect('professors:details')
