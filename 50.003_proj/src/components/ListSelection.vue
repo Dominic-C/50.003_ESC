@@ -1,0 +1,119 @@
+<template>
+    <div>
+        <v-app id="inspire">
+            <v-container fluid>
+                <v-layout wrap>
+                    <v-flex xs12>
+                        <p>These are the courses you have selected:</p>
+                        <ul>
+                            <li v-for="course in coursesSelected" :key="course.id">
+                            {{ course.courseName }}</li>
+                        </ul>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-app>
+    </div>
+</template>
+
+<script>
+export default {
+  name: 'SearchCourses',
+  data() {
+    return {
+      courseList: [
+        {"courseName": "50.003 Elements of Software Constructions",
+          "id": "50.003",
+          "pillar": "ISTD",
+          "isSelected": true},
+        {"courseName": "50.005 Computer Systems Engineering",
+        "id": "50.005",
+        "pillar": "ESD",
+        "isSelected": true},
+        {"courseName": "50.034 Probability and Statistics",
+        "id": "50.034",
+        "pillar": "EPD",
+        "isSelected": true},
+        {"courseName": "50.004 Algorithms",
+        "id": "50.004",
+        "pillar": "ASD",
+        "isSelected": false},
+        {"courseName": "01.112 Machine Learning",
+        "id": "01.112",
+        "pillar": "FRESHMORE",
+        "isSelected": false},
+        {"courseName": "50.040 Natural Language Processing",
+        "id": "50.040",
+        "pillar": "HASS",
+        "isSelected": false},
+        {"courseName": "50.006 User Interface",
+        "id": "50.006",
+        "pillar": "ISTD",
+        "isSelected": false}
+      ]
+    }
+  },
+  computed: {
+    coursesSelected: {
+      get: function() {
+        return this.courseList.filter(course => course.isSelected);
+      },
+      set: function(courses) {
+        for (var course of this.courseList){
+          this.remove(course);
+        }
+        for (var courseSelected of courses){
+          courseSelected.isSelected = true;
+        }
+        // for (var course of courses){
+        //   console.log(course);
+        // }
+      }
+    }    
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  .holder {
+    background: #fff;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  ul li {
+    padding: 10px;
+    font-size: 1em;
+    background-color: #E0EDF4;
+    border-left: 5px solid #3EB3F6;
+    margin-bottom: 2px;
+    color: #3E5252;
+  }
+  p {
+    text-align:center;
+    padding: 5px 0;
+    color: gray;
+  }
+  .container {
+    box-shadow: 0px 0px 40px lightgray;
+  }
+  input {
+    width: calc(100% - 40px);
+    border: 0;
+    padding: 20px;
+    font-size: 1.3em;
+    background-color: #323333;
+    color: #687F7F;
+  }
+  .alert {
+    background: #fdf2ce;
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px;
+    margin-top: -20px;
+  }
+</style>

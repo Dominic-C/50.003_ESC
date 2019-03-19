@@ -1,16 +1,30 @@
 {
   "name": "test",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "",
+  "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "main": "index.js",
   "dependencies": {
-    "vue": "^2.6.8"
+    "vue": "^2.6.9",
+    "vuetify": "^1.5.6"
   },
-  "devDependencies": {},
-  "description": ""
+  "devDependencies": {
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-cli-plugin-vuetify": "^0.5.0",
+    "vuetify-loader": "^1.0.5"
+  },
+  "bugs": {
+    "url": "https://github.com/Dominic-C/50.003_ESC/issues"
+  },
+  "homepage": "https://github.com/Dominic-C/50.003_ESC#readme",
+  "keywords": [],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dominic-C/50.003_ESC.git"
+  }
 }

@@ -1,30 +1,20 @@
 <template>
-  <v-app id="dayspan" v-cloak>
-    <ds-calendar-app :calendar="calendar"></ds-calendar-app>
-    <Courses />
-    
-  </v-app>
+  <div>
+    <search-courses></search-courses>
+    <list-selection></list-selection>
+  </div>
 </template>
 
 <script>
-import { Calendar } from 'dayspan';
-import Courses from './components/Courses.vue';
-
+import SearchCourses from './components/SearchCourses.vue';
+import ListSelection from './components/ListSelection.vue';
 export default {
   name: 'app',
   data: () => ({
-    calendar: Calendar.weeks()
   }),
   components: {
-    Courses
+    SearchCourses,
+    ListSelection
   }
 }
-</script>
-
-<style>
-body, html, #app, #dayspan {
-  font-family: Roboto, sans-serif;
-  width: 100%;
-  height: 100%;
-}
-</style>
+</script>  

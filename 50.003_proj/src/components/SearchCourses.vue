@@ -1,13 +1,13 @@
 <template>
   <!-- <div class="courses"> -->
-    <div class="holder">
+    <div>
       <!-- <select v-model="selected">
         <option disabled value="">Please select one</option>
         <option v-for="(course, index) in courseList" :key="index">{{ course.courseName }}</option>
       </select> -->
       <v-app id="inspire">
         <v-form @submit.prevent>
-          <v-container>
+          <v-container fluid>
             <v-layout wrap>
               <v-flex xs12>
                 <v-autocomplete
@@ -54,15 +54,8 @@
                 </v-autocomplete>
               </v-flex>
             </v-layout>
-            <p>These are the courses you have selected:</p>
-            <ul>
-              <li v-for="course in coursesSelected">
-                {{ course.courseName }}</li>
-            </ul>
           </v-container>
         </v-form>
-
-        
       </v-app>
       <!-- previous search method -->
       <!-- <form @submit.prevent="addCourse">
@@ -78,7 +71,7 @@
 
 <script>
 export default {
-  name: 'Courses',
+  name: 'SearchCourses',
   data() {
     return {
       courseList: [
@@ -161,8 +154,8 @@ export default {
         for (var course of this.courseList){
           this.remove(course);
         }
-        for (var course of courses){
-          course.isSelected = true;
+        for (var courseSelected of courses){
+          courseSelected.isSelected = true;
         }
         // for (var course of courses){
         //   console.log(course);
@@ -175,11 +168,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
   .holder {
     background: #fff;
   }
-
   ul {
     margin: 0;
     padding: 0;
@@ -194,17 +185,14 @@ export default {
     margin-bottom: 2px;
     color: #3E5252;
   }
-
   p {
     text-align:center;
     padding: 5px 0;
     color: gray;
   }
-
   .container {
     box-shadow: 0px 0px 40px lightgray;
   }
-
   input {
     width: calc(100% - 40px);
     border: 0;
@@ -213,7 +201,6 @@ export default {
     background-color: #323333;
     color: #687F7F;
   }
-
   .alert {
     background: #fdf2ce;
     font-weight: bold;
@@ -221,5 +208,4 @@ export default {
     padding: 5px;
     margin-top: -20px;
   }
-
 </style>
