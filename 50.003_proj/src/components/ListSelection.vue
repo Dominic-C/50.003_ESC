@@ -21,36 +21,31 @@ export default {
   name: 'SearchCourses',
   data() {
     return {
-      courseList: [
-        {"courseName": "50.003 Elements of Software Constructions",
-          "id": "50.003",
-          "pillar": "ISTD",
-          "isSelected": true},
-        {"courseName": "50.005 Computer Systems Engineering",
-        "id": "50.005",
-        "pillar": "ESD",
-        "isSelected": true},
-        {"courseName": "50.034 Probability and Statistics",
-        "id": "50.034",
-        "pillar": "EPD",
-        "isSelected": true},
-        {"courseName": "50.004 Algorithms",
-        "id": "50.004",
-        "pillar": "ASD",
-        "isSelected": false},
-        {"courseName": "01.112 Machine Learning",
-        "id": "01.112",
-        "pillar": "FRESHMORE",
-        "isSelected": false},
-        {"courseName": "50.040 Natural Language Processing",
-        "id": "50.040",
-        "pillar": "HASS",
-        "isSelected": false},
-        {"courseName": "50.006 User Interface",
-        "id": "50.006",
-        "pillar": "ISTD",
-        "isSelected": false}
-      ]
+    }
+  },
+  methods: {
+    remove (item) {
+      item.isSelected = false;
+    },
+    getColour(item) {
+      if (item.pillar === "ISTD") {
+        return "indigo";
+      } 
+      else if (item.pillar == "ESD") {
+        return "red";
+      }
+      else if (item.pillar == "EPD") {
+        return "blue";
+      }
+      else if (item.pillar == "ASD") {
+        return "purple";
+      }
+      else if (item.pillar == "FRESHMORE") {
+        return "green";
+      }
+      else if (item.pillar == "HASS") {
+        return "pink";
+      }
     }
   },
   computed: {
@@ -70,6 +65,12 @@ export default {
         // }
       }
     }    
+  },
+  props: {
+    courseList: {
+      type: Array,
+      required: true,
+    }
   }
 }
 </script>
