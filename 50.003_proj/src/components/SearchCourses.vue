@@ -1,13 +1,10 @@
 <template>
-  <!-- <div class="courses"> -->
-    <div>
       <!-- <select v-model="selected">
         <option disabled value="">Please select one</option>
         <option v-for="(course, index) in courseList" :key="index">{{ course.courseName }}</option>
       </select> -->
-      <v-app id="inspire">
         <v-form @submit.prevent>
-          <v-container fluid>
+          <v-container fluid class="pa-4">
             <v-layout wrap>
               <v-flex xs12>
                 <v-autocomplete
@@ -30,7 +27,7 @@
                       @input="remove(data.item)"
                     >
                       <v-icon 
-                        v-bind:color="getColour(data.item)"
+                        :color="getColour(data.item)"
                         class="headline font-weight-heavy white--text" 
                         left>
                           {{ data.item.pillar.substring(0, 2) }}
@@ -56,7 +53,6 @@
             </v-layout>
           </v-container>
         </v-form>
-      </v-app>
       <!-- previous search method -->
       <!-- <form @submit.prevent="addCourse">
         <input list="courseSearchList" id="coursesSelected" name="coursesSelected" placeholder="Search for a course" v-model="coursesSelected">
@@ -66,7 +62,7 @@
       </form> -->
       
     <!-- </div> -->
-  </div>
+
 </template>
 
 <script>
@@ -123,47 +119,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .holder {
-    background: #fff;
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-  }
-  
-  ul li {
-    padding: 10px;
-    font-size: 1em;
-    background-color: #E0EDF4;
-    border-left: 5px solid #3EB3F6;
-    margin-bottom: 2px;
-    color: #3E5252;
-  }
-  p {
-    text-align:center;
-    padding: 5px 0;
-    color: gray;
-  }
-  .container {
-    box-shadow: 0px 0px 40px lightgray;
-  }
-  input {
-    width: calc(100% - 40px);
-    border: 0;
-    padding: 20px;
-    font-size: 1.3em;
-    background-color: #323333;
-    color: #687F7F;
-  }
-  .alert {
-    background: #fdf2ce;
-    font-weight: bold;
-    display: inline-block;
-    padding: 5px;
-    margin-top: -20px;
-  }
-</style>

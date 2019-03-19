@@ -1,6 +1,4 @@
 <template>
-    <div>
-        <v-app id="inspire">
             <v-container fluid>
                 <v-layout wrap>
                     <v-flex xs12>
@@ -12,8 +10,6 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-        </v-app>
-    </div>
 </template>
 
 <script>
@@ -26,26 +22,6 @@ export default {
   methods: {
     remove (item) {
       item.isSelected = false;
-    },
-    getColour(item) {
-      if (item.pillar === "ISTD") {
-        return "indigo";
-      } 
-      else if (item.pillar == "ESD") {
-        return "red";
-      }
-      else if (item.pillar == "EPD") {
-        return "blue";
-      }
-      else if (item.pillar == "ASD") {
-        return "purple";
-      }
-      else if (item.pillar == "FRESHMORE") {
-        return "green";
-      }
-      else if (item.pillar == "HASS") {
-        return "pink";
-      }
     }
   },
   computed: {

@@ -1,11 +1,15 @@
 <template>
   <div>
-    <search-courses :courseList="courseList"></search-courses>
-    <list-selection :courseList="courseList"></list-selection>
+    <v-app id="inspire">
+      <app-header></app-header>
+      <search-courses :courseList="courseList"></search-courses>
+      <list-selection :courseList="courseList"></list-selection>
+    </v-app>
   </div>
 </template>
 
 <script>
+import AppHeader from './components/AppHeader.vue';
 import SearchCourses from './components/SearchCourses.vue';
 import ListSelection from './components/ListSelection.vue';
 export default {
@@ -43,8 +47,9 @@ export default {
       ]
   }),
   components: {
+    AppHeader,
     SearchCourses,
-    ListSelection
+    ListSelection,
   }
 }
 </script>  
