@@ -15,7 +15,9 @@
                         </v-list-tile-action>
                         <v-list-tile-content>
                         <v-list-tile-title>
-                            {{ item.text }}
+                            <a :href="'/'+item.link">
+                                {{ item.text }}
+                            </a>
                         </v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
@@ -51,14 +53,15 @@ export default {
   data: () => ({
       drawerIsOpen: false,
       drawerItems: [
-        { icon: 'contacts', text: 'Contacts' },
-        { icon: 'assignment', text: 'Form Submission'},
-        { icon: 'import_export', text: 'Export Calendar' },
-        { icon: 'calendar_today', text: 'Calendar' },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'message', text: 'Messages' },
-        { icon: 'help', text: 'Help' }
+        { icon: 'contacts', text: 'Contacts', link: ''},
+        { icon: 'assignment', text: 'Form Submission' , link: 'forms.html'},
+        { icon: 'import_export', text: 'Export Calendar', link: ''},
+        { icon: 'calendar_today', text: 'Calendar', link: ''},
+        { icon: 'settings', text: 'Settings', link: '' },
+        { icon: 'message', text: 'Messages', link: '' },
+        { icon: 'help', text: 'Help', link: '' }
       ]
-    })
+    }),
+  })
 }
 </script>
