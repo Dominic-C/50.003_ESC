@@ -4,6 +4,7 @@
       <app-header></app-header>
       <search-courses :courseList="courseList"></search-courses>
       <list-selection :courseList="courseList"></list-selection>
+      <weekly-calendar></weekly-calendar>
     </v-app>
   </div>
 </template>
@@ -12,6 +13,8 @@
 import AppHeader from './components/AppHeader.vue';
 import SearchCourses from './components/SearchCourses.vue';
 import ListSelection from './components/ListSelection.vue';
+import WeeklyCalendar from './components/WeeklyCalendar.vue';
+
 export default {
   name: 'app',
   data: () => ({
@@ -50,6 +53,7 @@ export default {
     AppHeader,
     SearchCourses,
     ListSelection,
+    WeeklyCalendar
   }
 }
 </script>  

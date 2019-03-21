@@ -38,7 +38,7 @@
             <!-- list of items that appear on search -->
             <template v-slot:item="data">
               <v-list-tile-avatar
-                  v-bind:color="getColour(data.item)"
+                v-bind:color="getColour(data.item)"
                 class="headline font-weight-light white--text"
               >
                 {{ data.item.pillar.substring(0, 2) }}

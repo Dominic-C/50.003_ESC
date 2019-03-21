@@ -15,13 +15,10 @@
 <script>
 export default {
   name: 'SearchCourses',
-  data() {
-    return {
-    }
-  },
-  methods: {
-    remove (item) {
-      item.isSelected = false;
+  props: {
+    courseList: {
+      type: Array,
+      required: true
     }
   },
   computed: {
@@ -42,10 +39,9 @@ export default {
       }
     }    
   },
-  props: {
-    courseList: {
-      type: Array,
-      required: true,
+  methods: {
+    remove (item) {
+      item.isSelected = false;
     }
   }
 }

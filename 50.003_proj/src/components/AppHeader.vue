@@ -8,15 +8,14 @@
                 v-model="drawerIsOpen"
                 >
                 <v-list dense v-for="item in drawerItems" :key="item.text">
-                    
-                    <v-list-tile @click="">
+                    <v-list-tile @click="action(item)">
                         <v-list-tile-action>
-                        <v-icon>{{ item.icon }}</v-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                        <v-list-tile-title>
-                            {{ item.text }}
-                        </v-list-tile-title>
+                            <v-list-tile-title>
+                                {{ item.text }}
+                            </v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
@@ -51,7 +50,6 @@ export default {
   data: () => ({
       drawerIsOpen: false,
       drawerItems: [
-        { icon: 'contacts', text: 'Contacts' },
         { icon: 'assignment', text: 'Form Submission'},
         { icon: 'import_export', text: 'Export Calendar' },
         { icon: 'calendar_today', text: 'Calendar' },
@@ -59,6 +57,11 @@ export default {
         { icon: 'message', text: 'Messages' },
         { icon: 'help', text: 'Help' }
       ]
-    })
+    }), 
+    methods: {
+        action(item){
+            console.log(item.text + " was clicked");
+        }
+    }
 }
 </script>
