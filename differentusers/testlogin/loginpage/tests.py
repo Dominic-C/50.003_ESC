@@ -314,11 +314,28 @@ class PermissionTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class PreferencesFormsTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        cls.profuser = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
+            username="prof", password="sutd1234")
+        cls.pref = Preferences.objects.create(created_by=cls.profuser, first_name=cls.profuser.first_name, 
+            last_name=cls.profuser.last_name, user_type=cls.profuser.user_type, subject_code="50.005", 
+            subject_name="CSE", cohort_size=50, cohort_num=9)
+
+    def test_submit_course_details(self):
+        form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 10}
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post("professors:submitdetails", form_data)
+        self.assertEqual(Preferences.objects.filter(first_name = self.__class__.profuser.first_name)[0], self.__class__.pref)
+
+    # def test_edit_course_details(self):
+    #     form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 10}
+    #     login = self.client.login(username='prof', password='sutd1234')
 
 
-
-# test preferences form submit
-# class 
 
 # test preferences form edit
 
