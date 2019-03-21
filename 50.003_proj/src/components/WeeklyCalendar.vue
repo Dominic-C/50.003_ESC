@@ -8,7 +8,7 @@
         >
           <template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
             <template v-for="event in eventsMap[date]">
-          <v-menu offset-x>
+            <v-menu offset-x>
             <template v-slot:activator="{ on }">
                 <div
                 v-on="on"
