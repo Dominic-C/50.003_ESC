@@ -19,5 +19,6 @@ urlpatterns = [
 
     path('coordinators/', include(([
         path('', coordinators.CoordinatorMainView.as_view(), name='coordinator_main'),
+        path('accounts', coordinators.CoordinatorAccountsListView.as_view(), name='accountlist')
     ], 'classroom'), namespace='coordinators')),
 ]

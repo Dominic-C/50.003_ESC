@@ -34,4 +34,8 @@ class CoordinatorSignUpView(CreateView):
 class CoordinatorMainView(TemplateView):
     template_name = 'classroom/coordinators/coordinator_main.html'
 
+@method_decorator([login_required, coordinator_required], name='dispatch')
+class CoordinatorAccountsListView(ListView):
+    template_name = 'classroom/coordinators/accountslist.html'
+    queryset = User.objects.all()
 

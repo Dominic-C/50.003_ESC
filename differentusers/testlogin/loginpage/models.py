@@ -10,10 +10,30 @@ USER_TYPE_CHOICES = (
     (5, 'student'),
 )
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }   
+
 class User(AbstractUser):
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=5)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+
+    def get_user_type(self):
+        if self.user_type == usertypes['professor']:
+            return 'Professor'
+        elif self.user_type == usertypes['coursecoordinators']:
+            return 'Course Coordinator'
+        elif self.user_type == usertypes['sutdadmin']:
+            return 'SUTD Admin'
+        elif self.user_type == usertypes['timetableplanner']:
+            return 'Timetable Planner'
+        else:
+            return 'Student'
 
 
 class Student(models.Model):
