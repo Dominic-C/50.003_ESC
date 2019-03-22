@@ -18,3 +18,14 @@ class ScheduleListView(ListView):
 	model = Schedule
 	template_name = "schedule/schedule_list.html"
 	queryset = Schedule.objects.all()
+
+def add_schedule(request):
+    if request.method == "POST":
+        form = CreateSchedule(request.POST) # creates form instance and binds form data to it. request.post contains form data
+        # check if form is valid
+        if form.is_valid():
+            schedule_item = form.save(commit=False)
+            schedule_item.save()
+    else: # no post data, resulting in empty form.
+        form = CreateSchedule()
+    return render(request, 'schedule/createSchedule_form.html', {'form': form})
