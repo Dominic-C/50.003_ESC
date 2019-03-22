@@ -331,14 +331,14 @@ class PreferencesFormsTests(TestCase):
         response = self.client.post("professors:submitdetails", form_data)
         self.assertEqual(Preferences.objects.filter(first_name = self.__class__.profuser.first_name)[0], self.__class__.pref)
 
-    # Submit a '50.005' course detail and edit it to '10.007', observe changes
-    def test_edit_course_details(self):
-        form_data = {'subject_code': '10.007', 'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 10}
-        login = self.client.login(username='prof', password='sutd1234')
-        response = self.client.post(reverse("professors:editdetails", kwargs={'pk':self.__class__.pref.id}), form_data)
-        self.assertEqual(self.__class__.pref.id, 1)
-        self.assertEqual(str(Preferences.objects.filter(subject_code='10.007')[0]), "Bob Lee: 10.007 Digital World | 49 x 10")
+    # def test_edit_course_details(self):
+    #     form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 10}
+    #     login = self.client.login(username='prof', password='sutd1234')
 
 
+
+# test preferences form edit
+
+# test queryset (models)
 
 
