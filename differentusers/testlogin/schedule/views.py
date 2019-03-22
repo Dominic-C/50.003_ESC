@@ -3,6 +3,8 @@ from django.views.generic import CreateView, ListView
 from .models import Schedule
 from .forms import CreateSchedule
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core import serializers
+from django.http import HttpResponse
 
 # Create your views here.
 class ScheduleCreateView(CreateView):
@@ -29,3 +31,8 @@ def add_schedule(request):
     else: # no post data, resulting in empty form.
         form = CreateSchedule()
     return render(request, 'schedule/createSchedule_form.html', {'form': form})
+
+def serialized_schedule(request):
+    queryset = Schedule.objects.all()
+    queryset = serializers.serialize('json', queryset)
+    return HttpResponse(queryset, content_type="application/json")
