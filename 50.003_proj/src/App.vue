@@ -2,9 +2,9 @@
   <div>
     <v-app id="inspire">
       <app-header></app-header>
-      <search-courses :courseList="courseList"></search-courses>
-      <list-selection :courseList="courseList"></list-selection>
-      <weekly-calendar></weekly-calendar>
+      <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
+      <list-selection :courseList="courseList" :isActive="isActive"></list-selection>
+      <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar>
     </v-app>
   </div>
 </template>
@@ -47,7 +47,17 @@ export default {
         "id": "50.006",
         "pillar": "ISTD",
         "isSelected": false}
-      ]
+      ],
+    isActive: [
+      {
+        "name": "weeklyCalendar",
+        "live": true
+      },
+      {
+        "name": "searchCourses",
+        "live": false
+      }
+    ]
   }),
   components: {
     AppHeader,
