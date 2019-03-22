@@ -19,3 +19,4 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(test_end_time, datetime.time(10,30))
         self.assertEqual(test_assigned_prof, "Prof David")
         self.assertEqual(test_location, "2.506")
+
