@@ -8,8 +8,10 @@
         >
           <template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
             <template v-for="event in eventsMap[date]">
-            <v-menu offset-x>
-            <template v-slot:activator="{ on }">
+            <v-menu 
+              offset-x
+              :key="event.title">
+              <template v-slot:activator="{ on }">
                 <div
                 v-on="on"
                 v-if="event.time"
@@ -38,7 +40,8 @@
                     </v-btn>
                   </v-toolbar>
                   <v-card-title primary-title>
-                    <span v-html="event.details"></span>
+                    <p>Start Time: {{ event.time }}</p>
+                    <p>Location: {{ event.location }}</p>
                   </v-card-title>
                   <v-card-actions>
                     <v-btn
@@ -92,7 +95,9 @@
       // convert the list of events into a map of lists keyed by date
       eventsMap () {
         const map = {}
-        this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e))
+        for (var course of this.courseList){
+          course.lessonTimes.forEach(e => (map[e.date] = map[e.date] || []).push(e))
+        }
         return map
       }
     },
