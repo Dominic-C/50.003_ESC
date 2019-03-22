@@ -11,7 +11,7 @@ class CreateSchedule(forms.ModelForm):
     
     class Meta:
         model = Schedule
-        fields = ['title','description','start_time','end_time', 'lecturer', 'location']
+        fields = '__all__'
         widgets = {'start_time': forms.Select(choices=HOUR_CHOICES),
         'end_time':forms.Select(choices=HOUR_CHOICES)
         }

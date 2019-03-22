@@ -10,7 +10,7 @@ from django.http import HttpResponse
 class ScheduleCreateView(CreateView):
     model = Schedule
     template_name = "schedule/schedule_create.html"
-    fields = ['title','description','start_time','end_time', 'lecturer', 'location']
+    fields = '__all__'
 
     def form_valid(self, form):
         form.save()
