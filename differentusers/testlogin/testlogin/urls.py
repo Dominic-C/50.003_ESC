@@ -28,4 +28,5 @@ urlpatterns = [
     path('accounts/signup/student/', students.StudentSignUpView.as_view(), name='student_signup'),
     path('accounts/signup/professor/', professors.ProfessorSignUpView.as_view(), name='professor_signup'),
     path('accounts/signup/coordinator/', coordinators.CoordinatorSignUpView.as_view(), name='coordinator_signup'),
+    path('schedule/', include('schedule.urls')),
 ]
