@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'loginpage',
-
-    'schedule',
 ]
 
 MIDDLEWARE = [
