@@ -325,7 +325,7 @@ class PreferencesFormsTests(TestCase):
             last_name=cls.profuser.last_name, user_type=cls.profuser.user_type, subject_code="50.005", 
             subject_name="CSE", cohort_size=50, cohort_num=9)
 
-    def test_submit_course_details(self):
+    def test_submit_course_details_valid(self):
         form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 10}
         login = self.client.login(username='prof', password='sutd1234')
         response = self.client.post(reverse("professors:submitdetails"), form_data)
@@ -339,5 +339,42 @@ class PreferencesFormsTests(TestCase):
         self.assertEqual(self.__class__.pref.id, 1)
         self.assertEqual(str(Preferences.objects.filter(subject_code='10.007')[0]), "Bob Lee: 10.007 Digital World | 49 x 10")
 
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_invalid_subj_code(self):
+        form_data = {'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 10}
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
 
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_invalid_subj_name(self):
+        form_data = {'subject_code': '10.009', 'cohort_size': 49, 'cohort_num': 10}
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
 
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_invalid_cohort_size(self):
+        form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_num': 10}
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
+
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_invalid_cohort_num(self):
+        form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 49}
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)

@@ -1,6 +1,7 @@
 from django.test import TestCase
 from schedule.models import Schedule
 import datetime
+from django.urls import reverse, reverse_lazy
 
 # Create your tests here.
 class ScheduleTestCase(TestCase):
@@ -20,3 +21,43 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(test_assigned_prof, "Prof David")
         self.assertEqual(test_location, "2.506")
 
+    def test_create_schedule_form_valid(self):
+        form_data = {'title' : "10.009 Digital World", 'start_time' : "09:00", 'end_time' : "10:30", "lecturer" : "Prof Oka", "location" : "2.506"}
+        response = self.client.post(reverse("schedule:create"), form_data)
+        self.assertEqual(Schedule.objects.last().title, "10.009 Digital World")
+        self.assertEqual(Schedule.objects.last().lecturer, "Prof Oka")
+
+    # Form is invalid so it is not saved in Schedule Database
+    def test_create_schedule_form_invalid_title(self):
+        form_data = {'start_time' : "09:00", 'end_time' : "10:30", "lecturer" : "Prof Oka2", "location" : "2.506"}
+        response = self.client.post(reverse("schedule:create"), form_data)
+        self.assertEqual(Schedule.objects.last().title, "50.005 CSE")
+        self.assertEqual(Schedule.objects.last().lecturer, "Prof David")
+
+    # Form is invalid so it is not saved in Schedule Database
+    def test_create_schedule_form_invalid_starttime(self):
+        form_data = {'title' : "10.009 Digital World", 'end_time' : "10:30", "lecturer" : "Prof Oka2", "location" : "2.506"}
+        response = self.client.post(reverse("schedule:create"), form_data)
+        self.assertEqual(Schedule.objects.last().title, "50.005 CSE")
+        self.assertEqual(Schedule.objects.last().lecturer, "Prof David")
+
+    # Form is invalid so it is not saved in Schedule Database
+    def test_create_schedule_form_invalid_endtime(self):
+        form_data = {'title' : "10.009 Digital World", 'start_time' : "09:00", "lecturer" : "Prof Oka2", "location" : "2.506"}
+        response = self.client.post(reverse("schedule:create"), form_data)
+        self.assertEqual(Schedule.objects.last().title, "50.005 CSE")
+        self.assertEqual(Schedule.objects.last().lecturer, "Prof David")
+
+    # Form is invalid so it is not saved in Schedule Database
+    def test_create_schedule_form_invalid_lecturer(self):
+        form_data = {'title' : "10.009 Digital World", 'start_time' : "09:00", 'end_time' : "10:30", "location" : "2.506"}
+        response = self.client.post(reverse("schedule:create"), form_data)
+        self.assertEqual(Schedule.objects.last().title, "50.005 CSE")
+        # self.assertEqual(Schedule.objects.last().lecturer, "Prof David")
+
+    # Form is invalid so it is not saved in Schedule Database
+    def test_create_schedule_form_invalid_location(self):
+        form_data = {'title' : "10.009 Digital World", 'start_time' : "09:00", 'end_time' : "10:30", "lecturer" : "Prof Oka2"}
+        response = self.client.post(reverse("schedule:create"), form_data)
+        self.assertEqual(Schedule.objects.last().title, "50.005 CSE")
+        self.assertEqual(Schedule.objects.last().lecturer, "Prof David")
