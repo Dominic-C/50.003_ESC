@@ -3,7 +3,7 @@
         <option disabled value="">Please select one</option>
         <option v-for="(course, index) in courseList" :key="index">{{ course.courseName }}</option>
       </select> -->
-  <v-form @submit.prevent>
+  <v-form @submit.prevent v-if="alive">
     <v-container fluid class="pa-4">
       <v-layout wrap>
         <v-flex xs12>
@@ -109,12 +109,23 @@ export default {
         //   console.log(course);
         // }
       }
-    }    
+    },
+    alive: {
+      get: function(){
+        // this is meant to return the 'live' value;
+        // also done because filter returns an array
+        return this.isActive.filter(contain => contain.name=="searchCourses")[0].live
+      }
+    }
   },
   props: {
     courseList: {
       type: Array,
-      required: true,
+      required: true
+    },
+    isActive: {
+      type: Array,
+      required: true
     }
   }
 }

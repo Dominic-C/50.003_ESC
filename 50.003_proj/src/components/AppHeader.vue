@@ -52,13 +52,13 @@ export default {
   data: () => ({
       drawerIsOpen: false,
       drawerItems: [
-        { icon: 'contacts', text: 'Contacts', link: ''},
-        { icon: 'assignment', text: 'Form Submission' , link: 'forms.html'},
-        { icon: 'import_export', text: 'Export Calendar', link: ''},
-        { icon: 'calendar_today', text: 'Calendar', link: ''},
-        { icon: 'settings', text: 'Settings', link: '' },
-        { icon: 'message', text: 'Messages', link: '' },
-        { icon: 'help', text: 'Help', link: '' }
+        { icon: 'contacts', text: 'Contacts', event: ""},
+        { icon: 'assignment', text: 'Form Submission'},
+        { icon: 'import_export', text: 'Export Calendar'},
+        { icon: 'calendar_today', text: 'Calendar'},
+        { icon: 'settings', text: 'Settings'},
+        { icon: 'message', text: 'Messages'},
+        { icon: 'help', text: 'Help'}
       ]
     }),
 }

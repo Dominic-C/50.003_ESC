@@ -1,9 +1,10 @@
 <template>
+  <div v-if="alive" >
   <v-layout>
     <v-flex>
       <v-sheet height="400">
         <v-calendar
-          ref="calendar"    
+          ref="calendar"
           type="week"
         >
           <template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
@@ -15,7 +16,7 @@
                 <div
                 v-on="on"
                 v-if="event.time"
-                :key="event.title"
+                v-bind:key="event.title"
                 :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"
                 class="my-event with-time"
                 v-html="event.title"
@@ -59,6 +60,7 @@
       </v-sheet>
     </v-flex>
   </v-layout>
+  </div>
 </template>
 
 
@@ -66,9 +68,14 @@
   export default {
     name: 'WeeklyCalendar',
     props: {
+        isActive: {
+          type: Array,
+          required: true
+        },
         courseList: {
         type: Array,
-        required: true
+        required: true,
+        active: true
         }
     },
     data: () => ({
@@ -112,7 +119,12 @@
             courseSelected.isSelected = true;
           }
         }
-      }    
+      },    
+      alive: {
+        get: function(){
+          return this.isActive.filter(contain => contain.name=="weeklyCalendar")[0].live
+        }
+      }
     },
     mounted () {
       this.$refs.calendar.scrollToTime('08:00')     

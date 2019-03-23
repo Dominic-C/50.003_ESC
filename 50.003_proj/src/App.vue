@@ -2,9 +2,9 @@
   <div>
     <v-app id="inspire">
       <app-header></app-header>
-      <search-courses :courseList="courseList"></search-courses>
-      <list-selection :courseList="courseList"></list-selection>
-      <!-- <weekly-calendar :courseList="courseList"></weekly-calendar> -->
+      <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
+      <list-selection :courseList="courseList" :isActive="isActive"></list-selection>
+      <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar>
       
       <v-app id="dayspan" v-cloak>
         <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar>
@@ -175,9 +175,18 @@ export default {
               time: '10:00',
               duration: 90,
               location: '1.203'
-            }
-          ]}
-      ]
+            }]
+        }],
+    isActive: [
+      {
+        "name": "weeklyCalendar",
+        "live": true
+      },
+      {
+        "name": "searchCourses",
+        "live": false
+      }
+    ]
   }),
   components: {
     AppHeader,
