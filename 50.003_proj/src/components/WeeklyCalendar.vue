@@ -95,11 +95,24 @@
       // convert the list of events into a map of lists keyed by date
       eventsMap () {
         const map = {}
-        for (var course of this.courseList){
+        for (var course of this.coursesSelected){
           course.lessonTimes.forEach(e => (map[e.date] = map[e.date] || []).push(e))
         }
         return map
-      }
+      },
+      coursesSelected: {
+        get: function() {
+          return this.courseList.filter(course => course.isSelected);
+        },
+        set: function(courses) {
+          for (var course of this.courseList){
+            this.remove(course);
+          }
+          for (var courseSelected of courses){
+            courseSelected.isSelected = true;
+          }
+        }
+      }    
     },
     mounted () {
       this.$refs.calendar.scrollToTime('08:00')     
