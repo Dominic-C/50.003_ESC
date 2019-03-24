@@ -106,19 +106,16 @@ export default {
   name: 'dsCalendarApp',
   props:
   {
-    events:
-    {
+    events: {
       type: Array
     },
-    calendar:
-    {
+    calendar: {
       type: Calendar,
       default() {
         return Calendar.weeks();
       }
     },
-    readOnly:
-    {
+    readOnly: {
       type: Boolean,
       default: false
     },
@@ -129,15 +126,13 @@ export default {
         return this.$dsDefaults().types;
       }
     },
-    allowsAddToday:
-    {
+    allowsAddToday: {
       type: Boolean,
       default() {
         return this.$dsDefaults().allowsAddToday;
       }
     },
-    formats:
-    {
+    formats: {
       validate(x) {
         return this.$dsValidate(x, 'formats');
       },
@@ -145,8 +140,7 @@ export default {
         return this.$dsDefaults().formats;
       }
     },
-    labels:
-    {
+    labels: {
       validate(x) {
         return this.$dsValidate(x, 'labels');
       },
@@ -154,8 +148,7 @@ export default {
         return this.$dsDefaults().labels;
       }
     },
-    styles:
-    {
+    styles: {
       validate(x) {
         return this.$dsValidate(x, 'styles');
       },
@@ -163,8 +156,7 @@ export default {
         return this.$dsDefaults().styles;
       }
     },
-    optionsDialog:
-    {
+    optionsDialog: {
       validate(x) {
         return this.$dsValidate(x, 'optionsDialog');
       },
@@ -172,8 +164,7 @@ export default {
         return this.$dsDefaults().optionsDialog;
       }
     },
-    promptDialog:
-    {
+    promptDialog: {
       validate(x) {
         return this.$dsValidate(x, 'promptDialog');
       },
