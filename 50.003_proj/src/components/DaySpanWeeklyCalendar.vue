@@ -252,6 +252,7 @@ export default {
         this.promptVisible = true;
       };
     }
+    this.applyEvents();
   },
   methods:
   {

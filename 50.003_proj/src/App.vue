@@ -8,7 +8,6 @@
       
       <v-app id="dayspan" v-cloak>
         <ds-weekly-calendar :events="calendarEvents" :calendar="calendar"></ds-weekly-calendar>
-        <!-- <calendar></calendar> -->
         <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
         <!-- <ds-calendar-app :calendar="calendar"></ds-calendar-app> -->
       </v-app>
@@ -23,7 +22,6 @@ import SearchCourses from './components/SearchCourses.vue';
 import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
-// import Calendar from './components/Calendar.vue';
 
 export default {
   name: 'app',
@@ -202,7 +200,6 @@ export default {
     ListSelection,
     WeeklyCalendar,
     dsWeeklyCalendar,
-    // Calendar
   },
   computed: {
     calendarEvents() {
