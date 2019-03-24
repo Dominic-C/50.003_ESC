@@ -1,5 +1,5 @@
 <template>
-  <div v-if="alive" >
+  <div>
   <v-layout>
     <v-flex>
       <v-sheet height="400">
@@ -68,10 +68,6 @@
   export default {
     name: 'WeeklyCalendar',
     props: {
-        isActive: {
-          type: Array,
-          required: true
-        },
         courseList: {
         type: Array,
         required: true,
@@ -118,11 +114,6 @@
           for (var courseSelected of courses){
             courseSelected.isSelected = true;
           }
-        }
-      },    
-      alive: {
-        get: function(){
-          return this.isActive.filter(contain => contain.name=="weeklyCalendar")[0].live
         }
       }
     },

@@ -8,15 +8,13 @@
                 v-model="drawerIsOpen"
                 >
                 <v-list dense v-for="item in drawerItems" :key="item.text">
-                    <v-list-tile @click="action(item)">
+                    <v-list-tile @click="toggleVisible(item.name)">
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
                         <v-list-tile-title>
-                            <a :href="'/'+item.link">
-                                {{ item.text }}
-                            </a>
+                        {{ item.text }}
                         </v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
@@ -52,14 +50,19 @@ export default {
   data: () => ({
       drawerIsOpen: false,
       drawerItems: [
-        { icon: 'contacts', text: 'Contacts', event: ""},
-        { icon: 'assignment', text: 'Form Submission'},
-        { icon: 'import_export', text: 'Export Calendar'},
-        { icon: 'calendar_today', text: 'Calendar'},
-        { icon: 'settings', text: 'Settings'},
-        { icon: 'message', text: 'Messages'},
-        { icon: 'help', text: 'Help'}
+        { name: 'a', icon: 'contacts', text: 'Contacts'},
+        { name: 'formSubmitter', icon: 'cloud_upload', text: 'Form Submission'},
+        { name: 'courseListing', icon: 'import_export', text: 'Export Calendar'},
+        { name: 'weeklyCalendar', icon: 'date_range', text: 'Weekly Calendar'},
+        { name: 'b', icon: 'settings', text: 'Settings'},
+        { name: 'c', icon: 'message', text: 'Messages'},
+        { name: 'd', icon: 'help', text: 'Help'}
       ]
     }),
+    methods: {
+        toggleVisible(name) {
+            this.$emit('changeComp', name)
+        }
+    }
 }
 </script>

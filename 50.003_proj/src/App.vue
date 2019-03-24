@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-app id="inspire">
-      <app-header></app-header>
-      <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
-      <list-selection :courseList="courseList" :isActive="isActive"></list-selection>
-      <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar>
+      <app-header @changeComp="toggleVisible"></app-header>
+      <search-courses :courseList="courseList" v-if="activeComp.courseListing"></search-courses>
+      <list-selection :courseList="courseList" v-if="activeComp.courseListing"></list-selection>
+      <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar>
       
-      <v-app id="dayspan" v-cloak>
+      <v-app id="dayspan" v-cloak v-if="activeComp.weeklyCalendar">
         <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar>
         <!-- <calendar></calendar> -->
         <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
@@ -177,16 +177,11 @@ export default {
               location: '1.203'
             }]
         }],
-    isActive: [
-      {
-        "name": "weeklyCalendar",
-        "live": false
-      },
-      {
-        "name": "searchCourses",
-        "live": false
-      }
-    ]
+    activeComp: {
+      weeklyCalendar : false,
+      courseListing : true,
+      formSubmitter : false
+    }
   }),
   components: {
     AppHeader,
@@ -219,6 +214,23 @@ export default {
         }
       }   
     return eventData;
+    }
+  },
+  methods: {
+    toggleVisible : function(item) {
+      this.activeComp.formSubmitter = false
+      this.activeComp.weeklyCalendar = false
+      this.activeComp.courseListing = false
+
+      if(item == "formSubmitter"){
+        this.activeComp.formSubmitter = true
+      }
+      if(item == "weeklyCalendar"){
+        this.activeComp.weeklyCalendar = true
+      }
+      if(item == "courseListing"){
+        this.activeComp.courseListing = true
+      }
     }
   }
 }

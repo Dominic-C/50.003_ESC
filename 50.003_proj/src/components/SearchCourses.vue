@@ -3,7 +3,7 @@
         <option disabled value="">Please select one</option>
         <option v-for="(course, index) in courseList" :key="index">{{ course.courseName }}</option>
       </select> -->
-  <v-form @submit.prevent v-if="alive">
+  <v-form @submit.prevent>
     <v-container fluid class="pa-4">
       <v-layout wrap>
         <v-flex xs12>
@@ -120,10 +120,6 @@ export default {
   },
   props: {
     courseList: {
-      type: Array,
-      required: true
-    },
-    isActive: {
       type: Array,
       required: true
     }

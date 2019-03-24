@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-if="alive">
+    <v-container fluid>
         <v-layout wrap>
             <v-flex xs12>
                 <p>These are the courses you have selected:</p>
@@ -19,10 +19,6 @@ export default {
     courseList: {
       type: Array,
       required: true
-    },
-    isActive: {
-      type: Array,
-      required: true
     }
   },
   computed: {
@@ -40,11 +36,6 @@ export default {
         // for (var course of courses){
         //   console.log(course);
         // }
-      }
-    },
-    alive: {
-      get: function() {
-        return this.isActive.filter(life => life.name=="searchCourses")[0].live
       }
     }
   },
