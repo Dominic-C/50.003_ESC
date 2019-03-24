@@ -180,7 +180,7 @@ export default {
     isActive: [
       {
         "name": "weeklyCalendar",
-        "live": true
+        "live": false
       },
       {
         "name": "searchCourses",
