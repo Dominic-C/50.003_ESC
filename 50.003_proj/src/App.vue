@@ -3,16 +3,16 @@
     <v-app id="inspire">
       <app-header></app-header>
       <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
-      <list-selection :courseList="courseList" :isActive="isActive"></list-selection>
-      <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar>
+      <!-- <list-selection :courseList="courseList" :isActive="isActive"></list-selection> -->
+      <!-- <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar> -->
       
       <v-app id="dayspan" v-cloak>
-        <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar>
+        <ds-weekly-calendar :events="calendarEvents" :calendar="calendar"></ds-weekly-calendar>
         <!-- <calendar></calendar> -->
         <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
         <!-- <ds-calendar-app :calendar="calendar"></ds-calendar-app> -->
       </v-app>
-  </v-app>
+    </v-app>
   </div>
 </template>
 
@@ -180,11 +180,19 @@ export default {
     isActive: [
       {
         "name": "weeklyCalendar",
-        "live": true
+        "live": false
       },
       {
         "name": "searchCourses",
-        "live": false
+        "live": true
+      },
+      {
+        "name": "listSelection",
+        "live": true
+      },
+      {
+        "name": "dsWeeklyCalendar",
+        "live": true
       }
     ]
   }),
@@ -201,25 +209,27 @@ export default {
       var eventData = []
       for (var course of this.courseList){
         if (course.isSelected){
-          for (var lesson of course.lessonTimes)
-          eventData.push({
-            data: {
-              title: lesson.title,
-              color: course.colour
-            },
-            schedule: {
+          for (var lesson of course.lessonTimes){
+            eventData.push({
+              data: {
+                title: lesson.title,
+                color: course.colour
+              },
               schedule: {
                 dayOfWeek: [lesson.day],
                 times: [lesson.time],
                 duration: lesson.duration,
                 durationUnit: 'minutes'
               }
-            }
-          })
+            })
+          }
         }
-      }   
-    return eventData;
+      }
+      return eventData;  
     }
-  }
+  },
+  // mounted () {
+  //     this.$refs.calendar.addEvent()
+  //   },
 }
 </script>  

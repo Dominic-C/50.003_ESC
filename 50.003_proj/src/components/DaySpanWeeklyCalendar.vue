@@ -126,7 +126,6 @@ export default {
     {
       type: Array,
       default() {
-				console.log(this);
         return this.$dsDefaults().types;
       }
     },
@@ -275,6 +274,7 @@ export default {
     },
     applyEvents()
     {
+      // console.log(this.events[0].schedule.toInput);
       if (this.events)
       {
         this.calendar.removeEvents();
