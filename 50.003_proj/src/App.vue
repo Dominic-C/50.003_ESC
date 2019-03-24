@@ -17,6 +17,7 @@
 
 <script>
 import { Calendar, Weekday } from 'dayspan';
+import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchCourses from './components/SearchCourses.vue';
 import ListSelection from './components/ListSelection.vue';
@@ -27,12 +28,13 @@ export default {
   name: 'app',
   data: () => ({
     calendar: Calendar.weeks(),
+    coloursUsed: [],
     courseList: [
         {"courseName": "50.003 Elements of Software Constructions",
           "id": "50.003",
           "pillar": "ISTD",
           "isSelected": true,
-          "colour": '#2196F3',
+          colour: '',
           'lessonTimes': [ 
             {
               title: '50.003 Tutorial',
@@ -53,7 +55,7 @@ export default {
         "id": "50.005",
         "pillar": "ESD",
         "isSelected": true,
-        colour: '#2196F3',
+        colour: '',
         'lessonTimes': [ 
             {
               title: '50.005 Lab',
@@ -74,7 +76,7 @@ export default {
         "id": "50.034",
         "pillar": "EPD",
         "isSelected": true,
-        colour: '#2196F3',
+        colour: '',
         'lessonTimes': [ 
             {
               title: '50.034 Tutorial',
@@ -95,7 +97,7 @@ export default {
         "id": "50.004",
         "pillar": "ASD",
         "isSelected": false,
-        colour: '#2196F3',
+        colour: '',
         'lessonTimes': [ 
             {
               title: '50.004 Tutorial',
@@ -116,7 +118,7 @@ export default {
         "id": "01.112",
         "pillar": "FRESHMORE",
         "isSelected": false,
-        colour: '#2196F3',
+        colour: '',
         'lessonTimes': [ 
             {
               title: '01.112 Tutorial',
@@ -137,7 +139,7 @@ export default {
         "id": "50.040",
         "pillar": "HASS",
         "isSelected": false,
-        colour: '#2196F3',
+        colour: '',
         'lessonTimes': [ 
             {
               title: '50.040 Tutorial',
@@ -158,7 +160,7 @@ export default {
         "id": "50.006",
         "pillar": "ISTD",
         "isSelected": false,
-        colour: '#2196F3',
+        colour: '',
         'lessonTimes': [ 
             {
               title: '50.006 Tutorial',
@@ -210,7 +212,7 @@ export default {
             eventData.push({
               data: {
                 title: lesson.title,
-                color: course.colour
+                color: this.getColour(course)
               },
               schedule: {
                 dayOfWeek: [lesson.day],
@@ -225,8 +227,20 @@ export default {
       return eventData;  
     }
   },
-  // mounted () {
-  //     this.$refs.calendar.addEvent()
-  //   },
+  methods: {
+    getColour(course){
+      if (course.colour === '') {
+        let colour = Colors[Math.floor(Colors.length * Math.random())].value;
+        while (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
+          this.getColour();
+        }
+        this.coloursUsed.push(colour);
+        course.colour = colour;
+        return colour;
+      } else {
+        return course.colour;
+      }
+    }
+  }
 }
 </script>  
