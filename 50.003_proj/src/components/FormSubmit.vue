@@ -1,64 +1,138 @@
 <template>
-  <div id="formSubmit">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+  <vue-form-json-schema
+    :model="model"
+    :schema="schema"
+    :ui-schema="uiSchema"
+    :on-change="onChange"
+  >
+  </vue-form-json-schema>
 </template>
 
 <script>
 export default {
-  name: 'formSubmit',
-  components : {
-    appForm : Form
-  },
-  data : () => ({
-    jsonFields
-  }),
-  mounted (){
-    this.$root.$on('formSubmitted', values => alert(JSON.stringify(values)))
+  data() {
+    return {
+      model: {
+      },
+      options: {
+        "castToSchemaType": true
+      },
+      // Some valid JSON Schema Object
+      schema: {
+        'type' : 'object',
+        'required' : [
+          'courseTitle',
+          'description',
+          'date',
+          'startTime',
+          'duration',
+          'lecturer',
+          'location'
+        ],
+        'properties': {
+          'courseTitle' :{
+            "type" : "string"
+          },
+          'description' : {
+            "type" : "string"
+          },
+          'date' : {
+            "type" : "string",
+            "format" : "date"
+          },
+          'startTime' : {
+            "type" : "string",
+            "pattern" : "([0-2][0-9]){1}:([0-6][0-9]){1}"
+          },
+          'duration' : {
+            "type" : "number",
+            "multipleOf" : 1,
+            "minimum" : 30,
+          },
+          'lecturer' : {
+            "type" : "string"
+          },
+          'location' : {
+            "type" : "string"
+          }
+        }
+      },
+      uiSchema : [
+      {"component": "div",
+        "fieldOptions": {
+          "class": ["form-group"]
+        },
+        "children": [{
+          "component" : "label",
+          "fieldOptions" : {
+            "attrs" : {"for" : "course-title"},
+            "class" : ["font-weight-bold"],
+            "domProps" : {"innerHTML": "Course Title"}
+            }
+          },
+        {"component": "input",
+          "model": "courseTitle",
+          "errorOptions": {
+            "class": [
+              "is-invalid"
+              ]
+            },
+          "fieldOptions": {
+            "attrs": {
+              "id": "course-title"
+            },
+            "class": [
+              "form-control"
+            ],
+            "on": [
+              "input"
+            ]}
+          },
+        {"component": "small",
+          "fieldOptions": {
+            "class": [
+              "text-muted"
+            ],
+            "domProps": {
+              "innerHTML": "Please enter the Course Title"
+            }
+          }
+        }]
+        },
+      {"component": "transition",
+        "fieldOptions": {
+        "props": {"name": "fade"}
+        },
+        "children": [
+          {"component": "div",
+            "model": "courseTitle",
+            "errorHandler": true,
+            "displayOptions": {
+              "model": "courseTitle",
+              "schema": {
+                "not": {
+                  "type": "string"
+                }
+              }
+            },
+            "fieldOptions": {
+              "class": [
+                "alert alert-danger"
+                ]
+            },
+            "children": [
+            {"component": "div",
+              "fieldOptions": {
+                "domProps": {
+                  "innerHTML": "This field is required"
+                  }
+                }
+              }]
+            }
+          ]
+        },
+      ]
+    }
   }
 }
 </script>
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>
