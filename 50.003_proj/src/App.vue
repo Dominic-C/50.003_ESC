@@ -7,7 +7,7 @@
       <!-- <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar> -->
       
       <v-app id="dayspan" v-cloak>
-        <ds-weekly-calendar :events="calendarEvents" :calendar="calendar"></ds-weekly-calendar>
+        <ds-weekly-calendar :events="calendarEvents" :calendar="calendar" :read-only="true"></ds-weekly-calendar>
         <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
         <!-- <ds-calendar-app :calendar="calendar"></ds-calendar-app> -->
       </v-app>
@@ -212,7 +212,9 @@ export default {
             eventData.push({
               data: {
                 title: lesson.title,
-                color: this.getColour(course)
+                color: this.getColour(course),
+                location: lesson.location,
+                calendar: "First Draft"
               },
               schedule: {
                 dayOfWeek: [lesson.day],
