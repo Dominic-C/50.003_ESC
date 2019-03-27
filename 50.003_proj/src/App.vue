@@ -5,7 +5,7 @@
       <search-courses :courseList="courseList" v-if="activeComp.courseListing"></search-courses>
       <list-selection :courseList="courseList" v-if="activeComp.courseListing"></list-selection>
       <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar>
-      
+      <form-submit v-if="activeComp.formSubmitter"></form-submit>
       <v-app id="dayspan" v-cloak v-if="activeComp.weeklyCalendar">
         <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar>
         <!-- <calendar></calendar> -->
@@ -23,6 +23,7 @@ import SearchCourses from './components/SearchCourses.vue';
 import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
+import FormSubmit from './components/FormSubmit.vue';
 // import Calendar from './components/Calendar.vue';
 
 export default {
@@ -189,6 +190,7 @@ export default {
     ListSelection,
     WeeklyCalendar,
     dsWeeklyCalendar,
+    FormSubmit
     // Calendar
   },
   computed: {
