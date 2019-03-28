@@ -1,29 +1,36 @@
 <template>
-  <v-container fluid>
-    <v-layout wrap>
-      <v-flex xs12>
-        <form @submit="onSubmit" novalidate>
-        <vue-form-json-schema
-        :model="model"
-        :schema="schema"
-        :ui-schema="uiSchema"
-        v-on:change="onChange"
-        v-on:state-change="onChangeState"
-        v-on:validated="onValidated"
-        ref="form"
-        >
-        </vue-form-json-schema>
+  <div id="FormSubmit">
+    <v-container fluid>
+      <v-layout wrap>
+        <v-flex xs12>
 
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">
-            Submit form
-          </button>
-        </div>
-        </form>
-        <div>{{ valid }}</div>
-      </v-flex>
-    </v-layout>
-  </v-container>
+          <form @submit="onSubmit" novalidate>
+            <vue-form-json-schema
+            :model="model"
+            :schema="schema"
+            :ui-schema="uiSchema"
+            v-on:change="onChange"
+            v-on:state-change="onChangeState"
+            v-on:validated="onValidated"
+            ref="form"
+            >
+            </vue-form-json-schema>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+              Submit form
+            </button>
+          </div>
+          </form>
+
+          <div>
+            {{ valid }}
+          </div>
+
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
