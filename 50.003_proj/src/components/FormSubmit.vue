@@ -2,13 +2,25 @@
   <v-container fluid>
     <v-layout wrap>
       <v-flex xs12>
+        <form @submit="onSubmit" novalidate>
         <vue-form-json-schema
-      :model="model"
-      :schema="schema"
-      :ui-schema="uiSchema"
-      :on-change="onChange"
-      >
-      </vue-form-json-schema>
+        :model="model"
+        :schema="schema"
+        :ui-schema="uiSchema"
+        v-on:change="onChange"
+        v-on:state-change="onChangeState"
+        v-on:validated="onValidated"
+        ref="form"
+        >
+        </vue-form-json-schema>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">
+            Submit form
+          </button>
+        </div>
+        </form>
+        <div>{{ valid }}</div>
       </v-flex>
     </v-layout>
   </v-container>
@@ -24,11 +36,14 @@ export default {
   name: 'FormSubmit',
   data() {
     return {
-      model: {
-      },
+      model: {},
+      state: {},
+      valid: false,
       options: {
         "castToSchemaType": true
       },
+      submitted: false,
+      success: false,
       // Some valid JSON Schema Object
       schema: {
         'type' : 'object',
@@ -616,9 +631,29 @@ export default {
       methods: {
         onChange(value) {
           this.model = value;
-      }
+        },
+        onChangeState(value){
+          this.state = value;
+        },
+        onValidated(value) {
+          this.valid = value;
+        },
+        onSubmit(e){
+          e.preventDefault();
+
+          this.submitted = true;
+          this.options = {
+            ...this.options,
+            showValidationErrors: true
+          };
+
+          if (this.valid){
+            this.success = true;
+          }
+        }
+
     },
     }
   }
-}
+};
 </script>
