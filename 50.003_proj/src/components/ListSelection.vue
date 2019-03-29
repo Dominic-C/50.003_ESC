@@ -1,20 +1,20 @@
 <template>
-    <v-container fluid v-if="alive">
-        <v-layout wrap>
-            <v-flex xs12>
-                <p>These are the courses you have selected:</p>
-                <ul>
-                    <li v-for="course in coursesSelected" :key="course.id">
-                    {{ course.courseName }}</li>
-                </ul>
-            </v-flex>
-        </v-layout>
-    </v-container>
+  <v-container fluid v-if="alive">
+    <v-layout wrap>
+      <v-flex xs12>
+        <p>These are the courses you have selected:</p>
+        <ul>
+            <li v-for="course in coursesSelected" :key="course.id">
+            {{ course.courseName }}</li>
+        </ul>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: 'SearchCourses',
+  name: 'ListSelection',
   props: {
     courseList: {
       type: Array,

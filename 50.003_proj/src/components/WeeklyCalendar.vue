@@ -1,65 +1,65 @@
 <template>
   <div v-if="alive" >
-  <v-layout>
-    <v-flex>
-      <v-sheet height="400">
-        <v-calendar
-          ref="calendar"
-          type="week"
-        >
-          <template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
-            <template v-for="event in eventsMap[date]">
-            <v-menu 
-              offset-x
-              :key="event.title">
-              <template v-slot:activator="{ on }">
-                <div
-                v-on="on"
-                v-if="event.time"
-                v-bind:key="event.title"
-                :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"
-                class="my-event with-time"
-                v-html="event.title"
-                ></div>
-            </template>
-            <v-card
-                color="grey lighten-4"
-                min-width="350px"
-                flat
-                >
-                  <v-toolbar
-                    color="primary"
-                    dark
+    <v-layout>
+      <v-flex>
+        <v-sheet height="400">
+          <v-calendar
+            ref="calendar"
+            type="week"
+          >
+            <template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
+              <template v-for="event in eventsMap[date]">
+              <v-menu 
+                offset-x
+                :key="event.title">
+                <template v-slot:activator="{ on }">
+                  <div
+                  v-on="on"
+                  v-if="event.time"
+                  v-bind:key="event.title"
+                  :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"
+                  class="my-event with-time"
+                  v-html="event.title"
+                  ></div>
+              </template>
+              <v-card
+                  color="grey lighten-4"
+                  min-width="350px"
+                  flat
                   >
-                    <v-btn icon>
-                      <v-icon>edit</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>{{ event.title }}</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn icon>
-                      <v-icon>more_vert</v-icon>
-                    </v-btn>
-                  </v-toolbar>
-                  <v-card-title primary-title>
-                    <p>Start Time: {{ event.time }}</p>
-                    <p>Location: {{ event.location }}</p>
-                  </v-card-title>
-                  <v-card-actions>
-                    <v-btn
-                      flat
-                      color="secondary"
+                    <v-toolbar
+                      color="primary"
+                      dark
                     >
-                      Cancel
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-                </v-menu>
+                      <v-btn icon>
+                        <v-icon>edit</v-icon>
+                      </v-btn>
+                      <v-toolbar-title>{{ event.title }}</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-btn icon>
+                        <v-icon>more_vert</v-icon>
+                      </v-btn>
+                    </v-toolbar>
+                    <v-card-title primary-title>
+                      <p>Start Time: {{ event.time }}</p>
+                      <p>Location: {{ event.location }}</p>
+                    </v-card-title>
+                    <v-card-actions>
+                      <v-btn
+                        flat
+                        color="secondary"
+                      >
+                        Cancel
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                  </v-menu>
+              </template>
             </template>
-          </template>
-        </v-calendar>
-      </v-sheet>
-    </v-flex>
-  </v-layout>
+          </v-calendar>
+        </v-sheet>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -127,6 +127,7 @@
       }
     },
     mounted () {
+       console.log(this.$refs)
       this.$refs.calendar.scrollToTime('08:00')     
     },
     methods: {

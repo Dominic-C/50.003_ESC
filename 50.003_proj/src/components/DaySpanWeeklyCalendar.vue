@@ -1,8 +1,6 @@
 <template>
-<div class="ds-expand ds-calendar-app">
-  <v-content class="ds-expand">
-    <v-container fluid fill-height class="ds-calendar-container">
 
+    <v-container fluid fill-height class="ds-calendar-container">
       <ds-gestures
         @swipeleft="next"
         @swiperight="prev">
@@ -85,12 +83,7 @@
         </v-fab-transition>
 
       </slot>
-
-      <slot name="containerInside" v-bind="{events, calendar}"></slot>
-
     </v-container>
-  </v-content>
-</div>
 </template>
 
 <script>

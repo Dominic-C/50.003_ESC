@@ -1,4 +1,6 @@
 <template>
+  <!-- <div class="ds-expand ds-calendar-app">
+   -->
     <ds-weekly-calendar :events="events" :calendar="calendar" :read-only="readOnly">
       <template slot="eventDetailsExtra" slot-scope="{ details }">
         <v-text-field 
@@ -17,6 +19,7 @@
         ></v-text-field>
       </template>
     </ds-weekly-calendar>
+  <!-- </div> -->
 </template>
 
 <script>

@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <v-app id="inspire">
+  <div id="app">
+    <v-app id="dayspan" v-cloak>
       <app-header></app-header>
-      <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
-      <!-- <list-selection :courseList="courseList" :isActive="isActive"></list-selection> -->
-      <!-- <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar> -->
-      <v-app id="dayspan" v-cloak>
+      <v-content>
+        <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
+        <!-- <list-selection :courseList="courseList" :isActive="isActive"></list-selection> -->
+        <!-- <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar> -->
         <weekly-calendar-finalised :events="calendarEvents"></weekly-calendar-finalised>
-        <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
-        <!-- <ds-calendar-app :calendar="calendar"></ds-calendar-app> -->
-      </v-app>
-      
+        <!-- <v-app id="dayspan" v-cloak> -->
+          <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
+          <!-- <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar> -->
+        <!-- </v-app> -->
+      </v-content>
     </v-app>
   </div>
 </template>
@@ -28,6 +29,7 @@ import weeklyCalendarFinalised from './components/WeeklyCalendarFinalised.vue'
 export default {
   name: 'app',
   data: () => ({
+    calendar: Calendar.weeks(),
     coloursUsed: [],
     courseList: [
         {"courseName": "50.003 Elements of Software Constructions",
@@ -209,7 +211,7 @@ export default {
     isActive: [
       {
         "name": "weeklyCalendar",
-        "live": false
+        "live": true
       },
       {
         "name": "searchCourses",
