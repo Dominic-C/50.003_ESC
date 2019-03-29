@@ -5,12 +5,12 @@
       <search-courses :courseList="courseList" :isActive="isActive"></search-courses>
       <!-- <list-selection :courseList="courseList" :isActive="isActive"></list-selection> -->
       <!-- <weekly-calendar :courseList="courseList" :isActive="isActive"></weekly-calendar> -->
-      
       <v-app id="dayspan" v-cloak>
-        <ds-weekly-calendar :events="calendarEvents" :calendar="calendar" :read-only="true"></ds-weekly-calendar>
+        <weekly-calendar-finalised :events="calendarEvents"></weekly-calendar-finalised>
         <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
         <!-- <ds-calendar-app :calendar="calendar"></ds-calendar-app> -->
       </v-app>
+      
     </v-app>
   </div>
 </template>
@@ -23,11 +23,11 @@ import SearchCourses from './components/SearchCourses.vue';
 import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
+import weeklyCalendarFinalised from './components/WeeklyCalendarFinalised.vue'
 
 export default {
   name: 'app',
   data: () => ({
-    calendar: Calendar.weeks(),
     coloursUsed: [],
     courseList: [
         {"courseName": "50.003 Elements of Software Constructions",
@@ -42,13 +42,17 @@ export default {
               time: '09:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'              
             },
             {
               title: '50.003 Lecture',
               day: Weekday.TUESDAY,
               time: '10:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             }
           ]},
         {"courseName": "50.005 Computer Systems Engineering",
@@ -63,13 +67,17 @@ export default {
               time: '14:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             },
             {
               title: '50.005 Lecture',
               day: Weekday.THURSDAY,
               time: '11:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             }
           ]},
         {"courseName": "50.034 Probability and Statistics",
@@ -84,13 +92,17 @@ export default {
               time: '09:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             },
             {
               title: '50.034 Lecture',
               day: Weekday.TUESDAY,
               time: '10:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun',
             }
           ]},
         {"courseName": "50.004 Algorithms",
@@ -105,13 +117,18 @@ export default {
               time: '09:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
+              
             },
             {
               title: '50.004 Lecture',
               day: Weekday.TUESDAY,
               time: '10:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             }
           ]},
         {"courseName": "01.112 Machine Learning",
@@ -126,13 +143,17 @@ export default {
               time: '09:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             },
             {
               title: '01.112 Lecture',
               day: Weekday.TUESDAY,
               time: '10:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             }
           ]},
         {"courseName": "50.040 Natural Language Processing",
@@ -147,13 +168,17 @@ export default {
               time: '09:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             },
             {
               title: '50.040 Lecture',
               day: Weekday.TUESDAY,
               time: '10:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             }
           ]},
         {"courseName": "50.006 User Interface",
@@ -168,13 +193,17 @@ export default {
               time: '09:00',
               duration: 60,
               location: '2.501',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             },
             {
               title: '50.006 Lecture',
               day: Weekday.TUESDAY,
               time: '10:00',
               duration: 90,
-              location: '1.203'
+              location: '1.203',
+              classEnrolled: 'F01',
+              professor: 'Sun Jun'
             }]
         }],
     isActive: [
@@ -202,6 +231,7 @@ export default {
     ListSelection,
     WeeklyCalendar,
     dsWeeklyCalendar,
+    weeklyCalendarFinalised
   },
   computed: {
     calendarEvents() {
@@ -214,7 +244,9 @@ export default {
                 title: lesson.title,
                 color: this.getColour(course),
                 location: lesson.location,
-                calendar: "First Draft"
+                calendar: "First Draft",
+                professor: lesson.professor,
+                classEnrolled: lesson.classEnrolled
               },
               schedule: {
                 dayOfWeek: [lesson.day],
@@ -233,7 +265,7 @@ export default {
     getColour(course){
       if (course.colour === '') {
         let colour = Colors[Math.floor(Colors.length * Math.random())].value;
-        while (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
+        if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
           this.getColour();
         }
         this.coloursUsed.push(colour);
