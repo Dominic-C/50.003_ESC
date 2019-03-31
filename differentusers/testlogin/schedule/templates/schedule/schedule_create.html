@@ -24,12 +24,13 @@
       <form method="post" novalidate>
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
-        {{ form.title|as_crispy_field }}
+<!--         {{ form.title|as_crispy_field }}
         {{ form.description|as_crispy_field }}
         {{ form.start_time|as_crispy_field }}
         {{ form.end_time|as_crispy_field }}
         {{ form.lecturer|as_crispy_field }}
-        {{ form.location|as_crispy_field }}
+        {{ form.location|as_crispy_field }} -->
+        {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>

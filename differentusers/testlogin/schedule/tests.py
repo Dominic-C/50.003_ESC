@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 # Create your tests here.
 class ScheduleTestCase(TestCase):
     def setUp(self):
-        Schedule.objects.create(title = "50.005 CSE", start_time = "09:00", end_time = "10:30", lecturer = "Prof David", location = "2.506")
+        Schedule.objects.create(title = "50.005 CSE", date = "2019-03-31", start_time = "09:00", end_time = "10:30", lecturer = "Prof David", location = "2.506")
 
     def test_successfully_created(self):
         check = Schedule.objects.get(title = "50.005 CSE")
@@ -22,7 +22,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(test_location, "2.506")
 
     def test_create_schedule_form_valid(self):
-        form_data = {'title' : "10.009 Digital World", 'start_time' : "09:00", 'end_time' : "10:30", "lecturer" : "Prof Oka", "location" : "2.506"}
+        form_data = {'title' : "10.009 Digital World", 'date': "2019-03-31",'start_time' : "09:00", 'end_time' : "10:30", "lecturer" : "Prof Oka", "location" : "2.506"}
         response = self.client.post(reverse("schedule:create"), form_data)
         self.assertEqual(Schedule.objects.last().title, "10.009 Digital World")
         self.assertEqual(Schedule.objects.last().lecturer, "Prof Oka")
