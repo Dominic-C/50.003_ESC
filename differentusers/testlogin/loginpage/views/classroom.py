@@ -20,6 +20,8 @@ def home(request):
             return redirect('professors:professor_main')
         elif request.user.user_type == usertypes['coursecoordinators']:
         	return redirect('coordinators:coordinator_main')
+        elif request.user.user_type == usertypes['timetableplanner']:
+            return redirect('planners:planner_main')
         else:
             return redirect('students:student_main')
     return render(request, 'classroom/home.html')
