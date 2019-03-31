@@ -66,6 +66,22 @@ class CoordinatorSignUpForm(UserCreationForm):
             user.save()
         return user
 
+class PlannerSignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=50, required=True)
+    last_name = forms.CharField(max_length=50, required=True)
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.user_type = usertypes['timetableplanner']
+        if commit:
+            user.save()
+        return user
+
 class SubmitCourseDetails(forms.ModelForm):
 
     class Meta:

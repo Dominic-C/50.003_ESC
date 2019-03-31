@@ -18,7 +18,7 @@ from django.urls import path
 from django.conf.urls import include
 
 
-from loginpage.views import classroom, students, professors, coordinators
+from loginpage.views import classroom, students, professors, coordinators, planners
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +28,6 @@ urlpatterns = [
     path('accounts/signup/student/', students.StudentSignUpView.as_view(), name='student_signup'),
     path('accounts/signup/professor/', professors.ProfessorSignUpView.as_view(), name='professor_signup'),
     path('accounts/signup/coordinator/', coordinators.CoordinatorSignUpView.as_view(), name='coordinator_signup'),
+    path('accounts/signup/planner/', planners.PlannerSignUpView.as_view(), name='planner_signup'),
     path('schedule/', include('schedule.urls')),
 ]

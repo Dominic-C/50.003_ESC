@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import classroom, students, professors, coordinators
+from .views import classroom, students, professors, coordinators, planners
 
 urlpatterns = [
     path('', classroom.home, name='home'),
@@ -21,4 +21,9 @@ urlpatterns = [
         path('', coordinators.CoordinatorMainView.as_view(), name='coordinator_main'),
         path('accounts', coordinators.CoordinatorAccountsListView.as_view(), name='accountlist')
     ], 'classroom'), namespace='coordinators')),
+
+    path('planners/', include(([
+        path('', planners.PlannerMainView.as_view(), name='planner_main'),
+        path('export', planners.PreferencesCSVExportView.as_view(), name="exportcsv")
+    ], 'classroom'), namespace='planners')),
 ]
