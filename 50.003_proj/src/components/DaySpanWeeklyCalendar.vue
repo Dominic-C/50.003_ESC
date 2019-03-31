@@ -1,8 +1,6 @@
 <template>
-<div class="ds-expand ds-calendar-app">
-  <v-content class="ds-expand">
-    <v-container fluid fill-height class="ds-calendar-container">
 
+    <v-container fluid fill-height class="ds-calendar-container">
       <ds-gestures
         @swipeleft="next"
         @swiperight="prev">
@@ -85,12 +83,7 @@
         </v-fab-transition>
 
       </slot>
-
-      <slot name="containerInside" v-bind="{events, calendar}"></slot>
-
     </v-container>
-  </v-content>
-</div>
 </template>
 
 <script>
@@ -123,7 +116,6 @@ export default {
     {
       type: Array,
       default() {
-				console.log(this);
         return this.$dsDefaults().types;
       }
     },
@@ -253,6 +245,7 @@ export default {
         this.promptVisible = true;
       };
     }
+    this.applyEvents();
   },
   methods:
   {
@@ -266,6 +259,7 @@ export default {
     },
     applyEvents()
     {
+      // console.log(this.events[0].schedule.toInput);
       if (this.events)
       {
         this.calendar.removeEvents();

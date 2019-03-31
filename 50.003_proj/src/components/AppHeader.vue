@@ -1,47 +1,71 @@
 <template>
-    <div>
-        <v-container>
-            <v-navigation-drawer
-                fixed
-                :clipped="$vuetify.breakpoint.mdAndUp"
-                app
-                v-model="drawerIsOpen"
-                >
-                <v-list dense v-for="item in drawerItems" :key="item.text">
-                    <v-list-tile @click="toggleVisible(item.name)">
-                        <v-list-tile-action>
-                            <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                        <v-list-tile-title>
-                        {{ item.text }}
-                        </v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+	<div>
+		<v-navigation-drawer
+			fixed
+			:clipped="$vuetify.breakpoint.mdAndUp"
+			app
+			v-model="drawerIsOpen"
+			>
+			<v-list dense v-for="item in drawerItems" :key="item.text">
+				<v-list-group v-if="item.children"
+					v-model="item.open"
+					:key="item.text"
+					:prepend-icon="item.icon"
+				>
+					<v-list-tile slot="activator">
+						<v-list-tile-content>
+							<v-list-tile-title>
+								{{ item.text }}
+							</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile v-for="(child, i) in item.children"
+						:key="i"
+						@click="toggleVisible(item.name)"
+					>
+						<v-list-tile-content>
+							<v-list-tile-title >
+								{{ child.text }}
+							</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+				</v-list-group>
 
-                </v-list>
-                </v-navigation-drawer>
-                <v-toolbar
-                    color="blue darken-3"   
-                    dark
-                    app
-                    :clipped-left="$vuetify.breakpoint.mdAndUp"    
-                    fixed
-                    >
-                    <v-toolbar-title style="width: 300px">
-                        <v-toolbar-side-icon @click.stop="drawerIsOpen = !drawerIsOpen"></v-toolbar-side-icon>
-                        <span class="hidden-sm-and-down">SUTD Calendar</span>
-                    </v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn icon>
-                        <v-icon large>notifications</v-icon>
-                    </v-btn>
-                    <v-btn icon>
-                        <v-icon large>account_circle</v-icon>
-                    </v-btn>
-                </v-toolbar>
-        </v-container>
-    </div>
+				<!-- for no subgroup -->
+				<v-list-tile v-else @click="toggleVisible(item.name)" :key="item.text">
+					<v-list-tile-action>
+						<v-icon>
+							{{ item.icon }}
+						</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title>
+							{{ item.text }}
+						</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+			</v-list>
+		</v-navigation-drawer>
+		<v-toolbar
+			color="blue darken-3"   
+			dark
+			app
+			:clipped-left="$vuetify.breakpoint.mdAndUp"    
+			fixed
+			>
+			<v-toolbar-title style="width: 300px">
+					<v-toolbar-side-icon @click.stop="drawerIsOpen = !drawerIsOpen"></v-toolbar-side-icon>
+					<span class="hidden-sm-and-down">SUTD Calendar</span>
+			</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn icon>
+					<v-icon large>notifications</v-icon>
+			</v-btn>
+			<v-btn icon>
+					<v-icon large>account_circle</v-icon>
+			</v-btn>
+		</v-toolbar>
+	</div>
 </template>
 
 <script>
@@ -50,19 +74,55 @@ export default {
   data: () => ({
       drawerIsOpen: false,
       drawerItems: [
-        { name: 'a', icon: 'contacts', text: 'Contacts'},
-        { name: 'formSubmitter', icon: 'cloud_upload', text: 'Form Submission'},
-        { name: 'courseListing', icon: 'import_export', text: 'Export Calendar'},
-        { name: 'weeklyCalendar', icon: 'date_range', text: 'Weekly Calendar'},
-        { name: 'b', icon: 'settings', text: 'Settings'},
-        { name: 'c', icon: 'message', text: 'Messages'},
-        { name: 'd', icon: 'help', text: 'Help'}
+				// { name: 'a', icon: 'contacts', text: 'Contacts'},
+        // { name: 'formSubmitter', icon: 'cloud_upload', text: 'Form Submission'},
+        // { name: 'courseListing', icon: 'import_export', text: 'Export Calendar'},
+        // { name: 'weeklyCalendar', icon: 'date_range', text: 'Weekly Calendar'},
+        // { name: 'b', icon: 'settings', text: 'Settings'},
+        // { name: 'c', icon: 'message', text: 'Messages'},
+        // { name: 'd', icon: 'help', text: 'Help'}
+        // { icon: 'contacts', text: 'Contacts', event: ""},
+        // { icon: 'assignment', text: 'Form Submission'},
+        // { icon: 'import_export', text: 'Export Calendar'},
+        // { icon: 'calendar_today', text: 'Calendar'},
+        // { icon: 'settings', text: 'Settings'},
+        // { icon: 'message', text: 'Messages'},
+				// { icon: 'help', text: 'Help'}
+				{
+					name: 'formSubmitter',
+					icon: 'assignment',
+					text: 'Forms',
+					open: false,
+					children: [
+						{ text: 'Submit Form' },
+						{ text: 'View Submissions' }
+					]
+				},
+				{
+					name: 'weeklyCalendar',
+          icon: 'event',
+          text: 'Calendar',
+          open: false,
+          children: [
+            { text: 'View Calendar' },
+            { text: 'Export Calendar' },
+            { text: 'Suggest Timings' },
+            { text: 'Request Changes' },
+            { text: 'View Requests' }
+          ]
+				},
+				{ icon: 'message', text: 'Message'},
+				{ icon: 'calendar_today', text: 'test'},
+				{ name: 'courseListing', text: 'Course List'}
       ]
-    }),
-    methods: {
-        toggleVisible(name) {
-            this.$emit('changeComp', name)
-        }
-    }
+		}),
+		methods: {
+			toggleVisible(name) {
+        this.$emit('changeComp', name)
+      },
+			print(item) {
+				console.log(item.text + " was clicked");
+			}
+		}
 }
 </script>

@@ -13,6 +13,13 @@ Vue.config.productionTip = false
 Vue.use(Vuetify);
 
 Vue.use(DaySpanVuetify, {
+  data: {
+    supports: {
+      color: false,
+      busy: false,
+      icon: false,
+    }
+  },
   methods: {
     getDefaultEventColor: () => '#1976d2'
   }
