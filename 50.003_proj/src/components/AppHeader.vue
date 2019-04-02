@@ -21,7 +21,7 @@
 					</v-list-tile>
 					<v-list-tile v-for="(child, i) in item.children"
 						:key="i"
-						@click="toggleVisible(item.name)"
+						@click="toggleVisible(child.name)"
 					>
 						<v-list-tile-content>
 							<v-list-tile-title >
@@ -94,8 +94,8 @@ export default {
 					text: 'Forms',
 					open: false,
 					children: [
-						{ text: 'Submit Form' },
-						{ text: 'View Submissions' }
+						{ name: 'formSubmitNewCourse', text: 'Submit Form' },
+						{ name: 'viewCurrSuggestions', text: 'View Submissions' }
 					]
 				},
 				{
@@ -104,25 +104,24 @@ export default {
           text: 'Calendar',
           open: false,
           children: [
-            { text: 'View Calendar' },
-            { text: 'Export Calendar' },
-            { text: 'Suggest Timings' },
-            { text: 'Request Changes' },
-            { text: 'View Requests' }
+            { name: 'viewTimetableToSuggest',		text: 'View Calendar' },
+            { name: 'exportCoursesForPlanner', 	text: 'Export Calendar' },
+            { name: 'viewTimetableToSuggest',		text: 'Suggest Timings' },
+            { name: 'requestChangesToCalendar', text: 'Request Changes' },
+            { name: 'viewExistingRequests', 		text: 'View Requests' }
           ]
 				},
-				{ icon: 'message', text: 'Message'},
-				{ icon: 'calendar_today', text: 'test'},
-				{ name: 'courseListing', text: 'Course List'}
+				{ name: 'courseListingForViewer', icon: 'line_style', text: 'Course List'}
       ]
 		}),
 		methods: {
 			toggleVisible(name) {
         this.$emit('changeComp', name)
-      },
-			print(item) {
-				console.log(item.text + " was clicked");
-			}
+      }
+			//,
+			//print(item) {
+			//	console.log(item.text + " was clicked");
+			//}
 		}
 }
 </script>

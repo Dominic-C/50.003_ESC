@@ -3,12 +3,12 @@
     <v-app id="dayspan" v-cloak>
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
-        <search-courses :courseList="courseList" v-if="activeComp.courseListing || activeComp.weeklyCalendar"></search-courses>
-        <list-selection :courseList="courseList" v-if="activeComp.courseListing"></list-selection>
+        <form-submit v-if="activeComp.formSubmitNewCourse"></form-submit>
+        <search-courses :courseList="courseList" v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest"></search-courses>
+        <list-selection :courseList="courseList" v-if="activeComp.courseListingForViewer"></list-selection>
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <form-submit v-if="activeComp.formSubmitter"></form-submit>
-        <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.weeklyCalendar">></weekly-calendar-finalised>
-        <weekly-calendar-suggestable :events="calendarEvents" v-if="activeComp.weeklyCalendar">></weekly-calendar-suggestable>
+        <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-finalised>
+        <weekly-calendar-suggestable :events="calendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-suggestable>
         <!-- <ds-calendar :calendar="calendar" v-if="activeComp.weeklyCalendar">></ds-calendar> -->
         <!-- <v-app id="dayspan" v-cloak> -->
           <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
@@ -214,9 +214,16 @@ export default {
             }]
         }],
     activeComp: {
-      weeklyCalendar : false,
-      courseListing : true,
-      formSubmitter : false
+      // Submit new Course, Export Suggestions
+      formSubmitNewCourse : false,
+      viewCurrSuggestions : false,
+      exportCoursesForPlanner : false,
+      // Suggest new timings for course
+      viewTimetableToSuggest : false,
+      viewExistingRequests : false,
+      // After Finalization activities:
+      requestChangesToCalendar : false,
+      courseListingForViewer : false
     }
   }),
   components: {
@@ -259,18 +266,34 @@ export default {
   },
   methods: {
     toggleVisible : function(item) {
-      this.activeComp.formSubmitter = false
-      this.activeComp.weeklyCalendar = false
-      this.activeComp.courseListing = false
+      this.activeComp.formSubmitNewCourse = false
+      this.activeComp.viewCurrSuggestions = false
+      this.activeComp.exportCoursesForPlanner = false
+      this.activeComp.viewTimetableToSuggest = false
+      this.activeComp.viewExistingRequests = false
+      this.activeComp.requestChangesToCalendar = false
+      this.activeComp.courseListingForViewer = false
 
-      if(item == "formSubmitter"){
-        this.activeComp.formSubmitter = true
+      if(item == "formSubmitNewCourse"){
+        this.activeComp.formSubmitNewCourse = true
       }
-      if(item == "weeklyCalendar"){
-        this.activeComp.weeklyCalendar = true
+      if(item == "viewCurrSuggestions"){
+        this.activeComp.viewCurrSuggestions = true
       }
-      if(item == "courseListing"){
-        this.activeComp.courseListing = true
+      if(item == "exportCoursesForPlanner"){
+        this.activeComp.exportCoursesForPlanner = true
+      }
+      if(item == "viewTimetableToSuggest"){
+        this.activeComp.viewTimetableToSuggest = true
+      }
+      if(item == "viewExistingRequests"){
+        this.activeComp.viewExistingRequests = true
+      }
+      if(item == "requestChangesToCalendar"){
+        this.activeComp.requestChangesToCalendar = true
+      }
+      if(item == "courseListingForViewer"){
+        this.activeComp.courseListingForViewer = true
       }
     },
     getColour(course){
