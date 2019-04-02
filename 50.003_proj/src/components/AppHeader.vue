@@ -24,6 +24,9 @@
 						@click="toggleVisible(child.name)"
 					>
 						<v-list-tile-content>
+							<v-icon>
+								{{ child.icon }}
+							</v-icon>
 							<v-list-tile-title >
 								{{ child.text }}
 							</v-list-tile-title>
@@ -94,8 +97,8 @@ export default {
 					text: 'Forms',
 					open: false,
 					children: [
-						{ name: 'formSubmitNewCourse', text: 'Submit Form' },
-						{ name: 'viewCurrSuggestions', text: 'View Submissions' }
+						{ name: 'formSubmitNewCourse', icon:'send', 		text: 'Submit Form' },
+						{ name: 'viewCurrSuggestions', icon:'pageview', text: 'View Submissions' }
 					]
 				},
 				{
@@ -104,11 +107,11 @@ export default {
           text: 'Calendar',
           open: false,
           children: [
-            { name: 'viewTimetableToSuggest',		text: 'View Calendar' },
-            { name: 'exportCoursesForPlanner', 	text: 'Export Calendar' },
-            { name: 'viewTimetableToSuggest',		text: 'Suggest Timings' },
-            { name: 'requestChangesToCalendar', text: 'Request Changes' },
-            { name: 'viewExistingRequests', 		text: 'View Requests' }
+            { name: 'viewTimetableToSuggest', 	icon:'calendar_view', text: 'View Calendar' },
+            { name: 'exportCoursesForPlanner', 	icon:'save_alt', 			text: 'Export Calendar' },
+            { name: 'viewTimetableToSuggest',		icon:'timelapse', 		text: 'Suggest Timings' },
+            { name: 'requestChangesToCalendar', icon:'reply_all', 		text: 'Request Changes' },
+            { name: 'viewExistingRequests', 		icon:'view_array', 		text: 'View Requests' }
           ]
 				},
 				{ name: 'courseListingForViewer', icon: 'line_style', text: 'Course List'}
