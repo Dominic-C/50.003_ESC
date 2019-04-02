@@ -1,5 +1,4 @@
 <template>
-
     <v-container fluid fill-height class="ds-calendar-container">
       <ds-gestures
         @swipeleft="next"
@@ -99,6 +98,9 @@ export default {
   name: 'dsCalendarApp',
   props:
   {
+    suggesting: {
+      type: Boolean
+    },
     events: {
       type: Array
     },
@@ -408,6 +410,10 @@ export default {
     },
     handleMove(moveEvent)
     {
+      //if suggesting and event chosen is locked, no action is taken
+      if (this.suggesting && moveEvent.calendarEvent.event.data.locked){
+        return;
+      }
       let calendarEvent = moveEvent.calendarEvent;
       let target = moveEvent.target;
       let targetStart = target.start;

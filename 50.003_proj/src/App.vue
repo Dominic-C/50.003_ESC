@@ -3,11 +3,13 @@
     <v-app id="dayspan" v-cloak>
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
-        <search-courses :courseList="courseList" v-if="activeComp.courseListing"></search-courses>
+        <search-courses :courseList="courseList" v-if="activeComp.courseListing || activeComp.weeklyCalendar"></search-courses>
         <list-selection :courseList="courseList" v-if="activeComp.courseListing"></list-selection>
-        <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar>
+        <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <form-submit v-if="activeComp.formSubmitter"></form-submit>
         <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.weeklyCalendar">></weekly-calendar-finalised>
+        <weekly-calendar-suggestable :events="calendarEvents" v-if="activeComp.weeklyCalendar">></weekly-calendar-suggestable>
+        <!-- <ds-calendar :calendar="calendar" v-if="activeComp.weeklyCalendar">></ds-calendar> -->
         <!-- <v-app id="dayspan" v-cloak> -->
           <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
           <!-- <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar> -->
@@ -26,6 +28,7 @@ import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
 import weeklyCalendarFinalised from './components/WeeklyCalendarFinalised.vue'
+import weeklyCalendarSuggestable from './components/WeeklyCalendarSuggestable.vue'
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -223,7 +226,8 @@ export default {
     WeeklyCalendar,
     dsWeeklyCalendar,
     FormSubmit,
-    weeklyCalendarFinalised
+    weeklyCalendarFinalised,
+    weeklyCalendarSuggestable
   },
   computed: {
     calendarEvents() {

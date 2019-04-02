@@ -1,25 +1,22 @@
 <template>
-  <!-- <div class="ds-expand ds-calendar-app">
-   -->
-    <ds-weekly-calendar :events="events" :calendar="calendar" :read-only="readOnly">
-      <template slot="eventDetailsExtra" slot-scope="{ details }">
-        <v-text-field 
-          single-line hide-details solo flat
-          prepend-icon="school"
-          label="Professor"
-          :readonly="readOnly"
-          v-model="details.professor"
-        >{{ details }}</v-text-field>
-        <v-text-field 
-          single-line hide-details solo flat
-          prepend-icon="group"
-          label="Class enrolled"
-          :readonly="readOnly"
-          v-model="details.classEnrolled"
-        ></v-text-field>
-      </template>
-    </ds-weekly-calendar>
-  <!-- </div> -->
+  <ds-weekly-calendar :events="events" :calendar="calendar" :read-only="readOnly">
+    <template slot="eventDetailsExtra" slot-scope="{ details }">
+      <v-text-field 
+        single-line hide-details solo flat
+        prepend-icon="school"
+        label="Professor"
+        :readonly="readOnly"
+        v-model="details.professor"
+      >{{ details }}</v-text-field>
+      <v-text-field 
+        single-line hide-details solo flat
+        prepend-icon="group"
+        label="Class enrolled"
+        :readonly="readOnly"
+        v-model="details.classEnrolled"
+      ></v-text-field>
+    </template>
+  </ds-weekly-calendar>
 </template>
 
 <script>
@@ -29,7 +26,7 @@ export default {
     name: 'weeklyCalendarFinalised',
     props: {
       events: {
-          type: Array
+        type: Array
       }
     },
     components: {
