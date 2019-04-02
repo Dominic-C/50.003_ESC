@@ -56,7 +56,7 @@ export default {
         suggestingEvent.data.locked = false;
         lockedEvent.data.locked = true;
         lockedEvent.data.color = "#808080";
-        eventData.push(lockedEvent);
+        eventData.unshift(lockedEvent);   //at the front of array so that the locked events will be below
         eventData.push(suggestingEvent);
       }
       // console.log(JSON.stringify(eventData[0].data));
