@@ -247,9 +247,12 @@ export default {
                 title: lesson.title,
                 color: this.getColour(course),
                 location: lesson.location,
-                calendar: "First Draft",
                 professor: lesson.professor,
-                classEnrolled: lesson.classEnrolled
+                classEnrolled: lesson.classEnrolled,
+                calendarType: "Academic",
+                locked: null,
+                suggestedBy: null,
+                requestedBy: null
               },
               schedule: {
                 dayOfWeek: [lesson.day],

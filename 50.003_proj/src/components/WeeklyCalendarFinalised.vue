@@ -5,7 +5,7 @@
         single-line hide-details solo flat
         prepend-icon="school"
         label="Professor"
-        :readonly="readOnly"
+        disabled
         v-model="details.professor"
       >{{ details }}</v-text-field>
       <v-text-field 
