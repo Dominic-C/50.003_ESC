@@ -18,12 +18,15 @@ Vue.use(DaySpanVuetify, {
       color: false,
       busy: false,
       icon: false,
+      calendar: false
     }
   },
   methods: {
     getDefaultEventColor: () => '#1976d2'
   }
 });
+
+Vue.prototype.$calendarTypes = ['Academic', 'Fifth Row', 'Events'];
 
 new Vue({
   render: h => h(App),
