@@ -2,13 +2,18 @@
   <ds-weekly-calendar :events="suggestibleEvents" :calendar="calendar" :suggesting="true">
     <template slot="eventDetailsLocation" slot-scope="{ details }">
        <!-- Location -->
-        <v-text-field v-if="$dayspan.supports.location"
-          single-line hide-details solo flat
-          prepend-icon="location_on"
-          label="Add Location"
-          :readonly="details.locked"
-          v-model="details.location"
-        ></v-text-field>
+        <v-select
+        single-line hide-details solo flat
+        prepend-icon="location_on"
+        :items="$locations"
+        :readonly="details.locked"
+        v-model="details.location">
+        <template slot="item" slot-scope="{ item }">
+          <v-list-tile-content>
+            {{ item }}
+          </v-list-tile-content>
+        </template>
+      </v-select>
      </template>
 
     <!-- Description -->
@@ -109,15 +114,17 @@ export default {
     suggestibleEvents(){
       var eventData = [];   
       for (var event of this.events){
-        var lockedEvent = JSON.parse(JSON.stringify(event)) //copying event object
-        var suggestingEvent = JSON.parse(JSON.stringify(event)) //copying event object
-        // console.log(JSON.stringify(copyEvent.data));
-        suggestingEvent.data.locked = false;
-        suggestingEvent.data.suggestedBy = "username"
-        lockedEvent.data.locked = true;
-        lockedEvent.data.color = "#EBEBE4";
-        eventData.unshift(lockedEvent);   //at the front of array so that the locked events will be below
-        eventData.push(suggestingEvent);
+        if (event.data.calendarType === "Academic"){
+          var lockedEvent = JSON.parse(JSON.stringify(event)) //copying event object
+          var suggestingEvent = JSON.parse(JSON.stringify(event)) //copying event object
+          // console.log(JSON.stringify(copyEvent.data));
+          suggestingEvent.data.locked = false;
+          suggestingEvent.data.suggestedBy = "username"
+          lockedEvent.data.locked = true;
+          lockedEvent.data.color = "#EBEBE4";
+          eventData.unshift(lockedEvent);   //at the front of array so that the locked events will be below
+          eventData.push(suggestingEvent);
+        }
       }
       // console.log(JSON.stringify(eventData[0].data));
       // console.log(this.events);

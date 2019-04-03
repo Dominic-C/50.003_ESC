@@ -3,7 +3,21 @@
       <ds-gestures
         @swipeleft="next"
         @swiperight="prev">
-        <div class="ds-expand">
+        <div v-if="currentType.schedule" class="ds-expand">
+          <slot name="calendarAppAgenda" v-bind="{$scopedSlots, $listeners, calendar, add, edit, viewDay}">
+            <ds-agenda
+              v-bind="{$scopedSlots}"
+              v-on="$listeners"
+              :read-only="readOnly"
+              :calendar="calendar"
+              @add="add"
+              @edit="edit"
+              @view-day="viewDay"
+            ></ds-agenda>
+          </slot>
+        </div>
+
+        <div v-else class="ds-expand">
           <slot name="weeklyCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
             <ds-calendar ref="calendar"
               v-bind="{$scopedSlots}"
@@ -86,7 +100,7 @@
 </template>
 
 <script>
-import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op } from 'dayspan';
+import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op, Schedule } from 'dayspan';
 import Vuetify from 'vuetify'
 import DaySpanVuetify from 'dayspan-vuetify'
 	
@@ -98,6 +112,9 @@ export default {
   name: 'dsCalendarApp',
   props:
   {
+    userName: {
+      type: String
+    },
     suggesting: {
       type: Boolean
     },
@@ -173,7 +190,7 @@ export default {
     options: [],
     promptVisible: false,
     promptQuestion: '',
-    promptCallback: null
+    promptCallback: null,
   }),
   watch:
   {
@@ -340,7 +357,13 @@ export default {
       calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        eventDialog.add(day);
+        //fill in suggestedBy and locked status by default for suggesting mode
+        if (this.suggesting){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
+        } 
+        else {
+          eventDialog.add(day);
+        }
         eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
@@ -357,7 +380,13 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
-        eventDialog.addAt(dayHour.day, dayHour.hour);
+        //fill in suggestedBy and locked status by default for suggesting mode
+        if (this.suggesting){
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:this.userName, locked: false});
+        } 
+        else{
+          eventDialog.addAt(dayHour.day, dayHour.hour);
+        }
         eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
@@ -382,7 +411,13 @@ export default {
       calendar && calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        eventDialog.add( day );
+        //fill in suggestedBy and locked status by default for suggesting mode
+        if (this.suggesting){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
+        } 
+        else {
+          eventDialog.add( day );
+        }
         calendar && eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
