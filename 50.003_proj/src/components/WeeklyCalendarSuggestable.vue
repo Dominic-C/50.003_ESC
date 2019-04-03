@@ -2,13 +2,18 @@
   <ds-weekly-calendar :events="suggestibleEvents" :calendar="calendar" :suggesting="true">
     <template slot="eventDetailsLocation" slot-scope="{ details }">
        <!-- Location -->
-        <v-text-field v-if="$dayspan.supports.location"
-          single-line hide-details solo flat
-          prepend-icon="location_on"
-          label="Add Location"
-          :readonly="details.locked"
-          v-model="details.location"
-        ></v-text-field>
+        <v-select
+        single-line hide-details solo flat
+        prepend-icon="location_on"
+        :items="$locations"
+        :readonly="details.locked"
+        v-model="details.location">
+        <template slot="item" slot-scope="{ item }">
+          <v-list-tile-content>
+            {{ item }}
+          </v-list-tile-content>
+        </template>
+      </v-select>
      </template>
 
     <!-- Description -->
