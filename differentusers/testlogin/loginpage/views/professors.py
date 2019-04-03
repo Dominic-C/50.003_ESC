@@ -6,12 +6,13 @@ from django.db.models import Avg, Count
 from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView, TemplateView, FormView)
+                                  UpdateView, TemplateView, View)
 
-from ..decorators import professor_required
-from ..forms import ProfessorSignUpForm, SubmitCourseDetails, SubmitCourseDetails
+from ..decorators import professor_required, drafting_required, beforefirstdraft_required
+from ..forms import ProfessorSignUpForm, SubmitCourseDetails
 from ..models import User, Preferences
 
 
@@ -25,8 +26,10 @@ class ProfessorSignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
+        userdetail = form.save(commit=False)
+        userdetail.phase = 1
+        userdetail = form.save()
+        login(self.request, userdetail)
         return redirect('professors:professor_main')
 
 
@@ -36,7 +39,7 @@ class ProfessorMainView(TemplateView):
 
 
 
-@method_decorator([login_required, professor_required], name='dispatch')
+@method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
 class SubmitCourseDetailsView(CreateView):
     model = Preferences
     fields = ['subject_code', 'subject_name', 'cohort_size', 'cohort_num']
@@ -52,7 +55,7 @@ class SubmitCourseDetailsView(CreateView):
         return redirect('professors:details')
     
 
-@method_decorator([login_required, professor_required], name='dispatch')
+@method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
 class DetailsListView(ListView):
     template_name = 'coursedetails/detailslist.html'
     # queryset = Preferences.objects.all()
@@ -63,7 +66,7 @@ class DetailsListView(ListView):
 
 
 
-@method_decorator([login_required, professor_required], name='dispatch')
+@method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
 class DetailsEditView(UpdateView):
     model = Preferences
     template_name = 'coursedetails/editdetails.html'
@@ -82,3 +85,5 @@ class DetailsEditView(UpdateView):
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
         return Preferences.objects.filter(created_by=self.request.user)
+
+

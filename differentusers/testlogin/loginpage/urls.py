@@ -4,6 +4,7 @@ from .views import classroom, students, professors, coordinators, planners
 
 urlpatterns = [
     path('', classroom.home, name='home'),
+    path('403', classroom.ForbiddenView.as_view(), name='403'),
 
     path('students/', include(([
         path('', students.StudentMainView.as_view(), name='student_main'),
@@ -24,6 +25,10 @@ urlpatterns = [
 
     path('planners/', include(([
         path('', planners.PlannerMainView.as_view(), name='planner_main'),
-        path('export', planners.PreferencesCSVExportView.as_view(), name="exportcsv")
+        path('export', planners.PreferencesCSVExportView.as_view(), name="exportcsv"),
+        path('upload', planners.csv_upload, name="uploaddata"),
+        path('phase', planners.CurrentPhase.as_view(), name='currentphase'),
+        path('nextphase', planners.NextPhase.as_view(), name="nextphase"),
+        path('prevphase', planners.PreviousPhase.as_view(), name="prevphase"),
     ], 'classroom'), namespace='planners')),
 ]
