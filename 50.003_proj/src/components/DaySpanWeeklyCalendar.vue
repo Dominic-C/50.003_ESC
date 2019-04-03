@@ -354,7 +354,12 @@ export default {
       calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        eventDialog.add(day);
+        if (this.suggesting){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:'user', locked: false});
+        } 
+        else{
+          eventDialog.add(day);
+        }
         eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
@@ -371,9 +376,11 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
+        //fill in suggestedBy and locke status by default for suggesting mode
         if (this.suggesting){
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:'user', locked: false});
-        } else{
+        } 
+        else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
         }
         eventDialog.$once('close', calendar.clearPlaceholder);
@@ -418,7 +425,6 @@ export default {
         else
         {
           eventDialog.addSpan(addEvent.span);
-          console.log(addEvent);
         }
         eventDialog.$once('close', addEvent.clearPlaceholder);
       }
