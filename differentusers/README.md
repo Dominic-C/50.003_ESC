@@ -1,10 +1,14 @@
 # 50.003_ESC
 
 ## Install required libraries
+- Django
+``pip3 install Django``
 - crispyforms
-``pip install --upgrade django-crispy-forms``
+``pip3 install --upgrade django-crispy-forms``
 - brutebuster
-``pip install django-brutebuster``
+``pip3 install django-brutebuster2``
+- django rest framework
+``pip3 install djangorestframework``
 
 ## Running
 `cd` to the location of this folder \

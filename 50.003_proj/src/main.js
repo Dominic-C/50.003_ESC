@@ -26,7 +26,8 @@ Vue.use(DaySpanVuetify, {
   }
 });
 
-Vue.prototype.$calendarTypes = ['Academic', 'Fifth Row', 'Events'];
+Vue.prototype.$calendarTypes = ['Academic', 'Events'];
+Vue.prototype.$locations = ['Unspecified', 'Lecture Theatre 1', 'Lecture Theatre 2', 'Lecture Theatre 3', 'Lecture Theatre 4', 'Lecture Theatre 5']
 
 new Vue({
   render: h => h(App),

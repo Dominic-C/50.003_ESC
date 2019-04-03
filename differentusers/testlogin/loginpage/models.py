@@ -16,12 +16,19 @@ usertypes = {
     'coursecoordinators': 3, 
     'timetableplanner': 4, 
     'student' : 5
-    }   
+    }
+
+PHASE_CHOICES = (
+    (1, 'Before First Draft'),
+    (2, 'Drafting'),
+    (3, 'Finalisation'),
+)
 
 class User(AbstractUser):
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=5)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    phase = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, default=1)
 
     def get_user_type(self):
         if self.user_type == usertypes['professor']:
@@ -34,6 +41,16 @@ class User(AbstractUser):
             return 'Timetable Planner'
         else:
             return 'Student'
+            
+    def get_phase(self):
+        if self.phase == 1:
+            return "Before First Draft"
+        elif self.phase == 2:
+            return "Drafting"
+        elif self.phase == 3:
+            return "Finalisation"
+        else:
+            return "None"
 
 
 class Student(models.Model):
@@ -57,3 +74,9 @@ class Preferences(models.Model):
         string = "{} {}: {} {} | {} x {}".format(self.first_name, self.last_name, self.subject_code, 
             self.subject_name, self.cohort_size, self.cohort_num)
         return string
+
+
+class Example(models.Model):
+    class_number = models.CharField(max_length=10)
+    day = models.CharField(max_length=10)
+    
