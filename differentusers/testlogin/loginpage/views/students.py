@@ -23,8 +23,10 @@ class StudentSignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
+        userdetail = form.save(commit=False)
+        userdetail.phase = 1
+        userdetail = form.save()
+        login(self.request, userdetail)
         return redirect('students:student_main')
 
 

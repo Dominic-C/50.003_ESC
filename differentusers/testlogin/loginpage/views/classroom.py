@@ -25,3 +25,6 @@ def home(request):
         else:
             return redirect('students:student_main')
     return render(request, 'classroom/home.html')
+
+class ForbiddenView(TemplateView):
+    template_name = '403.html'
