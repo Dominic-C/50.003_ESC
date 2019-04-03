@@ -112,6 +112,9 @@ export default {
   name: 'dsCalendarApp',
   props:
   {
+    userName: {
+      type: String
+    },
     suggesting: {
       type: Boolean
     },
@@ -187,7 +190,7 @@ export default {
     options: [],
     promptVisible: false,
     promptQuestion: '',
-    promptCallback: null
+    promptCallback: null,
   }),
   watch:
   {
@@ -354,10 +357,11 @@ export default {
       calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
+        //fill in suggestedBy and locked status by default for suggesting mode
         if (this.suggesting){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:'user', locked: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
         } 
-        else{
+        else {
           eventDialog.add(day);
         }
         eventDialog.$once('close', calendar.clearPlaceholder);
@@ -376,9 +380,9 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locke status by default for suggesting mode
+        //fill in suggestedBy and locked status by default for suggesting mode
         if (this.suggesting){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:'user', locked: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:this.userName, locked: false});
         } 
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
@@ -407,7 +411,13 @@ export default {
       calendar && calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        eventDialog.add( day );
+        //fill in suggestedBy and locked status by default for suggesting mode
+        if (this.suggesting){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
+        } 
+        else {
+          eventDialog.add( day );
+        }
         calendar && eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
