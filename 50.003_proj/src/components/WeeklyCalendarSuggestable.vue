@@ -109,7 +109,7 @@ export default {
     suggestibleEvents(){
       var eventData = [];   
       for (var event of this.events){
-        if (event.calendarType === "Academic"){
+        if (event.data.calendarType === "Academic"){
           var lockedEvent = JSON.parse(JSON.stringify(event)) //copying event object
           var suggestingEvent = JSON.parse(JSON.stringify(event)) //copying event object
           // console.log(JSON.stringify(copyEvent.data));

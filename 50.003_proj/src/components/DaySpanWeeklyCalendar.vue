@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op } from 'dayspan';
+import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op, Schedule } from 'dayspan';
 import Vuetify from 'vuetify'
 import DaySpanVuetify from 'dayspan-vuetify'
 	
@@ -371,7 +371,11 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
-        eventDialog.addAt(dayHour.day, dayHour.hour);
+        if (this.suggesting){
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:'user', locked: false});
+        } else{
+          eventDialog.addAt(dayHour.day, dayHour.hour);
+        }
         eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
@@ -414,6 +418,7 @@ export default {
         else
         {
           eventDialog.addSpan(addEvent.span);
+          console.log(addEvent);
         }
         eventDialog.$once('close', addEvent.clearPlaceholder);
       }
