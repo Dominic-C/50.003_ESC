@@ -3,7 +3,21 @@
       <ds-gestures
         @swipeleft="next"
         @swiperight="prev">
-        <div class="ds-expand">
+        <div v-if="currentType.schedule" class="ds-expand">
+          <slot name="calendarAppAgenda" v-bind="{$scopedSlots, $listeners, calendar, add, edit, viewDay}">
+            <ds-agenda
+              v-bind="{$scopedSlots}"
+              v-on="$listeners"
+              :read-only="readOnly"
+              :calendar="calendar"
+              @add="add"
+              @edit="edit"
+              @view-day="viewDay"
+            ></ds-agenda>
+          </slot>
+        </div>
+
+        <div v-else class="ds-expand">
           <slot name="weeklyCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
             <ds-calendar ref="calendar"
               v-bind="{$scopedSlots}"

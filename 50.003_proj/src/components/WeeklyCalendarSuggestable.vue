@@ -109,15 +109,17 @@ export default {
     suggestibleEvents(){
       var eventData = [];   
       for (var event of this.events){
-        var lockedEvent = JSON.parse(JSON.stringify(event)) //copying event object
-        var suggestingEvent = JSON.parse(JSON.stringify(event)) //copying event object
-        // console.log(JSON.stringify(copyEvent.data));
-        suggestingEvent.data.locked = false;
-        suggestingEvent.data.suggestedBy = "username"
-        lockedEvent.data.locked = true;
-        lockedEvent.data.color = "#EBEBE4";
-        eventData.unshift(lockedEvent);   //at the front of array so that the locked events will be below
-        eventData.push(suggestingEvent);
+        if (event.calendarType === "Academic"){
+          var lockedEvent = JSON.parse(JSON.stringify(event)) //copying event object
+          var suggestingEvent = JSON.parse(JSON.stringify(event)) //copying event object
+          // console.log(JSON.stringify(copyEvent.data));
+          suggestingEvent.data.locked = false;
+          suggestingEvent.data.suggestedBy = "username"
+          lockedEvent.data.locked = true;
+          lockedEvent.data.color = "#EBEBE4";
+          eventData.unshift(lockedEvent);   //at the front of array so that the locked events will be below
+          eventData.push(suggestingEvent);
+        }
       }
       // console.log(JSON.stringify(eventData[0].data));
       // console.log(this.events);
