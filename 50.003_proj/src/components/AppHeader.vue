@@ -24,9 +24,9 @@
 						@click="toggleVisible(child.name)"
 					>
 						<v-list-tile-content>
-							<v-icon>
+							<!-- <v-icon>
 								{{ child.icon }}
-							</v-icon>
+							</v-icon> -->
 							<v-list-tile-title >
 								{{ child.text }}
 							</v-list-tile-title>
