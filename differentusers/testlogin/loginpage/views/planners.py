@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, TemplateView, View)
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 
 from ..serializers import PreferencesSerializer
@@ -112,21 +112,50 @@ def csv_upload(request):
     if request.method == "GET":
         return render(request, template, prompt)
 
-    csv_file = request.FILES['file']
+    try:
+        csv_file = request.FILES['file']
 
-    if not csv_file.name.endswith('.csv'):
-        messages.error(request, "This file is not a .csv file")
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, "This file is not a .csv file")
 
-    data_set = csv_file.read().decode('utf-8')
-    io_string = io.StringIO(data_set)
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-        _, created = Example.objects.update_or_create(
-            class_number=column[0],
-            day=column[1],
-        )
+        #if file is too large
+        if csv_file.multiple_chunks():
+            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
 
-    context = {}
-    return render(request, template, context)
+        data_set = csv_file.read().decode('utf-8')
+        io_string = io.StringIO(data_set)
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+            _, created = Example.objects.update_or_create(
+                class_number=column[0],
+                day=column[1],)
+
+        context = {}
+        messages.success(request, 'File upload successful')
+        return render(request, template, context)
+
+    except Exception as e:
+        # messages.error(request,"Unable to upload file. " + repr(e))
+        messages.error(request, "Unable to upload file! Check your format and for empty rows!")
+        return HttpResponseRedirect(reverse("planners:uploaddata"))
+
+
+    # csv_file = request.FILES['file']
+
+    # if not csv_file.name.endswith('.csv'):
+    #     messages.error(request, "This file is not a .csv file")
+
+    # data_set = csv_file.read().decode('utf-8')
+    # io_string = io.StringIO(data_set)
+    # next(io_string)
+    # for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+    #     _, created = Example.objects.update_or_create(
+    #         class_number=column[0],
+    #         day=column[1],
+    #     )
+
+    # context = {}
+    # messages.success(request, 'File upload successful')
+    # return render(request, template, context)
 
 
