@@ -107,7 +107,7 @@ export default {
           text: 'Calendar',
           open: false,
           children: [
-            { name: 'viewTimetableToSuggest', 	icon:'calendar_view', text: 'View Calendar' },
+            { name: 'viewFinalTimetable', 	icon:'calendar_view', text: 'View Calendar' },
             { name: 'exportCoursesForPlanner', 	icon:'save_alt', 			text: 'Export Calendar' },
             { name: 'viewTimetableToSuggest',		icon:'timelapse', 		text: 'Suggest Timings' },
             { name: 'requestChangesToCalendar', icon:'reply_all', 		text: 'Request Changes' },

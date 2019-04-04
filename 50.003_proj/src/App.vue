@@ -7,7 +7,7 @@
         <search-courses :courseList="courseList" v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest"></search-courses>
         <list-selection :courseList="courseList" v-if="activeComp.courseListingForViewer"></list-selection>
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-finalised>
+        <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
         <weekly-calendar-suggestable :events="calendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-suggestable>
         <!-- <ds-calendar :calendar="calendar" v-if="activeComp.weeklyCalendar">></ds-calendar> -->
         <!-- <v-app id="dayspan" v-cloak> -->
@@ -223,7 +223,8 @@ export default {
       viewExistingRequests : false,
       // After Finalization activities:
       requestChangesToCalendar : false,
-      courseListingForViewer : false
+      courseListingForViewer : false,
+      viewFinalTimetable : false
     }
   }),
   components: {
@@ -297,6 +298,9 @@ export default {
       }
       if(item == "courseListingForViewer"){
         this.activeComp.courseListingForViewer = true
+      }
+      if(item == "viewFinalTimetable"){
+        this.activeComp.viewFinalTimetable = true
       }
     },
     getColour(course){
