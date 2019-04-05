@@ -3,8 +3,10 @@
       <v-layout>
         <v-flex xs12>
           <v-toolbar color="white">
-            <v-layout align-center justify-center row fill-height>
-              <v-flex offset-xs4>
+            <v-flex xs1/>
+      
+            <v-layout align-center justify-center>
+              <div>
                 <slot name="prev" v-bind="{prev, prevLabel, calendar}">
                   <v-tooltip bottom>
                     <v-btn slot="activator"
@@ -15,17 +17,17 @@
                     <span>{{ prevLabel }}</span>
                   </v-tooltip>
                 </slot>
-              </v-flex>
+              </div>
               
-              <v-flex>
+              <div>
                 <slot name="summary" v-bind="{summary, calendar}">
-                  <h1  class="title ds-light-forecolor">
+                  <h1  class="title ds-light-forecolor" style="margin-bottom:0">
                     {{ summary }}
                   </h1>
                 </slot>
-              </v-flex>
+              </div>
               
-              <v-flex>
+              <div>
                 <slot name="next" v-bind="{next, nextLabel, calendar}">
                   <v-tooltip bottom>
                     <v-btn slot="activator"
@@ -37,9 +39,10 @@
                     <span>{{ nextLabel }}</span>
                   </v-tooltip>
                 </slot>
-              </v-flex>
-  
-              <v-flex offset-xs3>
+              </div>
+            </v-layout>
+            
+            <v-flex xs1>
                 <slot name="view" v-bind="{currentType, types}">
                   <v-menu>
                     <v-btn flat slot="activator">
@@ -57,8 +60,7 @@
                     </v-list>
                   </v-menu>
                 </slot>
-              </v-flex>  
-            </v-layout>
+            </v-flex>
           </v-toolbar>
         
           <ds-gestures
