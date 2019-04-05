@@ -4,17 +4,17 @@
       <v-layout wrap>
         <v-flex xs12>
           <v-autocomplete
-            v-model="coursesSelected"
-            :items="courseList"
+            v-model="itemsSelected"
+            :items="selectionCandidates"
             chips
             return-object
-            item-text="courseName"
             label="Search for courses to add"
             multiple
             clearable
-            no-data-text="No such available course name"
+            no-data-text="No such name"
+            :disabled="!categoryHasBeenChosen"
           >
-            <!-- item that appears in search bar -->
+            <!-- how selected items should be rendered -->
             <template v-slot:selection="data">
               <v-chip
                 :selected= "data.selected"
@@ -23,25 +23,31 @@
                 @input="remove(data.item)"
               >
                 <v-icon 
+                  v-if="searchCategory!=='location'" 
                   :color="getColour(data.item)"
                   class="headline font-weight-heavy white--text" 
                   left>
                     {{ data.item.pillar.substring(0, 2) }}
                   </v-icon>
-                <span v-text="data.item.courseName"></span>
+                <span v-text="data.item.searchText"></span>
               </v-chip>
             </template>
-            <!-- list of items that appear on search -->
+
+            <!-- how list of searchable items should be rendered -->
             <template v-slot:item="data">
               <v-list-tile-avatar
-                v-bind:color="getColour(data.item)"
+                v-if="searchCategory!=='location'" 
+                :color="getColour(data.item)"
                 class="headline font-weight-light white--text"
               >
                 {{ data.item.pillar.substring(0, 2) }}
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title v-text="data.item.courseName"></v-list-tile-title>
-                <v-list-tile-sub-title v-html="data.item.pillar"></v-list-tile-sub-title>
+                <v-list-tile-title v-text="data.item.searchText"></v-list-tile-title>
+                <v-list-tile-sub-title 
+                  v-if="searchCategory!=='location'" 
+                  v-html="data.item.pillar">
+                </v-list-tile-sub-title>
               </v-list-tile-content>
             </template>
           </v-autocomplete>
@@ -52,11 +58,6 @@
             label="Search Category"
             :items="searchCategories"
             v-model="searchCategory">
-            <template slot="item" slot-scope="{ item }">
-              <v-list-tile-content>
-                {{ item }}
-              </v-list-tile-content>
-            </template>
           </v-select>
         </v-flex>
       </v-layout>
@@ -67,11 +68,137 @@
 <script>
 export default {
   name: 'SearchCourses',
-  data: () => ({
-    searchCategories: ['Course Name', 'Class', 'Professor', 'Location']
-  }),
+  props: {
+    calendarEventsTable: {
+      type: Array,
+      required: true
+    },
+    professorTable: {
+      type: Array,
+      required: true
+    },
+    courseNameTable: {
+      type: Array,
+      required: true
+    },
+    locationTable: {
+      type: Array,
+      required: true
+    },
+    classTable: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      searchCategory: '',  
+      searchCategories: [
+        {text: 'Course Name', value: 'courseName', table: this.courseNameTable}, 
+        {text: 'Class', value: 'classEnrolled', table: this.classTable}, 
+        {text: 'Professor', value: 'professor', table: this.professorTable}, 
+        {text: 'Location', value: 'location', table: this.locationTable}
+        // {text: 'Course Name', value: 'courseName'}, 
+        // {text: 'Class', value: 'classEnrolled'}, 
+        // {text: 'Professor', value: 'professor'}, 
+        // {text: 'Location', value: 'location'}
+      ]
+    }
+  },
+  computed: {
+    categoryHasBeenChosen() {
+      if (this.searchCategory !== ""){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+    selectionCandidates() {
+      //TO CHANGE: get selection categories from database (for now, hardcoding it from front-end)
+      // var selectionCandidates = [];
+      // var selectionCandidatesSet = new Set();
+      // if (this.searchCategory === "location"){
+      //   for (var searchObject of this.searchableItems){
+      //     selectionCandidatesSet.add(JSON.stringify({searchText: searchObject[this.searchCategory]}));
+      //   }
+      //   selectionCandidatesSet.forEach(searchObject => {
+      //     selectionCandidates.push(JSON.parse(searchObject)); 
+      //   });
+      // }
+      // else {
+      //   for (var searchObject of this.searchableItems){
+      //     selectionCandidatesSet.add(JSON.stringify({    //JSON.stringify so that objects can be compared
+      //       searchText: searchObject[this.searchCategory], 
+      //       pillar: searchObject.pillar}));
+      //   }
+      //   selectionCandidatesSet.forEach(searchObject => {
+      //     selectionCandidates.push(JSON.parse(searchObject)); //parse back to object
+      //   }); 
+      // }
+      // var selectionCandidates = this.searchableItems.filter((searchObject, index) => {
+      //   const indexOfIndenticalObject = searchList.findIndex(item => item[this.searchCategory] === searchObject[this.searchCategory]);
+      //   return indexOfIndenticalObject === index;
+      // });  
+     
+
+           
+      for (var category of this.searchCategories){
+        if (category.value === this.searchCategory) {
+          return category.table;
+        }
+      }
+      return [];
+    },
+    itemsSelected: {
+      get: function() {
+        //TODO: select items through database method eventually
+        var itemsSelected = [];
+        console.log(this.selectionCandidates);
+        for (var item of this.selectionCandidates){
+          if (item.isSelected){
+            itemsSelected.push(item);
+            console.log('item has been selected', item)
+          }
+          // itemsSelected.push(course.lessonTimes.filter(lesson => lesson.isSelected));
+        }
+        return itemsSelected;
+      },
+      set: function(selectedItems) {
+        selectedItems.forEach(item => {
+          item.isSelected = true;
+          //changing calendarEventsTable (database) so that calendar can be updated
+          //TODO: change in database eventually
+          for (var event of this.calendarEventsTable){
+            if (event[this.searchCategory] === item.searchText){
+              event.data.isSelected === true;
+            }
+            // if (course.courseName === item.courseName){
+            //   if (this.searchCategory === 'courseName' || this.searchCategory === 'pillar'){
+            //     for (var lesson of course.lessonTimes){
+            //       lesson.isSelected = true;
+            //     }
+            //   }
+            //   else {
+            //     for (var lesson of course.lessonTimes){
+            //       if (lesson[this.searchCategory] === item.searchText){
+            //         lesson.isSelected = true;
+            //       }
+            //     }
+            //   }
+            // }
+          }
+        });
+      }
+    }
+  },
   methods: {
     remove (item) {
+      for (var event of this.calendarEventsTable){
+        if (event.data[this.searchCategory] === item.searchText){
+          event.data.isSelected === false;
+        }
+      }
       item.isSelected = false;
     },
     getColour(item) {
@@ -93,30 +220,6 @@ export default {
       else if (item.pillar == "HASS") {
         return "pink";
       }
-    }
-  },
-  computed: {
-    coursesSelected: {
-      get: function() {
-        return this.courseList.filter(course => course.isSelected);
-      },
-      set: function(courses) {
-        for (var course of this.courseList){
-          this.remove(course);
-        }
-        for (var courseSelected of courses){
-          courseSelected.isSelected = true;
-        }
-        // for (var course of courses){
-        //   console.log(course);
-        // }
-      }
-    }
-  },
-  props: {
-    courseList: {
-      type: Array,
-      required: true
     }
   }
 }

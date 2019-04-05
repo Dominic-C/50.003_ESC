@@ -4,11 +4,18 @@
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
         <form-submit v-if="activeComp.formSubmitNewCourse"></form-submit>
-        <search-courses :courseList="courseList" v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable"></search-courses>
-        <list-selection :courseList="courseList" v-if="activeComp.courseListingForViewer"></list-selection>
+        <search-courses 
+          :calendarEventsTable="calendarEventTable"
+          :professorTable="professorTable"
+          :courseNameTable="courseNameTable"
+          :locationTable="locationTable"
+          :classTable="classTable"
+          v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable">
+        </search-courses>
+        <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection>
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
-        <weekly-calendar-suggestable :events="calendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-suggestable>
+        <weekly-calendar-finalised :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
+        <weekly-calendar-suggestable :events="selectedCalendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-suggestable>
         <!-- <ds-calendar :calendar="calendar" v-if="activeComp.weeklyCalendar">></ds-calendar> -->
         <!-- <v-app id="dayspan" v-cloak> -->
           <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
@@ -36,7 +43,8 @@ export default {
   data: () => ({
     calendar: Calendar.weeks(),
     coloursUsed: [],
-    courseList: [
+    //TO CHANGE: get from database (main table)
+    courseTable: [
         {"courseName": "50.003 Elements of Software Constructions",
           "id": "50.003",
           "pillar": "ISTD",
@@ -245,35 +253,109 @@ export default {
     weeklyCalendarSuggestable
   },
   computed: {
-    calendarEvents() {
+    selectedCalendarEvents() {
+      //TO CHANGE: iterating through all events to get those selected-- to do through database method eventually
+      var selectedEvents = []
+      for (var event of this.calendarEventTable){
+        if (event.data.isSelected){
+            selectedEvents.push(event);
+        }
+      }
+    },
+    //main database table
+    calendarEventTable() {
       var eventData = []
-      for (var course of this.courseList){
-        if (course.isSelected){
-          for (var lesson of course.lessonTimes){
-            eventData.push({
-              data: {
-                title: lesson.title,
-                color: this.getColour(course),
-                location: lesson.location,
-                professor: lesson.professor,
-                classEnrolled: lesson.classEnrolled,
-                calendarType: "Academic",
-                locked: null,
-                suggestedBy: null,
-                requestedBy: null
-              },
-              schedule: {
-                dayOfWeek: [lesson.day],
-                times: [lesson.time],
-                duration: lesson.duration,
-                durationUnit: 'minutes'
-              }
-            })
-          }
+      for (var course of this.courseTable){
+        var colour = this.getColour()
+        for (var lesson of course.lessonTimes){
+          eventData.push({
+            data: {
+              course: course.courseName,
+              pillar: course.pillar,
+              title: lesson.title,
+              color: colour,
+              location: lesson.location,
+              professor: lesson.professor,
+              classEnrolled: lesson.classEnrolled,
+              calendarType: "Academic",
+              locked: null,
+              suggestedBy: null,
+              requestedBy: null,
+              isSelected: false
+            },
+            schedule: {
+              dayOfWeek: [lesson.day],
+              times: [lesson.time],
+              duration: lesson.duration,
+              durationUnit: 'minutes'
+            }
+          })
         }
       }
       return eventData;  
-    }
+    },
+    //other database tables
+    //TODO: get from database eventually
+    professorTable() {
+      var selectionCandidates = [];
+      var selectionCandidatesSet = new Set();
+      for (var event of this.calendarEventTable){
+        //JSON.stringify so that objects can be compared
+        selectionCandidatesSet.add(JSON.stringify({    
+          searchText: event.data.professor, 
+          pillar: event.data.pillar,
+          isSelected: false}));
+      }
+      selectionCandidatesSet.forEach(searchObject => {
+        //parse back to object
+        selectionCandidates.push(JSON.parse(searchObject)); 
+      });
+      return selectionCandidates; 
+    },
+    courseNameTable() {
+      var selectionCandidates = [];
+      var selectionCandidatesSet = new Set();
+      for (var event of this.calendarEventTable){
+        //JSON.stringify so that objects can be compared
+        selectionCandidatesSet.add(JSON.stringify({    
+          searchText: event.data.course, 
+          pillar: event.data.pillar,
+          isSelected: false}));
+      }
+      selectionCandidatesSet.forEach(searchObject => {
+        selectionCandidates.push(JSON.parse(searchObject)); //parse back to object
+      }); 
+      return selectionCandidates; 
+    },
+    locationTable() {
+      var selectionCandidates = [];
+      var selectionCandidatesSet = new Set();
+      for (var event of this.calendarEventTable){
+        //JSON.stringify so that objects can be compared
+        selectionCandidatesSet.add(JSON.stringify({
+          searchText: event.data.location,
+          isSelected: false}));
+      }
+      selectionCandidatesSet.forEach(searchObject => {
+        selectionCandidates.push(JSON.parse(searchObject)); 
+      });
+      return selectionCandidates; 
+    },
+    classTable() {
+      var selectionCandidates = [];
+      var selectionCandidatesSet = new Set();
+      for (var event of this.calendarEventTable){
+        //JSON.stringify so that objects can be compared
+        selectionCandidatesSet.add(JSON.stringify({    
+          searchText: event.data.classEnrolled, 
+          pillar: event.data.pillar,
+          isSelected: false}));
+      }
+      selectionCandidatesSet.forEach(searchObject => {
+        selectionCandidates.push(JSON.parse(searchObject)); //parse back to object
+      }); 
+      return selectionCandidates; 
+    },
   },
   methods: {
     toggleVisible : function(item) {
@@ -310,18 +392,13 @@ export default {
         this.activeComp.viewFinalTimetable = true
       }
     },
-    getColour(course){
-      if (course.colour === '') {
-        let colour = Colors[Math.floor(Colors.length * Math.random())].value;
-        if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
-          this.getColour();
-        }
-        this.coloursUsed.push(colour);
-        course.colour = colour;
-        return colour;
-      } else {
-        return course.colour;
+    getColour(){
+      let colour = Colors[Math.floor(Colors.length * Math.random())].value;
+      if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
+        this.getColour();
       }
+      this.coloursUsed.push(colour);
+      return colour;
     }
   }
 }

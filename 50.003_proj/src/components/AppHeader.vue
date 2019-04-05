@@ -74,7 +74,8 @@
 <script>
 export default {
   name: 'AppHeader',
-  data: () => ({
+  data() {
+		return {
       drawerIsOpen: false,
       drawerItems: [
 				// { name: 'a', icon: 'contacts', text: 'Contacts'},
@@ -115,16 +116,17 @@ export default {
           ]
 				},
 				{ name: 'courseListingForViewer', icon: 'line_style', text: 'Course List'}
-      ]
-		}),
-		methods: {
-			toggleVisible(name) {
-        this.$emit('changeComp', name)
-      }
-			//,
-			//print(item) {
-			//	console.log(item.text + " was clicked");
-			//}
+			]
 		}
+	},
+	methods: {
+		toggleVisible(name) {
+			this.$emit('changeComp', name)
+		}
+		//,
+		//print(item) {
+		//	console.log(item.text + " was clicked");
+		//}
+	}
 }
 </script>
