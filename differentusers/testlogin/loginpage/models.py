@@ -79,4 +79,7 @@ class Preferences(models.Model):
 class Example(models.Model):
     class_number = models.CharField(max_length=10)
     day = models.CharField(max_length=10)
+
+    def __str__(self):
+        return "{} - {}".format(self.class_number, self.day) 
     

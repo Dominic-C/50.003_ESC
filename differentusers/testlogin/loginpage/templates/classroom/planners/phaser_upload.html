@@ -5,20 +5,19 @@
 {% block content %}
 
 
-    {% if messages %}
-        {% for message in messages %}
-            <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                <strong>{{ message|safe }}</strong>
+
+    {{order}}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>Only Accepts CSV Files</p>
+            <button type="save" class="btn btn-primary">Upload</button>
+            <div class="custom-file col-4">
+                <!-- added in js script for to change placeholder text to file name -->
+                <input type="file" class="custom-file-input" id="customFile" name="file" onchange="$(this).next().after().text($(this).val().split('\\').slice(-1)[0])">
+                <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
-        {% endfor %}
-    {% else %}
-        {{order}}
-            <form method="post" enctype="multipart/form-data">{% csrf_token %}
-                <label><b>Upload File</b></label>
-                <input type="file" name="file">
-                <p>Only Accepts CSV Files</p>
-                <button type="save" class="btn btn-primary">Upload</button>
-            </form>
-    {% endif %}
+        </form>
+            
+
 
 {% endblock %}
