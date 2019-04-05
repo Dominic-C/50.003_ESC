@@ -3,7 +3,7 @@
     <template slot="eventDetailsLocation" slot-scope="{ details }">
        <!-- Location -->
         <v-select
-        single-line hide-details solo flat
+        single-line solo flat
         prepend-icon="location_on"
         :items="$locations"
         :readonly="details.locked"

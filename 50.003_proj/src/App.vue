@@ -4,7 +4,7 @@
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
         <form-submit v-if="activeComp.formSubmitNewCourse"></form-submit>
-        <search-courses :courseList="courseList" v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest"></search-courses>
+        <search-courses :courseList="courseList" v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable"></search-courses>
         <list-selection :courseList="courseList" v-if="activeComp.courseListingForViewer"></list-selection>
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <weekly-calendar-finalised :events="calendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
@@ -40,7 +40,6 @@ export default {
         {"courseName": "50.003 Elements of Software Constructions",
           "id": "50.003",
           "pillar": "ISTD",
-          "isSelected": true,
           colour: '',
           'lessonTimes': [ 
             {
@@ -50,7 +49,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'              
+              professor: 'Sun Jun',
+              "isSelected": true              
             },
             {
               title: '50.003 Lecture',
@@ -59,13 +59,13 @@ export default {
               duration: 90,
               location: '1.203',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": true
             }
           ]},
         {"courseName": "50.005 Computer Systems Engineering",
         "id": "50.005",
         "pillar": "ESD",
-        "isSelected": true,
         colour: '',
         'lessonTimes': [ 
             {
@@ -75,7 +75,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": true
             },
             {
               title: '50.005 Lecture',
@@ -84,13 +85,13 @@ export default {
               duration: 90,
               location: '1.203',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sudipta',
+              "isSelected": true
             }
           ]},
         {"courseName": "50.034 Probability and Statistics",
         "id": "50.034",
         "pillar": "EPD",
-        "isSelected": true,
         colour: '',
         'lessonTimes': [ 
             {
@@ -100,7 +101,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+               "isSelected": true
             },
             {
               title: '50.034 Lecture',
@@ -110,12 +112,12 @@ export default {
               location: '1.203',
               classEnrolled: 'F01',
               professor: 'Sun Jun',
+              "isSelected": false
             }
           ]},
         {"courseName": "50.004 Algorithms",
         "id": "50.004",
         "pillar": "ASD",
-        "isSelected": false,
         colour: '',
         'lessonTimes': [ 
             {
@@ -125,7 +127,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
               
             },
             {
@@ -135,13 +138,13 @@ export default {
               duration: 90,
               location: '1.203',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             }
           ]},
         {"courseName": "01.112 Machine Learning",
         "id": "01.112",
         "pillar": "FRESHMORE",
-        "isSelected": false,
         colour: '',
         'lessonTimes': [ 
             {
@@ -151,7 +154,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             },
             {
               title: '01.112 Lecture',
@@ -160,13 +164,13 @@ export default {
               duration: 90,
               location: '1.203',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             }
           ]},
         {"courseName": "50.040 Natural Language Processing",
         "id": "50.040",
         "pillar": "HASS",
-        "isSelected": false,
         colour: '',
         'lessonTimes': [ 
             {
@@ -176,7 +180,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             },
             {
               title: '50.040 Lecture',
@@ -185,13 +190,13 @@ export default {
               duration: 90,
               location: '1.203',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             }
           ]},
         {"courseName": "50.006 User Interface",
         "id": "50.006",
         "pillar": "ISTD",
-        "isSelected": false,
         colour: '',
         'lessonTimes': [ 
             {
@@ -201,7 +206,8 @@ export default {
               duration: 60,
               location: '2.501',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             },
             {
               title: '50.006 Lecture',
@@ -210,7 +216,8 @@ export default {
               duration: 90,
               location: '1.203',
               classEnrolled: 'F01',
-              professor: 'Sun Jun'
+              professor: 'Sun Jun',
+              "isSelected": false
             }]
         }],
     activeComp: {

@@ -1,8 +1,4 @@
 <template>
-      <!-- <select v-model="selected">
-        <option disabled value="">Please select one</option>
-        <option v-for="(course, index) in courseList" :key="index">{{ course.courseName }}</option>
-      </select> -->
   <v-form @submit.prevent>
     <v-container fluid class="pa-4">
       <v-layout wrap>
@@ -44,30 +40,36 @@
                 {{ data.item.pillar.substring(0, 2) }}
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title        v-text="data.item.courseName"></v-list-tile-title>
+                <v-list-tile-title v-text="data.item.courseName"></v-list-tile-title>
                 <v-list-tile-sub-title v-html="data.item.pillar"></v-list-tile-sub-title>
               </v-list-tile-content>
             </template>
           </v-autocomplete>
+
+          <!-- choosing search category -->
+          <v-select
+            single-line solo flat
+            label="Search Category"
+            :items="searchCategories"
+            v-model="searchCategory">
+            <template slot="item" slot-scope="{ item }">
+              <v-list-tile-content>
+                {{ item }}
+              </v-list-tile-content>
+            </template>
+          </v-select>
         </v-flex>
       </v-layout>
     </v-container>
   </v-form>
-      <!-- previous search method -->
-      <!-- <form @submit.prevent="addCourse">
-        <input list="courseSearchList" id="coursesSelected" name="coursesSelected" placeholder="Search for a course" v-model="coursesSelected">
-        <datalist id="courseSearchList">
-          <option v-for="(course, index) in notEnrolledClasses" :key="index" v-bind:disabled="course.isSelected">{{ course.courseName }}</option>
-        </datalist>
-      </form> -->
-      
-    <!-- </div> -->
-
 </template>
 
 <script>
 export default {
   name: 'SearchCourses',
+  data: () => ({
+    searchCategories: ['Course Name', 'Class', 'Professor', 'Location']
+  }),
   methods: {
     remove (item) {
       item.isSelected = false;
@@ -108,13 +110,6 @@ export default {
         // for (var course of courses){
         //   console.log(course);
         // }
-      }
-    },
-    alive: {
-      get: function(){
-        // this is meant to return the 'live' value;
-        // also done because filter returns an array
-        return this.isActive.filter(contain => contain.name=="searchCourses")[0].live
       }
     }
   },
