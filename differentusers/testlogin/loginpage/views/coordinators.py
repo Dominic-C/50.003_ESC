@@ -14,6 +14,13 @@ from ..decorators import coordinator_required
 from ..forms import CoordinatorSignUpForm
 from ..models import User
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }
 
 class CoordinatorSignUpView(CreateView):
     model = User
@@ -26,7 +33,10 @@ class CoordinatorSignUpView(CreateView):
 
     def form_valid(self, form):
         userdetail = form.save(commit=False)
-        userdetail.phase = 1
+        try:
+            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+        except:
+            userdetail.phase = 1
         userdetail = form.save()
         login(self.request, userdetail)
         return redirect('coordinators:coordinator_main')

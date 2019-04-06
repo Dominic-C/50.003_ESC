@@ -102,6 +102,8 @@ class PermissionTests(TestCase):
             username="student", password="sutd1234")
         cls.coorduser = User.objects.create_user(user_type=usertypes['coursecoordinators'], first_name="Babby", last_name="Lee",
             username="coord", password="sutd1234")
+        cls.planneruser = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Peppa", last_name="Chia",
+            username="planner", password='sutd1234')
 
 #===========================
 # Tests -- Nobody Logged in
@@ -145,12 +147,53 @@ class PermissionTests(TestCase):
     # professors/details/edit ERROR
     def test_professor_editdetails_wo_pk_redirect_if_not_logged_in(self):
         response = self.client.get('/professors/details/edit')
-        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 404)
 
     # professors/details/edit/<int id>
     def test_professor_editdetails_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('professors:editdetails', kwargs={'pk': self.pref.pk}))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/
+    def test_planner_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse("planners:planner_main"))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/export
+    def test_planner_export_redirect_if_not_logged_in(self):
+        response = self.client.get('/planners/export')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/upload
+    def test_planner_upload_redirect_if_not_logged_in(self):
+        response = self.client.get('/planners/upload')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/phase
+    def test_planner_phase_redirect_if_not_logged_in(self):
+        response = self.client.get('/planners/phase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/nextphase
+    def test_planner_nextphase_redirect_if_not_logged_in(self):
+        response = self.client.get('/planners/nextphase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/prevphase
+    def test_planner_prevphase_redirect_if_not_logged_in(self):
+        response = self.client.get('/planners/prevphase')
         # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url.startswith('/accounts/login/'))
@@ -211,6 +254,54 @@ class PermissionTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url.startswith('/accounts/login/'))
 
+    # planners/
+    def test_planner_redirect_if_prof_logged_in(self):
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get(reverse("planners:planner_main"))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/export
+    def test_planner_export_redirect_if_prof_logged_in(self):
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get('/planners/export')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/upload
+    def test_planner_upload_redirect_if_prof_logged_in(self):
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get('/planners/upload')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/phase
+    def test_planner_phase_redirect_if_prof_logged_in(self):
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get('/planners/phase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/nextphase
+    def test_planner_nextphase_redirect_if_prof_logged_in(self):
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get('/planners/nextphase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/prevphase
+    def test_planner_prevphase_redirect_if_prof_logged_in(self):
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get('/planners/prevphase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
 
 #===========================
 # Tests -- Student Logged in
@@ -258,6 +349,54 @@ class PermissionTests(TestCase):
     def test_coordinator_redirect_if_student_logged_in(self):
         login = self.client.login(username='student', password='sutd1234')
         response = self.client.get(reverse('coordinators:coordinator_main'))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/
+    def test_planner_redirect_if_student_logged_in(self):
+        login = self.client.login(username='student', password='sutd1234')
+        response = self.client.get(reverse("planners:planner_main"))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/export
+    def test_planner_export_redirect_if_student_logged_in(self):
+        login = self.client.login(username='student', password='sutd1234')
+        response = self.client.get('/planners/export')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/upload
+    def test_planner_upload_redirect_if_student_logged_in(self):
+        login = self.client.login(username='student', password='sutd1234')
+        response = self.client.get('/planners/upload')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/phase
+    def test_planner_phase_redirect_if_student_logged_in(self):
+        login = self.client.login(username='student', password='sutd1234')
+        response = self.client.get('/planners/phase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/nextphase
+    def test_planner_nextphase_redirect_if_student_logged_in(self):
+        login = self.client.login(username='student', password='sutd1234')
+        response = self.client.get('/planners/nextphase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/prevphase
+    def test_planner_prevphase_redirect_if_student_logged_in(self):
+        login = self.client.login(username='student', password='sutd1234')
+        response = self.client.get('/planners/prevphase')
         # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url.startswith('/accounts/login/'))
@@ -312,6 +451,151 @@ class PermissionTests(TestCase):
         response = self.client.get(reverse('coordinators:coordinator_main'))
         # status code = 200
         self.assertEqual(response.status_code, 200)
+
+    # planners/
+    def test_planner_redirect_if_coord_logged_in(self):
+        login = self.client.login(username='coord', password='sutd1234')
+        response = self.client.get(reverse("planners:planner_main"))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/export
+    def test_planner_export_redirect_if_coord_logged_in(self):
+        login = self.client.login(username='coord', password='sutd1234')
+        response = self.client.get('/planners/export')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/upload
+    def test_planner_upload_redirect_if_coord_logged_in(self):
+        login = self.client.login(username='coord', password='sutd1234')
+        response = self.client.get('/planners/upload')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/phase
+    def test_planner_phase_redirect_if_coord_logged_in(self):
+        login = self.client.login(username='coord', password='sutd1234')
+        response = self.client.get('/planners/phase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    # planners/nextphase
+    def test_planner_nextphase_redirect_if_coord_logged_in(self):
+        login = self.client.login(username='coord', password='sutd1234')
+        response = self.client.get('/planners/nextphase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/prevphase
+    def test_planner_prevphase_redirect_if_coord_logged_in(self):
+        login = self.client.login(username='coord', password='sutd1234')
+        response = self.client.get('/planners/prevphase')
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+
+#================================
+# Tests -- Planner Logged in
+#================================
+    # professors/
+    def test_professor_redirect_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse('professors:professor_main'))
+        # redirect to login
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # professors/details
+    def test_professor_details_redirect_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse('professors:details'))
+        # redirect to login
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # professors/submitdetails
+    def test_professor_submitdetails_redirect_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse('professors:submitdetails'))
+        # redirect to login
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # professors/details/edit ERROR
+    def test_professor_editdetails_wo_pk_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get('/professors/details/edit')
+        # No such url, get status code = 404
+        self.assertEqual(response.status_code, 404)
+
+    # students/
+    def test_student_redirect_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse('students:student_main'))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # coordinators/
+    def test_coordinator_redirect_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse('coordinators:coordinator_main'))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    # planners/
+    def test_planner_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:planner_main"))
+        # status code = 200
+        self.assertEqual(response.status_code, 200)
+    
+    # planners/export
+    def test_planner_export_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:exportcsv"))
+        # status code = 200
+        self.assertEqual(response.status_code, 200)
+
+    # planners/upload
+    def test_planner_upload_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:uploaddata"))
+        # status code = 200
+        self.assertEqual(response.status_code, 200)
+    
+    # planners/phase
+    def test_planner_phase_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:currentphase"))
+        # status code = 200
+        self.assertEqual(response.status_code, 200)
+    
+    # planners/nextphase
+    def test_planner_nextphase_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        # status code = 200
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url == reverse('planners:currentphase'))
+
+    # planners/prevphase
+    def test_planner_prevphase_if_planner_logged_in(self):
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:prevphase"))
+        # status code = 200
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url == reverse('planners:currentphase'))
+
+
 
 
 class PreferencesFormsTests(TestCase):
@@ -378,3 +662,67 @@ class PreferencesFormsTests(TestCase):
         self.assertEqual(Preferences.objects.last().subject_name, "CSE")
         self.assertEqual(Preferences.objects.last().cohort_size, 50)
         self.assertEqual(Preferences.objects.last().cohort_num, 9)
+
+
+class PhaseTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        cls.user = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Bob", last_name="Lee",
+            username="planner", password="sutd1234")
+
+    def test_next_phase(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 2)
+
+    def test_next_phase_only_till_3(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:nextphase"))
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 3)
+
+
+    def test_prev_phase(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:prevphase"))
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+
+    def test_prev_phase_always_bigger_than_0(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:prevphase"))
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+
+    def test_phase_up_to_3_down_to_1(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:nextphase"))
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 3)
+
+        response = self.client.get(reverse("planners:prevphase"))
+        response = self.client.get(reverse("planners:prevphase"))
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)

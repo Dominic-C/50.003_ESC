@@ -12,6 +12,14 @@ from ..decorators import student_required
 from ..forms import StudentSignUpForm
 from ..models import Student, User
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }
+
 
 class StudentSignUpView(CreateView):
     model = User
@@ -24,7 +32,10 @@ class StudentSignUpView(CreateView):
 
     def form_valid(self, form):
         userdetail = form.save(commit=False)
-        userdetail.phase = 1
+        try:
+            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+        except:
+            userdetail.phase = 1
         userdetail = form.save()
         login(self.request, userdetail)
         return redirect('students:student_main')
