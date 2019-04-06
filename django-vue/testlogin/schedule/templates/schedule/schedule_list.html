@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} - Schedule List{% endblock %}
+
+{% block content %}
+<script type='text/javascript'>
+	var object_list = {{ object_list }};
+</script>
+
+	<h3>Schedule List</h3>
+	<table  class="table table-hover">
+		<thead class="thead-dark">
+			<tr>
+			    <th scope="col">Title</th>
+			    <th scope="col">Description</th> 
+			    <th scope="col">Time (Start to End)</th>
+			    <th scope="col">Lecturer</th>
+			    <th scope="col">Location </th>
+		  	</tr>
+
+			{% for item in object_list %}
+		    	 
+		    	 <tr>
+					<td>{{ item.title }} </td>
+					<td>{{ item.description }}</td>
+					<td>{{ item.start_time }} to {{ item.end_time }}</td>
+					<td>{{ item.lecturer }} </td>
+					<td>{{ item.location }}</td>
+					
+				</tr>
+
+	   	{% empty %}
+	    	<tr> 
+				<td>No schedules yet </td>
+				<td></td>
+				<td></td>
+	    	</tr>
+
+		{% endfor %}
+
+	</table>
+{% endblock %}
+
+<script type='text/javascript'>
+	var object_list = {{ object_list }};
+</script>
