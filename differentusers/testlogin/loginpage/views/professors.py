@@ -16,6 +16,14 @@ from ..forms import ProfessorSignUpForm, SubmitCourseDetails
 from ..models import User, Preferences
 
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }
+
 class ProfessorSignUpView(CreateView):
     model = User
     form_class = ProfessorSignUpForm
@@ -27,7 +35,10 @@ class ProfessorSignUpView(CreateView):
 
     def form_valid(self, form):
         userdetail = form.save(commit=False)
-        userdetail.phase = 1
+        try:
+            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+        except:
+            userdetail.phase = 1
         userdetail = form.save()
         login(self.request, userdetail)
         return redirect('professors:professor_main')

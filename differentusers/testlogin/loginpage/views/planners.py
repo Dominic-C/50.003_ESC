@@ -28,7 +28,10 @@ class PlannerSignUpView(CreateView):
 
     def form_valid(self, form):
         userdetail = form.save(commit=False)
-        userdetail.phase = 1
+        try:
+            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+        except:
+            userdetail.phase = 1
         userdetail = form.save()
         login(self.request, userdetail)
         return redirect('planners:planner_main')
@@ -86,7 +89,7 @@ class NextPhase(View):
             User.objects.all().update(phase=current_phase+1)
         # to reset
         # User.objects.all().update(phase=1)
-        return redirect('home')
+        return redirect('planners:currentphase')
 
 @method_decorator([login_required, planner_required], name='dispatch')
 class PreviousPhase(View):
@@ -98,7 +101,7 @@ class PreviousPhase(View):
             User.objects.all().update(phase=current_phase-1)
         # to reset
         # User.objects.all().update(phase=1)
-        return redirect('home')
+        return redirect('planners:currentphase')
 
 @login_required
 @planner_required

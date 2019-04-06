@@ -26,7 +26,10 @@ class CoordinatorSignUpView(CreateView):
 
     def form_valid(self, form):
         userdetail = form.save(commit=False)
-        userdetail.phase = 1
+        try:
+            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+        except:
+            userdetail.phase = 1
         userdetail = form.save()
         login(self.request, userdetail)
         return redirect('coordinators:coordinator_main')
