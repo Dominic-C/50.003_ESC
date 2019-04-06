@@ -1,13 +1,13 @@
 <template>
-  <v-form @submit.prevent>
+  <!-- <v-form @submit.prevent> -->
     <v-container fluid class="pa-4">
       <v-layout wrap>
         <v-flex xs12>
           <v-autocomplete
-            v-model="itemsSelected"
+            v-model="selectedItems"
             :items="selectionCandidates"
+            item-value="searchText"
             chips
-            return-object
             label="Search for courses to add"
             multiple
             clearable
@@ -61,7 +61,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-  </v-form>
+  <!-- </v-form> -->
 </template>
 
 <script>
@@ -91,7 +91,8 @@ export default {
   },
   data() {
     return {
-      searchCategory: '',  
+      searchCategory: '',
+      selectedItemsArray: '',  
       searchCategories: [
         {text: 'Course Name', value: 'courseName', table: this.courseNameTable}, 
         {text: 'Class', value: 'classEnrolled', table: this.classTable}, 
@@ -118,27 +119,6 @@ export default {
       }
     },
     selectionCandidates() {
-      //TO CHANGE: get selection categories from database (for now, hardcoding it from front-end)
-      // var selectionCandidates = [];
-      // var selectionCandidatesSet = new Set();
-      // if (this.searchCategory === "location"){
-      //   for (var searchObject of this.searchableItems){
-      //     selectionCandidatesSet.add(JSON.stringify({searchText: searchObject[this.searchCategory]}));
-      //   }
-      //   selectionCandidatesSet.forEach(searchObject => {
-      //     selectionCandidates.push(JSON.parse(searchObject)); 
-      //   });
-      // }
-      // else {
-      //   for (var searchObject of this.searchableItems){
-      //     selectionCandidatesSet.add(JSON.stringify({    //JSON.stringify so that objects can be compared
-      //       searchText: searchObject[this.searchCategory], 
-      //       pillar: searchObject.pillar}));
-      //   }
-      //   selectionCandidatesSet.forEach(searchObject => {
-      //     selectionCandidates.push(JSON.parse(searchObject)); //parse back to object
-      //   }); 
-      // }
       // var selectionCandidates = this.searchableItems.filter((searchObject, index) => {
       //   const indexOfIndenticalObject = searchList.findIndex(item => item[this.searchCategory] === searchObject[this.searchCategory]);
       //   return indexOfIndenticalObject === index;
@@ -151,27 +131,16 @@ export default {
       }
       return [];
     },
-    itemsSelected: {
+    selectedItems: {
       get: function() {
-        //TODO: select items through database method eventually
-        // var itemsSelected = [];
-        // for (var item of this.selectionCandidates){
-        //   if (item.isSelected){
-        //     itemsSelected.push(item);
-        //   }
-        // }
-        // return itemsSelected;
-        return this.selectionCandidates.filter(item => item.isSelected);
+        return this.selectedItemsArray;
       },
       set: function(selectedItems) {
         for (var item of selectedItems){
-          //changing ___table (database) 
-          //TODO: change in database eventually
-          item.isSelected = true;
+          this.selectedItemsArray = selectedItems;
           //changing calendarEventsTable (database) so that calendar can be updated
-          //TODO: change in database eventually
           for (var event of this.calendarEventsTable){
-            if (event.data[this.searchCategory] === item.searchText){
+            if (event.data[this.searchCategory] === item){
               event.data.isSelected === true;
             }
           }
@@ -181,35 +150,17 @@ export default {
   },
   methods: {
     remove (item) {
+      const index = this.selectedItemsArray.indexOf(item.searchText)
+      if (index >= 0) {
+        this.selectedItems.splice(index, 1);  //deleting item from selectedItems array
+      }
       //TO CHANGE: updating calendarEventsTable
       for (var event of this.calendarEventsTable){
         if (event.data[this.searchCategory] === item.searchText){
           event.data.isSelected === false;
         }
       }
-      //TO CHANGE: updating __table
-      item.isSelected = false;
-    }
-    // getColour(item) {
-    //   if (item.pillar === "ISTD") {
-    //     return "indigo";
-    //   } 
-    //   else if (item.pillar == "ESD") {
-    //     return "red";
-    //   }
-    //   else if (item.pillar == "EPD") {
-    //     return "blue";
-    //   }
-    //   else if (item.pillar == "ASD") {
-    //     return "purple";
-    //   }
-    //   else if (item.pillar == "FRESHMORE") {
-    //     return "green";
-    //   }
-    //   else if (item.pillar == "HASS") {
-    //     return "pink";
-    //   }
-    // }
+    }  
   }
 }
 </script>

@@ -58,7 +58,7 @@ export default {
               location: '2.501',
               classEnrolled: 'F01',
               professor: 'Sun Jun',
-              "isSelected": true              
+              "isSelected": false              
             },
             {
               title: '50.003 Lecture',
@@ -68,7 +68,7 @@ export default {
               location: '1.203',
               classEnrolled: 'F01',
               professor: 'Sun Jun',
-              "isSelected": true
+              "isSelected": false
             }
           ]},
         {"courseName": "50.005 Computer Systems Engineering",
@@ -84,7 +84,7 @@ export default {
               location: '2.501',
               classEnrolled: 'F01',
               professor: 'Sun Jun',
-              "isSelected": true
+              "isSelected": false
             },
             {
               title: '50.005 Lecture',
@@ -94,7 +94,7 @@ export default {
               location: '1.203',
               classEnrolled: 'F01',
               professor: 'Sudipta',
-              "isSelected": true
+              "isSelected": false
             }
           ]},
         {"courseName": "50.034 Probability and Statistics",
@@ -110,7 +110,7 @@ export default {
               location: '2.501',
               classEnrolled: 'F01',
               professor: 'Sun Jun',
-               "isSelected": true
+               "isSelected": false
             },
             {
               title: '50.034 Lecture',
@@ -282,7 +282,7 @@ export default {
               locked: null,
               suggestedBy: null,
               requestedBy: null,
-              isSelected: lesson.isSelected
+              isSelected: lesson.isSelected //not from database (frontend)
             },
             schedule: {
               dayOfWeek: [lesson.day],
@@ -296,7 +296,7 @@ export default {
       return eventData;  
     },
     //other database tables
-    //TODO: get from database eventually
+    //TO CHANGE: get from database eventually
     professorTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
@@ -304,8 +304,7 @@ export default {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(JSON.stringify({    
           searchText: event.data.professor, 
-          pillar: event.data.pillar,
-          isSelected: false}));
+          pillar: event.data.pillar}));
       }
       selectionCandidatesSet.forEach(searchObject => {
         //parse back to object
@@ -320,8 +319,7 @@ export default {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(JSON.stringify({    
           searchText: event.data.courseName, 
-          pillar: event.data.pillar,
-          isSelected: false}));
+          pillar: event.data.pillar}));
       }
       selectionCandidatesSet.forEach(searchObject => {
         selectionCandidates.push(JSON.parse(searchObject)); //parse back to object
@@ -333,9 +331,7 @@ export default {
       var selectionCandidatesSet = new Set();
       for (var event of this.calendarEventTable){
         //JSON.stringify so that objects can be compared
-        selectionCandidatesSet.add(JSON.stringify({
-          searchText: event.data.location,
-          isSelected: false}));
+        selectionCandidatesSet.add(JSON.stringify({searchText: event.data.location}));
       }
       selectionCandidatesSet.forEach(searchObject => {
         selectionCandidates.push(JSON.parse(searchObject)); 
@@ -349,8 +345,7 @@ export default {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(JSON.stringify({    
           searchText: event.data.classEnrolled, 
-          pillar: event.data.pillar,
-          isSelected: false}));
+          pillar: event.data.pillar}));
       }
       selectionCandidatesSet.forEach(searchObject => {
         selectionCandidates.push(JSON.parse(searchObject)); //parse back to object
