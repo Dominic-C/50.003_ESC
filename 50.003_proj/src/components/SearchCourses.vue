@@ -17,14 +17,13 @@
             <!-- how selected items should be rendered -->
             <template v-slot:selection="data">
               <v-chip
-                :selected= "data.selected"
                 close
                 class="chip--select-multi"
                 @input="remove(data.item)"
               >
                 <v-icon 
                   v-if="searchCategory!=='location'" 
-                  :color="getColour(data.item)"
+                  :color="pillarColours[data.item.pillar]"
                   class="headline font-weight-heavy white--text" 
                   left>
                     {{ data.item.pillar.substring(0, 2) }}
@@ -37,7 +36,7 @@
             <template v-slot:item="data">
               <v-list-tile-avatar
                 v-if="searchCategory!=='location'" 
-                :color="getColour(data.item)"
+                :color="pillarColours[data.item.pillar]"
                 class="headline font-weight-light white--text"
               >
                 {{ data.item.pillar.substring(0, 2) }}
@@ -98,11 +97,15 @@ export default {
         {text: 'Class', value: 'classEnrolled', table: this.classTable}, 
         {text: 'Professor', value: 'professor', table: this.professorTable}, 
         {text: 'Location', value: 'location', table: this.locationTable}
-        // {text: 'Course Name', value: 'courseName'}, 
-        // {text: 'Class', value: 'classEnrolled'}, 
-        // {text: 'Professor', value: 'professor'}, 
-        // {text: 'Location', value: 'location'}
-      ]
+      ],
+      pillarColours: {
+        ISTD: 'indigo',
+        ESD:'red',
+        EPD:'blue',
+        ASD:'purple',
+        FRESHMORE:'green',
+        HASS:'pink'
+      }
     }
   },
   computed: {
@@ -140,8 +143,6 @@ export default {
       //   const indexOfIndenticalObject = searchList.findIndex(item => item[this.searchCategory] === searchObject[this.searchCategory]);
       //   return indexOfIndenticalObject === index;
       // });  
-     
-
            
       for (var category of this.searchCategories){
         if (category.value === this.searchCategory) {
@@ -153,74 +154,62 @@ export default {
     itemsSelected: {
       get: function() {
         //TODO: select items through database method eventually
-        var itemsSelected = [];
-        console.log(this.selectionCandidates);
-        for (var item of this.selectionCandidates){
-          if (item.isSelected){
-            itemsSelected.push(item);
-            console.log('item has been selected', item)
-          }
-          // itemsSelected.push(course.lessonTimes.filter(lesson => lesson.isSelected));
-        }
-        return itemsSelected;
+        // var itemsSelected = [];
+        // for (var item of this.selectionCandidates){
+        //   if (item.isSelected){
+        //     itemsSelected.push(item);
+        //   }
+        // }
+        // return itemsSelected;
+        return this.selectionCandidates.filter(item => item.isSelected);
       },
       set: function(selectedItems) {
-        selectedItems.forEach(item => {
+        for (var item of selectedItems){
+          //changing ___table (database) 
+          //TODO: change in database eventually
           item.isSelected = true;
           //changing calendarEventsTable (database) so that calendar can be updated
           //TODO: change in database eventually
           for (var event of this.calendarEventsTable){
-            if (event[this.searchCategory] === item.searchText){
+            if (event.data[this.searchCategory] === item.searchText){
               event.data.isSelected === true;
             }
-            // if (course.courseName === item.courseName){
-            //   if (this.searchCategory === 'courseName' || this.searchCategory === 'pillar'){
-            //     for (var lesson of course.lessonTimes){
-            //       lesson.isSelected = true;
-            //     }
-            //   }
-            //   else {
-            //     for (var lesson of course.lessonTimes){
-            //       if (lesson[this.searchCategory] === item.searchText){
-            //         lesson.isSelected = true;
-            //       }
-            //     }
-            //   }
-            // }
           }
-        });
+        }
       }
     }
   },
   methods: {
     remove (item) {
+      //TO CHANGE: updating calendarEventsTable
       for (var event of this.calendarEventsTable){
         if (event.data[this.searchCategory] === item.searchText){
           event.data.isSelected === false;
         }
       }
+      //TO CHANGE: updating __table
       item.isSelected = false;
-    },
-    getColour(item) {
-      if (item.pillar === "ISTD") {
-        return "indigo";
-      } 
-      else if (item.pillar == "ESD") {
-        return "red";
-      }
-      else if (item.pillar == "EPD") {
-        return "blue";
-      }
-      else if (item.pillar == "ASD") {
-        return "purple";
-      }
-      else if (item.pillar == "FRESHMORE") {
-        return "green";
-      }
-      else if (item.pillar == "HASS") {
-        return "pink";
-      }
     }
+    // getColour(item) {
+    //   if (item.pillar === "ISTD") {
+    //     return "indigo";
+    //   } 
+    //   else if (item.pillar == "ESD") {
+    //     return "red";
+    //   }
+    //   else if (item.pillar == "EPD") {
+    //     return "blue";
+    //   }
+    //   else if (item.pillar == "ASD") {
+    //     return "purple";
+    //   }
+    //   else if (item.pillar == "FRESHMORE") {
+    //     return "green";
+    //   }
+    //   else if (item.pillar == "HASS") {
+    //     return "pink";
+    //   }
+    // }
   }
 }
 </script>

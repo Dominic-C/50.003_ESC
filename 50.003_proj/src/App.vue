@@ -261,6 +261,7 @@ export default {
             selectedEvents.push(event);
         }
       }
+      return selectedEvents;
     },
     //main database table
     calendarEventTable() {
@@ -270,7 +271,7 @@ export default {
         for (var lesson of course.lessonTimes){
           eventData.push({
             data: {
-              course: course.courseName,
+              courseName: course.courseName,
               pillar: course.pillar,
               title: lesson.title,
               color: colour,
@@ -281,7 +282,7 @@ export default {
               locked: null,
               suggestedBy: null,
               requestedBy: null,
-              isSelected: false
+              isSelected: lesson.isSelected
             },
             schedule: {
               dayOfWeek: [lesson.day],
@@ -318,7 +319,7 @@ export default {
       for (var event of this.calendarEventTable){
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(JSON.stringify({    
-          searchText: event.data.course, 
+          searchText: event.data.courseName, 
           pillar: event.data.pillar,
           isSelected: false}));
       }
