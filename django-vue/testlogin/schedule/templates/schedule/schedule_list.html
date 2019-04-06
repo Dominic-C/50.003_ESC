@@ -3,12 +3,13 @@
 {% block title %} - Schedule List{% endblock %}
 
 {% block content %}
-<script type='text/javascript'>
-	var object_list = {{ object_list }};
+
+<script> 
+var object_list = {{ object_list|safe }}; 
 </script>
 
-	<h3>Schedule List</h3>
-	<table  class="table table-hover">
+<h3>Schedule List</h3>
+<table class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
 			    <th scope="col">Title</th>
@@ -39,8 +40,32 @@
 		{% endfor %}
 
 	</table>
-{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+{% verbatim  %}
+
+<div id='list-schedule-items'></div>
 
 <script type='text/javascript'>
-	var object_list = {{ object_list }};
+Vue.component('show-schedules', {
+  data: function () {
+	  scheduleItems : object_list
+  },
+  template: '
+  	<li v-for="item in data">
+		<ul>{{ item.title }} 
+		{{ item.description }}
+		{{ item.start_time }}
+		{{ item.end_time }}
+		{{ item.lecturer }} 
+		{{ item.location }}</ul>
+	</li>
+   '
+})
+new Vue({
+	el: '#list-schedule-items',
+})
 </script>
+{% endverbatim  %}
+{% endblock %}
