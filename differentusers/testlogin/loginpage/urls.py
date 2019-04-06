@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import classroom, students, professors, coordinators, planners
+from .views import classroom, students, professors, coordinators, planners, sutdadmin
 
 urlpatterns = [
     path('', classroom.home, name='home'),
@@ -31,4 +31,9 @@ urlpatterns = [
         path('nextphase', planners.NextPhase.as_view(), name="nextphase"),
         path('prevphase', planners.PreviousPhase.as_view(), name="prevphase"),
     ], 'classroom'), namespace='planners')),
+
+    path('sutdadmin/', include(([
+        path('', sutdadmin.SutdAdminMainView.as_view(), name='sutdadmin_main'),
+    ], 'classroom'), namespace='sutdadmin')),
+
 ]

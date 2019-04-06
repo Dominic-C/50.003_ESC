@@ -16,6 +16,14 @@ from ..decorators import planner_required
 from ..forms import PlannerSignUpForm
 from ..models import User, Preferences, Example
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }
+
 
 class PlannerSignUpView(CreateView):
     model = User
@@ -74,7 +82,7 @@ class PreferencesCSVExportView(View):
         return response
 
 
-@method_decorator([login_required, planner_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class CurrentPhase(TemplateView):
     template_name = 'classroom/planners/planner_currentphase.html'
 

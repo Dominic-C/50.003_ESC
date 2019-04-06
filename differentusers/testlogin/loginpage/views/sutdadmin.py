@@ -8,9 +8,9 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
-from ..decorators import student_required
-from ..forms import StudentSignUpForm
-from ..models import Student, User
+from ..decorators import sutdadmin_required
+from ..forms import SutdAdminSignUpForm
+from ..models import User
 
 usertypes = { 
     'professor': 1, 
@@ -21,13 +21,13 @@ usertypes = {
     }
 
 
-class StudentSignUpView(CreateView):
+class SutdAdminSignUpView(CreateView):
     model = User
-    form_class = StudentSignUpForm
+    form_class = SutdAdminSignUpForm
     template_name = 'registration/signup_form.html'
 
     def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'student'
+        kwargs['user_type'] = 'sutdadmin'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -38,10 +38,10 @@ class StudentSignUpView(CreateView):
             userdetail.phase = 1
         userdetail = form.save()
         login(self.request, userdetail)
-        return redirect('students:student_main')
+        return redirect('sutdadmin:sutdadmin_main')
 
 
-@method_decorator([login_required, student_required], name='dispatch')
-class StudentMainView(TemplateView):
-    template_name = 'classroom/students/student_main.html'
+@method_decorator([login_required, sutdadmin_required], name='dispatch')
+class SutdAdminMainView(TemplateView):
+    template_name = 'classroom/sutdadmin/sutdadmin_main.html'
 

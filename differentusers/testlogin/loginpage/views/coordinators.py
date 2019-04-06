@@ -14,6 +14,13 @@ from ..decorators import coordinator_required
 from ..forms import CoordinatorSignUpForm
 from ..models import User
 
+usertypes = { 
+    'professor': 1, 
+    'sutdadmin': 2, 
+    'coursecoordinators': 3, 
+    'timetableplanner': 4, 
+    'student' : 5
+    }
 
 class CoordinatorSignUpView(CreateView):
     model = User
