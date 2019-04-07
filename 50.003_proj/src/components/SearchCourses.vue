@@ -4,7 +4,7 @@
       <v-layout wrap>
         <v-flex xs12>
           <v-autocomplete
-            v-model="selectedItems"
+            v-model="itemsSelected"
             :items="selectionCandidates"
             item-value="searchText"
             chips
@@ -19,7 +19,7 @@
               <v-chip
                 close
                 class="chip--select-multi"
-                @input="remove(data.item)"
+                @input="remove(data.item.searchText)"
               >
                 <v-icon 
                   v-if="searchCategory!=='location'" 
@@ -41,7 +41,7 @@
               >
                 {{ data.item.pillar.substring(0, 2) }}
               </v-list-tile-avatar>
-              <v-list-tile-content>
+              <v-list-tile-content @click="updateCalendar(data.item.searchText)">
                 <v-list-tile-title v-text="data.item.searchText"></v-list-tile-title>
                 <v-list-tile-sub-title 
                   v-if="searchCategory!=='location'" 
@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       searchCategory: '',
-      selectedItemsArray: '',  
+      itemsSelected: '',  
       searchCategories: [
         {text: 'Course Name', value: 'courseName', table: this.courseNameTable}, 
         {text: 'Class', value: 'classEnrolled', table: this.classTable}, 
@@ -130,36 +130,19 @@ export default {
         }
       }
       return [];
-    },
-    selectedItems: {
-      get: function() {
-        return this.selectedItemsArray;
-      },
-      set: function(selectedItems) {
-        for (var item of selectedItems){
-          this.selectedItemsArray = selectedItems;
-          //changing calendarEventsTable (database) so that calendar can be updated
-          for (var event of this.calendarEventsTable){
-            if (event.data[this.searchCategory] === item){
-              event.data.isSelected === true;
-            }
-          }
-        }
-      }
     }
   },
   methods: {
     remove (item) {
-      const index = this.selectedItemsArray.indexOf(item.searchText)
+      const index = this.itemsSelected.indexOf(item)
       if (index >= 0) {
-        this.selectedItems.splice(index, 1);  //deleting item from selectedItems array
+        this.itemsSelected.splice(index, 1);  //deleting item from itemsSelected array
       }
-      //TO CHANGE: updating calendarEventsTable
-      for (var event of this.calendarEventsTable){
-        if (event.data[this.searchCategory] === item.searchText){
-          event.data.isSelected === false;
-        }
-      }
+      console.log('removing');
+      this.$emit('selected-search-item', {item: item, searchCategory: this.searchCategory, isSelected: false});
+    },
+    updateCalendar(item) {
+      this.$emit('selected-search-item', {item: item, searchCategory: this.searchCategory, isSelected: !this.itemsSelected.includes(item)});
     }  
   }
 }
