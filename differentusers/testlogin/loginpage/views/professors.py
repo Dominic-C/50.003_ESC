@@ -17,13 +17,14 @@ from ..forms import ProfessorSignUpForm, SubmitCourseDetails
 from ..models import User, Preferences
 
 
-usertypes = { 
-    'professor': 1, 
-    'sutdadmin': 2, 
-    'coursecoordinators': 3, 
-    'timetableplanner': 4, 
-    'student' : 5
-    }
+usertypes = {
+    'professor': 1,
+    'sutdadmin': 2,
+    'coursecoordinators': 3,
+    'timetableplanner': 4,
+    'student': 5
+}
+
 
 class ProfessorSignUpView(CreateView):
     model = User
@@ -37,7 +38,8 @@ class ProfessorSignUpView(CreateView):
     def form_valid(self, form):
         userdetail = form.save(commit=False)
         try:
-            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+            userdetail.phase = User.objects.filter(
+                user_type=usertypes['professor'])[0].phase
         except:
             userdetail.phase = 1
         userdetail = form.save()
@@ -48,7 +50,6 @@ class ProfessorSignUpView(CreateView):
 @method_decorator([login_required, professor_required], name='dispatch')
 class ProfessorMainView(TemplateView):
     template_name = 'classroom/professors/professor_main.html'
-
 
 
 @method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
@@ -65,7 +66,7 @@ class SubmitCourseDetailsView(CreateView):
         details.created_by = self.request.user
         details.save()
         return redirect('professors:details')
-    
+
 
 @method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
 class DetailsListView(ListView):
@@ -76,13 +77,12 @@ class DetailsListView(ListView):
         # returns Preferences submited by the current User
         return Preferences.objects.filter(created_by=self.request.user)
 
-    def get_context_data(self,**kwargs):
-        context = super(DetailsListView,self).get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(DetailsListView, self).get_context_data(**kwargs)
         qs = Preferences.objects.all()
         qs_json = serializers.serialize('json', qs)
         context['json_list'] = qs_json
         return context
-
 
 
 @method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
@@ -104,5 +104,3 @@ class DetailsEditView(UpdateView):
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
         return Preferences.objects.filter(created_by=self.request.user)
-
-

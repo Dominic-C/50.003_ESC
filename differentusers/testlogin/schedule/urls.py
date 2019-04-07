@@ -8,5 +8,5 @@ urlpatterns = [
     path('', ScheduleListView.as_view(), name='list'),
     path('create', ScheduleCreateView.as_view(), name='create'),
     path('testingdropdown', views.add_schedule, name = 'addschedule'),
-    path('testingserialization', views.serialized_schedule, name = 'serialize')
+    path('serialized', views.serialized_schedule, name = 'serialize')
 ]

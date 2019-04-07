@@ -7,13 +7,13 @@
 {% block content %}
 
 <script>
-	var tables = '{{ json_list|safe }}';
-	console.log(tables);
+	var tables = {{ json_list|safe }};
+	{% comment %} console.log(tables); {% endcomment %}
 </script>
 
 	<h3>Course Details</h3>
-
-	<table  class="table table-hover">
+	<div id="populated-list">
+	<table class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
 			    <th scope="col">Name</th>
@@ -21,25 +21,51 @@
 			    <th scope="col">Cohort Size x No. of Cohorts</th>
 			    <th scope="col">Edit </th>
 		  	</tr>
-
-			{% for item in object_list %}
-		    	 
-		    	 <tr>
-					<td>{{ item.first_name }} {{ item.last_name }} </td>
-					<td>{{ item.subject_code }} {{ item.subject_name }}</td>
-					<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
-					<td> <a class="btn btn-info" href="{% url 'professors:editdetails' item.id %}" role="button">Edit</a> </td>
-					
-				</tr>
-
+			{% verbatim %}
+			<push-list
+			v:for="table in values"
+			v-if="table"
+			v-bind:item="table">
+			</push-list>
+			{% endverbatim %}
+		{% comment %} {% for item in object_list %}    	 
+		<tr>
+			<td>{{ item.first_name }} {{ item.last_name }} </td>
+			<td>{{ item.subject_code }} {{ item.subject_name }}</td>
+			<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
+			<td> <a class="btn btn-info" href="{% url 'professors:editdetails' item.id %}" role="button">Edit</a> </td>
+		</tr>
 	   	{% empty %}
-	    	<tr> 
-				<td>No course details yet </td>
-				<td></td>
-				<td></td>
+		   <tr> 
+		   <td>No course details yet </td>
+		   <td></td>
+		   <td></td>
 	    	</tr>
 
-		{% endfor %}
+		{% endfor %} {% endcomment %}
 
 	</table>
+	</div>
+
+{% verbatim %}
+<script type="text/javascript">
+Vue.component('push-list', {
+	props:['item'],
+	template: `<tr>
+		<td>{{ item.first_name }} {{ item_lastname }}</td>
+		<td>{{ item.subject_code }} {{ item.subject_name }}</td>
+		<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
+		<td></td>
+	</tr>`
+})
+
+var app = new Vue({
+	el : '#populated-list',
+	data : {
+		values: tables
+	}
+})
+</script>
+{% endverbatim %}
+
 {% endblock %}
