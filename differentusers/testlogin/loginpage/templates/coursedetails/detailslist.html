@@ -7,7 +7,8 @@
 {% block content %}
 
 <script>
-	var tables = {{ object_list|safe }};
+	var tables = '{{ json_list|safe }}';
+	console.log(tables);
 </script>
 
 	<h3>Course Details</h3>

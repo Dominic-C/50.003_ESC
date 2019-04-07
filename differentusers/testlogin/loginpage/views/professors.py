@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, TemplateView, View)
+from django.core import serializers
 
 from ..decorators import professor_required, drafting_required, beforefirstdraft_required
 from ..forms import ProfessorSignUpForm, SubmitCourseDetails
@@ -74,6 +75,13 @@ class DetailsListView(ListView):
     def get_queryset(self):
         # returns Preferences submited by the current User
         return Preferences.objects.filter(created_by=self.request.user)
+
+    def get_context_data(self,**kwargs):
+        context = super(DetailsListView,self).get_context_data(**kwargs)
+        qs = Preferences.objects.all()
+        qs_json = serializers.serialize('json', qs)
+        context['json_list'] = qs_json
+        return context
 
 
 
