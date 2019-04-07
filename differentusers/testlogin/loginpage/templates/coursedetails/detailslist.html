@@ -12,7 +12,7 @@
 </script>
 
 	<h3>Course Details</h3>
-	<div id="populated-list">
+	<div id="populated-list" v:for="table in values">
 	<table class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
@@ -23,12 +23,17 @@
 		  	</tr>
 			{% verbatim %}
 			<push-list
-			v:for="table in values"
 			v-if="table"
-			v-bind:item="table">
+			v-bind:key="table.pk"
+			v-bind:item="table.fields">
 			</push-list>
+			<push-list
+			v-bind:key="999"
+			v-bind:item="noneDefault" 
+			v-else
+			>
 			{% endverbatim %}
-		{% comment %} {% for item in object_list %}    	 
+		{% for item in object_list %}    	 
 		<tr>
 			<td>{{ item.first_name }} {{ item.last_name }} </td>
 			<td>{{ item.subject_code }} {{ item.subject_name }}</td>
@@ -42,7 +47,7 @@
 		   <td></td>
 	    	</tr>
 
-		{% endfor %} {% endcomment %}
+		{% endfor %}
 
 	</table>
 	</div>
@@ -51,18 +56,30 @@
 <script type="text/javascript">
 Vue.component('push-list', {
 	props:['item'],
-	template: `<tr>
+	template: `<tr v-if="item">
 		<td>{{ item.first_name }} {{ item_lastname }}</td>
 		<td>{{ item.subject_code }} {{ item.subject_name }}</td>
 		<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
 		<td></td>
-	</tr>`
+	</tr>
+	`
 })
 
 var app = new Vue({
 	el : '#populated-list',
 	data : {
-		values: tables
+		values: tables,
+		noneDefault: {
+			fields: {
+				first_name : "",
+				last_name : "",
+				subject_code : "LAST",
+				subject_name : "ENTRY",
+				cohort_size : "",
+				cohort_num : ""
+			},
+			pk: 99999
+		}
 	}
 })
 </script>
