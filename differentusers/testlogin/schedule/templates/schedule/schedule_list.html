@@ -4,8 +4,12 @@
 
 {% block content %}
 
+<script>
+	var tables = {{ object_list|safe }};
+</script>
+
 	<h3>Schedule List</h3>
-	<table  class="table table-hover">
+	<table class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
 			    <th scope="col">Title</th>
@@ -14,8 +18,10 @@
 			    <th scope="col">Lecturer</th>
 			    <th scope="col">Location </th>
 		  	</tr>
-
-			{% for item in object_list %}
+			{% verbatim %}
+			<tr id="list-schedule-items"></tr>
+			{% endverbatim %}
+			{% comment %} {% for item in object_list %}
 		    	 
 		    	 <tr>
 					<td>{{ item.title }} </td>
@@ -24,7 +30,7 @@
 					<td>{{ item.lecturer }} </td>
 					<td>{{ item.location }}</td>
 					
-				</tr>
+				</tr> 
 
 	   	{% empty %}
 	    	<tr> 
@@ -33,7 +39,22 @@
 				<td></td>
 	    	</tr>
 
-		{% endfor %}
+		{% endfor %}{% endcomment %}
 
 	</table>
+
+{% verbatim %}
+<script type='text/javascript'>
+Vue.component('show-schedules', {
+  props: ['{object_list}'],
+  template: ''
+})
+
+new Vue({
+	el: '#list-schedule-items',
+	data: { this.tables }
+})
+{% endverbatim %}
+
+
 {% endblock %}
