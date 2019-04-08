@@ -177,7 +177,7 @@ export default {
     userName: {
       type: String
     },
-    suggesting: {
+    suggestable: {
       type: Boolean
     },
     events: {
@@ -419,8 +419,8 @@ export default {
       calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggesting mode
-        if (this.suggesting){
+        //fill in suggestedBy and locked status by default for suggestable mode
+        if (this.suggestable){
           eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
         } 
         else {
@@ -442,8 +442,8 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggesting mode
-        if (this.suggesting){
+        //fill in suggestedBy and locked status by default for suggestable mode
+        if (this.suggestable){
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:this.userName, locked: false});
         } 
         else{
@@ -473,8 +473,8 @@ export default {
       calendar && calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggesting mode
-        if (this.suggesting){
+        //fill in suggestedBy and locked status by default for suggestable mode
+        if (this.suggestable){
           eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
         } 
         else {
@@ -507,8 +507,8 @@ export default {
     },
     handleMove(moveEvent)
     {
-      //if suggesting and event chosen is locked, no action is taken
-      if (this.suggesting && moveEvent.calendarEvent.event.data.locked){
+      //if suggestable and event chosen is locked, no action is taken
+      if (this.suggestable && moveEvent.calendarEvent.event.data.locked){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;
