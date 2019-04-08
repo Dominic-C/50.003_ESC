@@ -663,6 +663,49 @@ class PreferencesFormsTests(TestCase):
         self.assertEqual(Preferences.objects.last().cohort_size, 50)
         self.assertEqual(Preferences.objects.last().cohort_num, 9)
 
+    # Cohort_num should be less than 16
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_edge_cohort_num(self):
+        form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 49, 'cohort_num': 20}
+        login  = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
+
+    # Cohort_size should be less than 800
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_edge_cohort_size(self):
+        form_data = {'subject_code': '10.009', 'subject_name': 'Digital World', 'cohort_size': 900, 'cohort_num': 10}
+        login  = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
+
+    # subject_code length should be less than 10
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_edge_subject_code(self):
+        form_data = {'subject_code': '10.009XXXXXXXXX', 'subject_name': 'Digital World', 'cohort_size': 50, 'cohort_num': 10}
+        login  = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
+
+    # subject_name length should be less than 50
+    # Form is invalid so it is not saved in Preferences Database
+    def test_submit_course_details_edge_subject_code(self):
+        form_data = {'subject_code': '10.009', 'subject_name': 'Digital WorldXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx', 'cohort_size': 50, 'cohort_num': 10}
+        login  = self.client.login(username='prof', password='sutd1234')
+        response = self.client.post(reverse("professors:submitdetails"), form_data)
+        self.assertEqual(Preferences.objects.last().subject_code, "50.005")
+        self.assertEqual(Preferences.objects.last().subject_name, "CSE")
+        self.assertEqual(Preferences.objects.last().cohort_size, 50)
+        self.assertEqual(Preferences.objects.last().cohort_num, 9)
 
 class PhaseTests(TestCase):
     @classmethod
