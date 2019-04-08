@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.html import escape, mark_safe
 
 USER_TYPE_CHOICES = (
@@ -67,8 +68,8 @@ class Preferences(models.Model):
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=5)
     subject_code = models.CharField(max_length=10)
     subject_name = models.CharField(max_length=50)
-    cohort_size = models.PositiveSmallIntegerField()
-    cohort_num = models.PositiveSmallIntegerField()
+    cohort_size = models.PositiveSmallIntegerField(default=50, validators=[MaxValueValidator(800), MinValueValidator(1)])
+    cohort_num = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(16), MinValueValidator(1)])
 
     def __str__(self):
         string = "{} {}: {} {} | {} x {}".format(self.first_name, self.last_name, self.subject_code, 

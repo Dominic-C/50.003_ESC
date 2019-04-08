@@ -82,7 +82,7 @@ class PreferencesCSVExportView(View):
         return response
 
 
-@method_decorator([login_required], name='dispatch')
+@method_decorator([login_required, planner_required], name='dispatch')
 class CurrentPhase(TemplateView):
     template_name = 'classroom/planners/planner_currentphase.html'
 
