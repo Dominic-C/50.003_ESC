@@ -82,6 +82,8 @@ class DetailsListView(ListView):
         qs = Preferences.objects.all()
         qs_json = serializers.serialize('json', qs)
         context['json_list'] = qs_json
+        context['component'] = "course-details-app.js"
+        context['errorCatch'] = "errorCatch.js"
         return context
 
 

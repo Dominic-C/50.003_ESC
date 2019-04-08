@@ -12,28 +12,16 @@
 </script>
 
 	<h3>Course Details</h3>
-	<div id="populated-list" v:for="table in values">
-	<table class="table table-hover">
-		<thead class="thead-dark">
-			<tr>
-			    <th scope="col">Name</th>
-			    <th scope="col">Subject</th> 
-			    <th scope="col">Cohort Size x No. of Cohorts</th>
-			    <th scope="col">Edit </th>
-		  	</tr>
-			{% verbatim %}
-			<push-list
-			v-if="table"
-			v-bind:key="table.pk"
-			v-bind:item="table.fields">
-			</push-list>
-			<push-list
-			v-bind:key="999"
-			v-bind:item="noneDefault" 
-			v-else
-			>
-			{% endverbatim %}
-		{% for item in object_list %}    	 
+	{% verbatim %}
+	<div id="populated-list">
+			<course-table
+			v-bind:values="values">
+			</course-table>
+	</div>
+		{% endverbatim  %}
+			
+			
+		{% comment %} {% for item in object_list %}    	 
 		<tr>
 			<td>{{ item.first_name }} {{ item.last_name }} </td>
 			<td>{{ item.subject_code }} {{ item.subject_name }}</td>
@@ -47,42 +35,7 @@
 		   <td></td>
 	    	</tr>
 
-		{% endfor %}
-
-	</table>
-	</div>
-
-{% verbatim %}
-<script type="text/javascript">
-Vue.component('push-list', {
-	props:['item'],
-	template: `<tr v-if="item">
-		<td>{{ item.first_name }} {{ item_lastname }}</td>
-		<td>{{ item.subject_code }} {{ item.subject_name }}</td>
-		<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
-		<td></td>
-	</tr>
-	`
-})
-
-var app = new Vue({
-	el : '#populated-list',
-	data : {
-		values: tables,
-		noneDefault: {
-			fields: {
-				first_name : "",
-				last_name : "",
-				subject_code : "LAST",
-				subject_name : "ENTRY",
-				cohort_size : "",
-				cohort_num : ""
-			},
-			pk: 99999
-		}
-	}
-})
-</script>
-{% endverbatim %}
+		{% endfor %} {% endcomment %}
+<script src="/static/js/{{component}}"></script>
 
 {% endblock %}

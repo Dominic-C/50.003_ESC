@@ -1,0 +1,18 @@
+timeplanners
+- accepts suggestions or decline suggestions
+
+course coords
+- calendar needs to check if it's the same:
+    - prof
+    - cohort
+
+    Write deconflict logic
+
+Event Space:
+    - For any event, check all events containing location -> check if time 
+
+    Check for clashes in professor, class, location
+    if conflict -> FOR COURSE COORD => table of all conflicts => click to jump to list of entries of all conflicts
+        == pass the events as a prop -> jump to the event ->
+
+    
