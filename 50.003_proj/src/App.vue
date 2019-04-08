@@ -4,7 +4,7 @@
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
         <form-submit v-if="activeComp.formSubmitNewCourse"></form-submit>
-        <search-courses 
+        <search-bar 
           :calendarEventsTable="calendarEventTable"
           :professorTable="professorTable"
           :courseNameTable="courseNameTable"
@@ -12,7 +12,7 @@
           :classTable="classTable"
           @selected-search-item="updateCalendar"
           v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable">
-        </search-courses>
+        </search-bar>
         <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection>
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <weekly-calendar-finalised :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
