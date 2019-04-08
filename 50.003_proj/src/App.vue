@@ -707,12 +707,9 @@ export default {
     },
     updateCalendar(e){
       //TO CHANGE: hardcoding change--to change in database
-      console.log(e);
       for (var lesson of this.calendarEventTable){
         if (lesson.data[e.searchCategory] === e.item){
-          console.log('Before: ', lesson.data.isSelected);
           lesson.data.isSelected = e.isSelected;
-          console.log('After: ', lesson.data.isSelected);
         }
       }
     }
