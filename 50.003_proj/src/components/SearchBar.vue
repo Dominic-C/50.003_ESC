@@ -8,7 +8,7 @@
             :items="searchTable[searchCategory]"
             item-value="searchText"
             chips
-            label="Search for courses to add"
+            label="Search for courses/classes/professors/locations to add"
             multiple
             clearable
             no-data-text="No such name"
@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  name: 'SearchCourses',
+  name: 'SearchBar',
   props: {
     calendarEventsTable: {
       type: Array,

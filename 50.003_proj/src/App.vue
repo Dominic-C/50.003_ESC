@@ -31,7 +31,7 @@
 import { Calendar, Weekday } from 'dayspan';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
-import SearchCourses from './components/SearchCourses.vue';
+import SearchBar from './components/SearchBar.vue';
 import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
@@ -585,7 +585,7 @@ export default {
   }),
   components: {
     AppHeader,
-    SearchCourses,
+    SearchBar,
     ListSelection,
     WeeklyCalendar,
     dsWeeklyCalendar,
