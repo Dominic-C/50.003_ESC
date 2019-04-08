@@ -4,7 +4,7 @@
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
         <form-submit v-if="activeComp.formSubmitNewCourse"></form-submit>
-        <search-courses 
+        <search-bar 
           :calendarEventsTable="calendarEventTable"
           :professorTable="professorTable"
           :courseNameTable="courseNameTable"
@@ -12,7 +12,7 @@
           :classTable="classTable"
           @selected-search-item="updateCalendar"
           v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable">
-        </search-courses>
+        </search-bar>
         <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection>
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <weekly-calendar-finalised :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
@@ -31,7 +31,7 @@
 import { Calendar, Weekday } from 'dayspan';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
-import SearchCourses from './components/SearchCourses.vue';
+import SearchBar from './components/SearchBar.vue';
 import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
@@ -585,7 +585,7 @@ export default {
   }),
   components: {
     AppHeader,
-    SearchCourses,
+    SearchBar,
     ListSelection,
     WeeklyCalendar,
     dsWeeklyCalendar,
@@ -707,12 +707,9 @@ export default {
     },
     updateCalendar(e){
       //TO CHANGE: hardcoding change--to change in database
-      console.log(e);
       for (var lesson of this.calendarEventTable){
         if (lesson.data[e.searchCategory] === e.item){
-          console.log('Before: ', lesson.data.isSelected);
           lesson.data.isSelected = e.isSelected;
-          console.log('After: ', lesson.data.isSelected);
         }
       }
     }

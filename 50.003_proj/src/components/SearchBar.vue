@@ -5,10 +5,10 @@
         <v-flex xs12>
           <v-autocomplete
             v-model="itemsSelected"
-            :items="selectionCandidates"
+            :items="searchTable[searchCategory]"
             item-value="searchText"
             chips
-            label="Search for courses to add"
+            label="Search for courses/classes/professors/locations to add"
             multiple
             clearable
             no-data-text="No such name"
@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  name: 'SearchCourses',
+  name: 'SearchBar',
   props: {
     calendarEventsTable: {
       type: Array,
@@ -92,13 +92,19 @@ export default {
   data() {
     return {
       searchCategory: '',
-      itemsSelected: '',  
+      itemsSelected: [],  
       searchCategories: [
         {text: 'Course Name', value: 'courseName', table: this.courseNameTable}, 
         {text: 'Class', value: 'classEnrolled', table: this.classTable}, 
         {text: 'Professor', value: 'professor', table: this.professorTable}, 
         {text: 'Location', value: 'location', table: this.locationTable}
       ],
+      searchTable: {
+        courseName: this.courseNameTable, 
+        classEnrolled: this.classTable, 
+        professor: this.professorTable, 
+        location: this.locationTable
+      },
       pillarColours: {
         ISTD: 'indigo',
         ESD:'red',
@@ -123,13 +129,24 @@ export default {
       //   const indexOfIndenticalObject = searchList.findIndex(item => item[this.searchCategory] === searchObject[this.searchCategory]);
       //   return indexOfIndenticalObject === index;
       // });  
-           
-      for (var category of this.searchCategories){
-        if (category.value === this.searchCategory) {
-          return category.table;
+      return this.searchTable[this.searchCategory];
+    }
+  },
+  watch: {
+    itemsSelected: function (newList, oldList) {
+      if (newList.length === 0){
+        for (var item of oldList){
+          this.remove(item);
         }
       }
-      return [];
+    },
+    searchCategory: function (newCategory, oldCategory){
+      if (oldCategory != ''){
+        for (var item of this.searchTable[oldCategory]){
+          this.$emit('selected-search-item', {item: item.searchText, searchCategory: oldCategory, isSelected: false});
+        }
+        this.itemsSelected = [];
+      }
     }
   },
   methods: {
@@ -138,7 +155,6 @@ export default {
       if (index >= 0) {
         this.itemsSelected.splice(index, 1);  //deleting item from itemsSelected array
       }
-      console.log('removing');
       this.$emit('selected-search-item', {item: item, searchCategory: this.searchCategory, isSelected: false});
     },
     updateCalendar(item) {
