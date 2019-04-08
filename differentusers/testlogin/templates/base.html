@@ -36,6 +36,16 @@
                 {% elif user.get_user_type == 'Timetable Planner' %}
                   {% include 'planner_navbar.html' %}
 
+                {% elif user.get_user_type == 'SUTD Admin' %}
+                  {% include 'sutdadmin_navbar.html' %}
+                
+                {% elif user.get_user_type == 'Course Coordinator' %}
+                  {% include 'coordinator_navbar.html' %}
+
+                {% elif user.get_user_type == 'Student' %}
+                  {% include 'student_navbar.html' %}
+                
+
                 {% else %}
                   
                 {% endif %}
