@@ -47,7 +47,7 @@
                 <p class="pt-3">Logged in as <strong>{{ user.first_name }} {{ user.last_name }}</strong>. <a href="{% url 'logout' %}">Log out</a>.</p>
               {% else %}
                 <a href="{% url 'login' %}" class="btn btn-light" role="button">Log in</a>
-                <a href="{% url 'signup' %}" class="btn btn-primary" role="button">Sign up</a>
+                <a href="{% url 'signup' %}" id="id_signup" class="btn btn-primary" role="button">Sign up</a>
               {% endif %}
             </div>
 
