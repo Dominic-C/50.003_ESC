@@ -5,7 +5,7 @@
 {% block content %}
 
 <script>
-	var tables = 	{{ ser_data }};
+	var tables = 	{{ ser_data|safe }};
 </script>
 
 	<h3>Schedule List</h3>
@@ -19,7 +19,6 @@
 			    <th scope="col">Location </th>
 		  	</tr>
 			{% verbatim %}
-			<tr id="list-schedule-items"></tr>
 			{% endverbatim %}
 			{% comment %} {% for item in object_list %}
 		    	 
@@ -43,18 +42,6 @@
 
 	</table>
 
-{% verbatim %}
-<script type='text/javascript'>
-Vue.component('show-schedules', {
-  props: ['{object_list}'],
-  template: ''
-})
-
-new Vue({
-	el: '#list-schedule-items',
-	data: { this.tables }
-})
-{% endverbatim %}
 
 
 {% endblock %}
