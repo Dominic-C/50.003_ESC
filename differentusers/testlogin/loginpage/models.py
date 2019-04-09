@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, validate_comma_separated_integer_list
 from django.utils.html import escape, mark_safe
 
 USER_TYPE_CHOICES = (
@@ -77,10 +77,15 @@ class Preferences(models.Model):
         return string
 
 
-class Example(models.Model):
-    class_number = models.CharField(max_length=10)
-    day = models.CharField(max_length=10)
+class Lesson(models.Model):
+    course_name = models.CharField(max_length=50)
+    pillar = models.CharField(max_length=10)
+    title = models.CharField(max_length=20)
+    location = models.CharField(max_length=20)
+    class_enrolled = models.CharField(max_length=10)
+    day_of_week = models.CharField(max_length=20, validators=[validate_comma_separated_integer_list])
+    duration = models.PositiveSmallIntegerField(default=90, validators=[MaxValueValidator(360), MinValueValidator(30)])
 
     def __str__(self):
-        return "{} - {}".format(self.class_number, self.day) 
+        return "{} - {} for {}".format(self.course_name, self.title, self.class_enrolled) 
     
