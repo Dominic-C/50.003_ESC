@@ -14,7 +14,7 @@ from django.template import Context, loader
 from ..serializers import PreferencesSerializer
 from ..decorators import planner_required
 from ..forms import PlannerSignUpForm
-from ..models import User, Preferences, Example
+from ..models import User, Preferences, Lesson
 
 usertypes = { 
     'professor': 1, 
@@ -111,13 +111,14 @@ class PreviousPhase(View):
         # User.objects.all().update(phase=1)
         return redirect('planners:currentphase')
 
+
 @login_required
 @planner_required
 def csv_upload(request):
     template = "classroom/planners/phaser_upload.html"
 
     prompt = {
-        'order': "Order of the CSV should be ...."
+        'order': "Order of the CSV should be Pillar, Course Name, Title, Location, Class Enrolled, Day of Week, Duration"
     }
 
     if request.method == "GET":
@@ -137,16 +138,21 @@ def csv_upload(request):
         io_string = io.StringIO(data_set)
         next(io_string)
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-            _, created = Example.objects.update_or_create(
-                class_number=column[0],
-                day=column[1],)
+            _, created = Lesson.objects.update_or_create(
+                pillar=column[0],
+                course_name=column[1],
+                title=column[2],
+                location=column[3],
+                class_enrolled=column[4],
+                day_of_week=column[5],
+                duration=column[6],)
 
         context = {}
         messages.success(request, 'File upload successful')
         return render(request, template, context)
 
     except Exception as e:
-        # messages.error(request,"Unable to upload file. " + repr(e))
+        messages.error(request,"Unable to upload file. " + repr(e))
         messages.error(request, "Unable to upload file! Check your format and for empty rows!")
         return HttpResponseRedirect(reverse("planners:uploaddata"))
 
