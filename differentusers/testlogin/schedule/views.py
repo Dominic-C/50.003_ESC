@@ -33,6 +33,7 @@ def add_schedule(request):
         # check if form is valid
         if form.is_valid():
             print(Schedule.objects.filter(location=2))
+            # need to add condition to check for same date, then nest the code below
             print(form.cleaned_data['start_time'],
                   form.cleaned_data['end_time'])
             if(Schedule.objects.filter(location=2)):
