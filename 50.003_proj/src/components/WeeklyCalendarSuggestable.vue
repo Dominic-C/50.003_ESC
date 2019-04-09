@@ -12,7 +12,7 @@
       <template v-else>
         <v-btn 
           color="grey"
-          @click="isSuggesting=false"
+          @click="revertState"
         >
           Cancel
         </v-btn>
@@ -20,7 +20,14 @@
       </template>
     </v-layout>
     <div style="height: 500px">
-      <ds-weekly-calendar :events="suggestibleEvents" :calendar="calendar" :suggestable="true" :read-only="!isSuggesting">
+      <ds-weekly-calendar 
+        :events="suggestibleEvents" 
+        :calendar="calendar" 
+        :suggestable="true" 
+        :read-only="!isSuggesting"
+        @event-update="updateCalendar"
+        ref='calendar'
+        >
         <template slot="eventDetailsLocation" slot-scope="{ details }">
           <!-- Location -->
             <v-select
@@ -95,7 +102,7 @@
           <v-text-field 
             single-line hide-details solo flat
             :prepend-icon="details.locked ? 'lock' : 'lock_open'"
-            :label="details.locked ? 'First Draft' : 'Suggestable'"
+            :label="details.locked ? 'First Draft' : 'Suggestible'"
             disabled
             v-model="details.requestedBy"
           ></v-text-field>
@@ -114,7 +121,7 @@ export default {
   name: 'WeeklyCalendarSuggestable',
   props: {
     events: {
-      type: Array
+      type: Object
     },
   },
   components: {
@@ -127,24 +134,20 @@ export default {
   }),
   computed: {
     suggestibleEvents(){
-      var eventData = [];   
-      for (var event of this.events){
-        if (event.data.calendarType === "Academic"){
-          var lockedEvent = JSON.parse(JSON.stringify(event)) //copying event object
-          var suggestingEvent = JSON.parse(JSON.stringify(event)) //copying event object
-          // console.log(JSON.stringify(copyEvent.data));
-          suggestingEvent.data.locked = false;
-          suggestingEvent.data.suggestedBy = "username"
-          lockedEvent.data.locked = true;
-          lockedEvent.data.color = "#EBEBE4";
-          eventData.unshift(lockedEvent);   //at the front of array so that the locked events will be below
-          eventData.push(suggestingEvent);
-        }
-      }
-      // console.log(JSON.stringify(eventData[0].data));
-      // console.log(this.events);
-      return eventData;
+      return this.events.locked.concat(this.events.suggestible);
     }    
-  }
+  },
+  methods: {
+    revertState(){
+      this.isSuggesting = false;
+      this.$emit('revert-state');
+    },
+    updateCalendar(event){
+    this.$emit('event-update', event);
+    },
+    applyEvents(){
+      this.$refs.calendar.applyEvents();
+    }
+  }  
 }
 </script>

@@ -340,7 +340,6 @@ export default {
     },
     applyEvents()
     {
-      // console.log(this.events[0].schedule.toInput);
       if (this.events)
       {
         this.calendar.removeEvents();

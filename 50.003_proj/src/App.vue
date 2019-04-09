@@ -13,15 +13,14 @@
           @selected-search-item="updateCalendar"
           v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable">
         </search-bar>
-        <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection>
+        <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <weekly-calendar-finalised :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
-        <weekly-calendar-suggestable :events="selectedCalendarEvents" v-if="activeComp.viewTimetableToSuggest">></weekly-calendar-suggestable>
-        <!-- <ds-calendar :calendar="calendar" v-if="activeComp.weeklyCalendar">></ds-calendar> -->
-        <!-- <v-app id="dayspan" v-cloak> -->
-          <!-- <ds-calendar :calendar="calendar"></ds-calendar> -->
-          <!-- <ds-weekly-calendar :events="calendarEvents"></ds-weekly-calendar> -->
-        <!-- </v-app> -->
+        <weekly-calendar-suggestable ref='suggestCalendar'
+          :events="suggestibleCalendarEvents"
+          @revert-state="revertState"
+          @event-update="updateSuggestible"
+          v-if="activeComp.viewTimetableToSuggest"></weekly-calendar-suggestable>
       </v-content>
     </v-app>
   </div>
@@ -44,42 +43,15 @@ export default {
   data: () => ({
     calendar: Calendar.weeks(),
     coloursUsed: [],
+    suggestibleCalendarEvents: {locked:[], suggestible:[]},
     //TO CHANGE: get from database (main table)
     //main database table
     calendarEventTable: [
-      // var eventData = []
-      // for (var course of this.courseTable){
-      //   var colour = this.getColour()
-      //   for (var lesson of course.lessonTimes){
-      //     eventData.push({
-      //       data: {
-      //         courseName: course.courseName,
-      //         pillar: course.pillar,
-      //         title: lesson.title,
-      //         color: colour,
-      //         location: lesson.location,
-      //         professor: lesson.professor,
-      //         classEnrolled: lesson.classEnrolled,
-      //         calendarType: "Academic",
-      //         locked: null,
-      //         suggestedBy: null,
-      //         requestedBy: null,
-      //         isSelected: lesson.isSelected //not from database (frontend)
-      //       },
-      //       schedule: {
-      //         dayOfWeek: [lesson.day],
-      //         times: [lesson.time],
-      //         duration: lesson.duration,
-      //         durationUnit: 'minutes'
-      //       }
-      //     })
-      //   }
-      // }
-      // return eventData;  
       {
         "data": {
           "courseName": "50.003 Elements of Software Constructions",
           "pillar": "ISTD",
+          "id": "001",
           "title": "50.003 Tutorial",
           "color": "#1976d2",
           "location": "2.501",
@@ -102,6 +74,7 @@ export default {
         "data": {
           "courseName": "50.003 Elements of Software Constructions",
           "pillar": "ISTD",
+          "id": "002",
           "title": "50.003 Lecture",
           "color": "#1976d2",
           "location": "1.203",
@@ -124,6 +97,7 @@ export default {
         "data": {
           "courseName": "50.005 Computer Systems Engineering",
           "pillar": "ESD",
+          "id": "003",
           "title": "50.005 Lab",
           "color": "#9C27B0",
           "location": "2.501",
@@ -146,6 +120,7 @@ export default {
         "data": {
           "courseName": "50.005 Computer Systems Engineering",
           "pillar": "ESD",
+          "id": "004",
           "title": "50.005 Lecture",
           "color": "#9C27B0",
           "location": "1.203",
@@ -168,6 +143,7 @@ export default {
         "data": {
           "courseName": "50.034 Probability and Statistics",
           "pillar": "EPD",
+          "id": "005",
           "title": "50.034 Tutorial",
           "color": "#3F51B5",
           "location": "2.501",
@@ -190,6 +166,7 @@ export default {
         "data": {
           "courseName": "50.034 Probability and Statistics",
           "pillar": "EPD",
+          "id": "006",
           "title": "50.034 Lecture",
           "color": "#3F51B5",
           "location": "1.203",
@@ -212,6 +189,7 @@ export default {
         "data": {
           "courseName": "50.004 Algorithms",
           "pillar": "ASD",
+          "id": "007",
           "title": "50.004 Tutorial",
           "color": "#E91E63",
           "location": "2.501",
@@ -234,6 +212,7 @@ export default {
         "data": {
           "courseName": "50.004 Algorithms",
           "pillar": "ASD",
+          "id": "008",
           "title": "50.004 Lecture",
           "color": "#E91E63",
           "location": "1.203",
@@ -256,6 +235,7 @@ export default {
         "data": {
           "courseName": "01.112 Machine Learning",
           "pillar": "FRESHMORE",
+          "id": "009",
           "title": "01.112 Tutorial",
           "color": "#FFEB3B",
           "location": "2.501",
@@ -278,6 +258,7 @@ export default {
         "data": {
           "courseName": "01.112 Machine Learning",
           "pillar": "FRESHMORE",
+          "id": "010",
           "title": "01.112 Lecture",
           "color": "#FFEB3B",
           "location": "1.203",
@@ -300,6 +281,7 @@ export default {
         "data": {
           "courseName": "50.040 Natural Language Processing",
           "pillar": "HASS",
+          "id": "011",
           "title": "50.040 Tutorial",
           "color": "#2196F3",
           "location": "2.501",
@@ -322,6 +304,7 @@ export default {
         "data": {
           "courseName": "50.040 Natural Language Processing",
           "pillar": "HASS",
+          "id": "012",
           "title": "50.040 Lecture",
           "color": "#2196F3",
           "location": "1.203",
@@ -344,6 +327,7 @@ export default {
         "data": {
           "courseName": "50.006 User Interface",
           "pillar": "ISTD",
+          "id": "013",
           "title": "50.006 Tutorial",
           "color": "#2196F3",
           "location": "2.501",
@@ -366,6 +350,7 @@ export default {
         "data": {
           "courseName": "50.006 User Interface",
           "pillar": "ISTD",
+          "id": "014",
           "title": "50.006 Lecture",
           "color": "#2196F3",
           "location": "1.203",
@@ -599,7 +584,7 @@ export default {
       var selectedEvents = []
       for (var event of this.calendarEventTable){
         if (event.data.isSelected){
-            selectedEvents.push(event);
+          selectedEvents.push(event);
         }
       }
       return selectedEvents;
@@ -710,6 +695,41 @@ export default {
       for (var lesson of this.calendarEventTable){
         if (lesson.data[e.searchCategory] === e.item){
           lesson.data.isSelected = e.isSelected;
+          //updating suggestible calendar
+          if (e.isSelected === true && lesson.data.calendarType === 'Academic'){
+            var suggestingEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
+            suggestingEvent.data.locked = false;
+            suggestingEvent.data.suggestedBy = "username" //TO CHANGE: replace with username
+            this.suggestibleCalendarEvents.suggestible.push(suggestingEvent);
+            var lockedEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
+            lockedEvent.data.locked = true;
+            lockedEvent.data.color = "#EBEBE4";
+            this.suggestibleCalendarEvents.locked.push(lockedEvent)
+          }
+          else if (e.isSelected === false && lesson.data.calendarType === 'Academic'){
+            for (let index = 0; index < this.suggestibleCalendarEvents.locked.length; index ++){
+              if (this.suggestibleCalendarEvents.locked[index].data.id === lesson.data.id){
+                this.suggestibleCalendarEvents.locked.splice(index, 1); 
+                this.suggestibleCalendarEvents.suggestible.splice(index, 1);
+              }
+            }
+          }
+        }
+      }
+    },
+    revertState(){
+      for (let index = 0; index < this.suggestibleCalendarEvents.locked.length; index ++){
+        var event = JSON.parse(JSON.stringify(this.suggestibleCalendarEvents.locked[index]));
+        event.data.locked = false;
+        this.suggestibleCalendarEvents.suggestible[index] = event; 
+      }
+      this.$refs.suggestCalendar.applyEvents();
+    },
+    updateSuggestible(event){
+      for (let index = 0; index < this.suggestibleCalendarEvents.suggestible.length; index ++){
+        if (event.data.id === this.suggestibleCalendarEvents.suggestible[index].data.id){
+          const updatedEventData = {...this.suggestibleCalendarEvents.suggestible[index].data, ...event.data };
+          this.suggestibleCalendarEvents.suggestible[index] = {data: updatedEventData, schedule: event.schedule};
         }
       }
     }
