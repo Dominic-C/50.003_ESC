@@ -138,10 +138,12 @@ def csv_upload(request):
 
         if not csv_file.name.endswith('.csv'):
             messages.error(request, "This file is not a .csv file")
+            raise Exception('not a csv file')
 
         #if file is too large
         if csv_file.multiple_chunks():
             messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            raise Exception('File too big')
 
         data_set = csv_file.read().decode('utf-8')
         io_string = io.StringIO(data_set)
