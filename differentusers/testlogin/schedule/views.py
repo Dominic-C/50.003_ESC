@@ -33,17 +33,16 @@ def add_schedule(request):
         # check if form is valid
         if form.is_valid():
             print(Schedule.objects.filter(location=2))
+            # need to add condition to check for same date, then nest the code below
             print(form.cleaned_data['start_time'],
                   form.cleaned_data['end_time'])
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
-
                 for i in lectureTheaterBookings:
-                    if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
+                    if form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time:
                         conflict = True
                         raise Http404('time conflict')
-
             schedule_item = form.save(commit=False)
             schedule_item.save()
     else:  # no post data, resulting in empty form.

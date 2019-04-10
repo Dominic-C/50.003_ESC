@@ -11,7 +11,6 @@ class Schedule(models.Model):
     lecturer = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
     isEvent = models.BooleanField(default=False)
-    # isConflicting = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
