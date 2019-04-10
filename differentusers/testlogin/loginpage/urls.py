@@ -15,6 +15,7 @@ urlpatterns = [
         path('submitdetails', professors.SubmitCourseDetailsView.as_view(), name='submitdetails'),
         path('details', professors.DetailsListView.as_view(), name='details'),
         path('details/edit/<int:pk>', professors.DetailsEditView.as_view(), name='editdetails'),
+        path('details/delete/<int:pk>', professors.DetailsDeleteView.as_view(), name='deletedetails'),
 
     ], 'classroom'), namespace='professors')),
 
@@ -30,6 +31,7 @@ urlpatterns = [
         path('phase', planners.CurrentPhase.as_view(), name='currentphase'),
         path('nextphase', planners.NextPhase.as_view(), name="nextphase"),
         path('prevphase', planners.PreviousPhase.as_view(), name="prevphase"),
+        path('downloadsample', planners.SampleDownloadView.as_view(), name="downloadsample"),
     ], 'classroom'), namespace='planners')),
 
     path('sutdadmin/', include(([
