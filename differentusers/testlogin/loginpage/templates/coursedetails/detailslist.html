@@ -26,7 +26,8 @@
 			<td>{{ item.first_name }} {{ item.last_name }} </td>
 			<td>{{ item.subject_code }} {{ item.subject_name }}</td>
 			<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
-			<td> <a class="btn btn-info" href="{% url 'professors:editdetails' item.id %}" role="button">Edit</a> </td>
+			<td> <a class="btn btn-info" href="{% url 'professors:editdetails' item.id %}" role="button">Edit</a>
+				<a class="btn btn-danger" href="{% url 'professors:deletedetails' item.id %}" role="button">Delete</a></td>
 		</tr>
 	   	{% empty %}
 		   <tr> 

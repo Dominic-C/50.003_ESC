@@ -79,7 +79,7 @@ class DetailsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailsListView, self).get_context_data(**kwargs)
-        qs = Preferences.objects.all()
+        qs = Preferences.objects.filter(created_by=self.request.user)
         qs_json = serializers.serialize('json', qs)
         context['json_list'] = qs_json
         context['component'] = "course-details-app.js"
@@ -106,3 +106,13 @@ class DetailsEditView(UpdateView):
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
         return Preferences.objects.filter(created_by=self.request.user)
+
+
+@method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
+class DetailsDeleteView(DeleteView):
+    model = Preferences
+
+    def get_success_url():
+        return reverse('professors:details')
+
+

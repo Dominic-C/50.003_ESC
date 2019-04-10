@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Available to Coordinators Only</h2>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores corporis sequi minus esse hic ea voluptates dolores reprehenderit ad eligendi, fuga, eum deserunt alias tempore sunt amet consectetur eveniet necessitatibus consequuntur distinctio facilis totam ex quae ipsa explicabo. Libero nostrum id, minima recusandae eaque dolore reprehenderit perspiciatis iste vel eveniet dignissimos repudiandae illo deserunt consectetur! Libero perspiciatis unde, aut nulla ratione. Tenetur officiis in velit quo, blanditiis eos illo accusamus aperiam eligendi optio ad rem ut necessitatibus assumenda. Repellat, dolor!</p>
+	<h2>Welcome to SUTDCalendar!</h2>
+	<p>As a course coordinator, SUTDCalendar is your secure gateway to deconflict modification suggestions made by the professors. You will also be able to view the calendar and export it.
+	
+	<hr>
 
-	<a class="btn btn-info" href="{% url 'coordinators:accountlist' %}" role="button">View All Accounts</a>
+	<h2>Current Phase</h2>
+	<p>We are currently at Phase {{ user.phase }} - {{ user.get_phase }} </p>
 
 {% endblock %}

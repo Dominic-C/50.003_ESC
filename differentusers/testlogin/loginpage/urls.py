@@ -15,6 +15,7 @@ urlpatterns = [
         path('submitdetails', professors.SubmitCourseDetailsView.as_view(), name='submitdetails'),
         path('details', professors.DetailsListView.as_view(), name='details'),
         path('details/edit/<int:pk>', professors.DetailsEditView.as_view(), name='editdetails'),
+        path('details/delete/<int:pk>', professors.DetailsDeleteView.as_view(), name='deletedetails'),
 
     ], 'classroom'), namespace='professors')),
 

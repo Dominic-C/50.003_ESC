@@ -3,8 +3,13 @@
 
 {% block content %}
 
-<h2>Available to Timetable Planners Only</h2>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores corporis sequi minus esse hic ea voluptates dolores reprehenderit ad eligendi, fuga, eum deserunt alias tempore sunt amet consectetur eveniet necessitatibus consequuntur distinctio facilis totam ex quae ipsa explicabo. Libero nostrum id, minima recusandae eaque dolore reprehenderit perspiciatis iste vel eveniet dignissimos repudiandae illo deserunt consectetur! Libero perspiciatis unde, aut nulla ratione. Tenetur officiis in velit quo, blanditiis eos illo accusamus aperiam eligendi optio ad rem ut necessitatibus assumenda. Repellat, dolor!</p>
+	<h2>Welcome to SUTDCalendar!</h2>
+	<p>As a timetable planner, SUTDCalendar is your secure gateway to export all the course details. You are also able to upload the first draft (following the sample), accept modification suggestions and finalise the calendar.
+	
+	<hr>
+
+	<h2>Current Phase</h2>
+	<p>We are currently at Phase {{ user.phase }} - {{ user.get_phase }} </p>
 
 
 {% endblock %}
