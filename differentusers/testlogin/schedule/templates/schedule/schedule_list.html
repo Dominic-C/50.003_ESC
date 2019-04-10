@@ -5,7 +5,7 @@
 {% block content %}
 
 <script>
-	var tables = 	{{ ser_data|safe }};
+	var tables = {{ ser_data|safe }};
 </script>
 
 	<h3>Schedule List</h3>
@@ -41,7 +41,7 @@
 		{% endfor %}{% endcomment %}
 
 	</table>
-
+<script src="/static/js/{{component}}"></script>
 
 
 {% endblock %}
