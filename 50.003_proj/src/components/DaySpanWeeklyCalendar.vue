@@ -174,10 +174,10 @@ export default {
   name: 'dsCalendarApp',
   props:
   {
-    userName: {
+    username: {
       type: String
     },
-    suggestable: {
+    suggestible: {
       type: Boolean
     },
     events: {
@@ -418,9 +418,9 @@ export default {
       calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggestable mode
-        if (this.suggestable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
+        //fill in suggestedBy and locked status by default for suggestible mode
+        if (this.suggestible){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.username, locked: false});
         } 
         else {
           eventDialog.add(day);
@@ -441,9 +441,9 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggestable mode
-        if (this.suggestable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:this.userName, locked: false});
+        //fill in suggestedBy and locked status by default for suggestible mode
+        if (this.suggestible){
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:this.username, locked: false});
         } 
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
@@ -472,9 +472,9 @@ export default {
       calendar && calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggestable mode
-        if (this.suggestable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.userName, locked: false});
+        //fill in suggestedBy and locked status by default for suggestible mode
+        if (this.suggestible){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.username, locked: false});
         } 
         else {
           eventDialog.add( day );
@@ -506,8 +506,8 @@ export default {
     },
     handleMove(moveEvent)
     {
-      //if suggestable and event chosen is locked, no action is taken
-      if (this.suggestable && moveEvent.calendarEvent.event.data.locked){
+      //if suggestible and event chosen is locked, no action is taken
+      if (this.suggestible && moveEvent.calendarEvent.event.data.locked){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;

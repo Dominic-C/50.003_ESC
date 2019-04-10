@@ -23,7 +23,7 @@
 import { Calendar } from 'dayspan';
 import dsWeeklyCalendar from '../components/DaySpanWeeklyCalendar.vue';
 export default {
-    name: 'weeklyCalendarFinalised',
+    name: 'FinalisedCalendar',
     props: {
       events: {
         type: Array

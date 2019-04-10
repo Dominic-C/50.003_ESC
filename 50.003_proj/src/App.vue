@@ -15,12 +15,13 @@
         </search-bar>
         <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <weekly-calendar-finalised :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></weekly-calendar-finalised>
-        <weekly-calendar-suggestable ref='suggestCalendar'
+        <finalised-calendar :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></finalised-calendar>
+        <suggestible-calendar ref='suggestCalendar'
           :events="suggestibleCalendarEvents"
+          :username="username"
           @revert-state="revertState"
           @event-update="updateSuggestible"
-          v-if="activeComp.viewTimetableToSuggest"></weekly-calendar-suggestable>
+          v-if="activeComp.viewTimetableToSuggest"></suggestible-calendar>
       </v-content>
     </v-app>
   </div>
@@ -34,8 +35,8 @@ import SearchBar from './components/SearchBar.vue';
 import ListSelection from './components/ListSelection.vue';
 import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
-import weeklyCalendarFinalised from './components/WeeklyCalendarFinalised.vue'
-import weeklyCalendarSuggestable from './components/WeeklyCalendarSuggestable.vue'
+import FinalisedCalendar from './components/FinalisedCalendar.vue'
+import SuggestibleCalendar from './components/SuggestibleCalendar.vue'
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -44,6 +45,7 @@ export default {
     calendar: Calendar.weeks(),
     coloursUsed: [],
     suggestibleCalendarEvents: {locked:[], suggestible:[]},
+    username: "username", //TO CHANGE: replace with username
     //TO CHANGE: get from database (main table)
     //main database table
     calendarEventTable: [
@@ -575,8 +577,8 @@ export default {
     WeeklyCalendar,
     dsWeeklyCalendar,
     FormSubmit,
-    weeklyCalendarFinalised,
-    weeklyCalendarSuggestable
+    FinalisedCalendar,
+    SuggestibleCalendar
   },
   computed: {
     selectedCalendarEvents() {
@@ -699,7 +701,7 @@ export default {
           if (e.isSelected === true && lesson.data.calendarType === 'Academic'){
             var suggestingEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
             suggestingEvent.data.locked = false;
-            suggestingEvent.data.suggestedBy = "username" //TO CHANGE: replace with username
+            suggestingEvent.data.suggestedBy = this.username 
             this.suggestibleCalendarEvents.suggestible.push(suggestingEvent);
             var lockedEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
             lockedEvent.data.locked = true;
