@@ -829,3 +829,84 @@ class PhaseTests(TestCase):
         response = self.client.get(reverse("planners:prevphase"))
         self.__class__.user.refresh_from_db()
         self.assertEqual(self.__class__.user.phase, 1)
+
+class PhasePermissionTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        cls.user = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Bob", last_name="Lee",
+            username="planner", password="sutd1234")
+        cls.profuser = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
+            username="prof", password="sutd1234")
+
+
+    def test_phase_1_permission(self):
+        # assert that phase is 1 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log professor user in
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get(reverse('professors:details'), follow=True)
+        # prof can access, status code = 200
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse('professors:submitdetails'), follow=True)
+        # prof can access, status code = 200
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_phase_2_permission(self):
+         # assert that phase is 1 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+
+        # Log Planner user in
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+
+        # assert that phase is 2 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 2)
+
+        # Planner - Logout
+        logout = self.client.logout()
+
+        # Log Professor user in
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get(reverse('professors:details'), follow=True)
+
+        # check that it returns 403: forbidden
+        self.assertContains(response, 'Forbidden')
+        response = self.client.get(reverse('professors:submitdetails'), follow=True)
+        # check that it returns 403: forbidden
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_phase_3_permission(self):
+         # assert that phase is 1 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+
+        # Log Planner user in
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:nextphase"))
+
+        # assert that phase is 2 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 3)
+
+        # Planner - Logout
+        logout = self.client.logout()
+
+        # Log Professor user in
+        login = self.client.login(username='prof', password='sutd1234')
+        response = self.client.get(reverse('professors:details'), follow=True)
+
+        # check that it returns 403: forbidden
+        self.assertContains(response, 'Forbidden')
+        response = self.client.get(reverse('professors:submitdetails'), follow=True)
+        # check that it returns 403: forbidden
+        self.assertEqual(response.status_code, 200)
+    
+

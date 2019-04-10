@@ -81,6 +81,15 @@ class PreferencesCSVExportView(View):
         
         return response
 
+@method_decorator([login_required, planner_required], name='dispatch')
+class SampleDownloadView(View):
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="sample.csv"'
+        writer = csv.writer(response, delimiter=',')
+        writer.writerow(['Pillar', 'Course Name', 'Title', 'Location', 'Class Enrolled', 'Day of Week eg. (1/4/5)', 'Duration (mins)'])
+        return response
+
 
 @method_decorator([login_required, planner_required], name='dispatch')
 class CurrentPhase(TemplateView):

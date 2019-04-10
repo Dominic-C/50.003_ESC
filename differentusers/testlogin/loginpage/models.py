@@ -83,7 +83,7 @@ class Lesson(models.Model):
     title = models.CharField(max_length=20)
     location = models.CharField(max_length=20)
     class_enrolled = models.CharField(max_length=10)
-    day_of_week = models.CharField(max_length=20, validators=[validate_comma_separated_integer_list])
+    day_of_week = models.CharField(max_length=20)
     duration = models.PositiveSmallIntegerField(default=90, validators=[MaxValueValidator(360), MinValueValidator(30)])
 
     def __str__(self):
