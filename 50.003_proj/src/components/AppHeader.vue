@@ -123,10 +123,6 @@ export default {
 		toggleVisible(name) {
 			this.$emit('changeComp', name)
 		}
-		//,
-		//print(item) {
-		//	console.log(item.text + " was clicked");
-		//}
 	}
 }
 </script>

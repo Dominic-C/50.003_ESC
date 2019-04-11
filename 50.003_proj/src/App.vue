@@ -11,7 +11,7 @@
           :locationTable="locationTable"
           :classTable="classTable"
           @selected-search-item="updateCalendar"
-          v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable">
+          v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable || activeComp.requestChangesToCalendar">
         </search-bar>
         <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
@@ -27,7 +27,7 @@
           :username="username"
           @revert-state="revertState"
           @event-update="updateModifiable"
-          v-if="activeComp.viewTimetableToSuggest"></requestable-calendar>
+          v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
       </v-content>
     </v-app>
   </div>
@@ -659,13 +659,14 @@ export default {
   },
   methods: {
     toggleVisible : function(item) {
-      this.activeComp.formSubmitNewCourse = false
-      this.activeComp.viewCurrSuggestions = false
-      this.activeComp.exportCoursesForPlanner = false
-      this.activeComp.viewTimetableToSuggest = false
-      this.activeComp.viewExistingRequests = false
-      this.activeComp.requestChangesToCalendar = false
-      this.activeComp.courseListingForViewer = false
+      this.activeComp.formSubmitNewCourse = false;
+      this.activeComp.viewCurrSuggestions = false;
+      this.activeComp.exportCoursesForPlanner = false;
+      this.activeComp.viewTimetableToSuggest = false;
+      this.activeComp.viewFinalTimetable = false;
+      this.activeComp.viewExistingRequests = false;
+      this.activeComp.requestChangesToCalendar = false;
+      this.activeComp.courseListingForViewer = false;
 
       if(item == "formSubmitNewCourse"){
         this.activeComp.formSubmitNewCourse = true
@@ -677,12 +678,14 @@ export default {
         this.activeComp.exportCoursesForPlanner = true
       }
       if(item == "viewTimetableToSuggest"){
+        // this.modifiableCalendarEvent = {locked:[], modifiable: []};
         this.activeComp.viewTimetableToSuggest = true
       }
       if(item == "viewExistingRequests"){
         this.activeComp.viewExistingRequests = true
       }
       if(item == "requestChangesToCalendar"){
+        // this.modifiableCalendarEvent = {locked:[], modifiable: []};
         this.activeComp.requestChangesToCalendar = true
       }
       if(item == "courseListingForViewer"){
