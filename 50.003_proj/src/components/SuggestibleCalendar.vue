@@ -23,8 +23,9 @@
       <ds-weekly-calendar 
         :events="suggestibleEvents" 
         :calendar="calendar" 
-        :suggestable="true" 
+        :suggestible="true" 
         :read-only="!isSuggesting"
+        :username="username"
         @event-update="updateCalendar"
         ref='calendar'
         >
@@ -114,18 +115,20 @@
 
 <script>
 import { Calendar } from 'dayspan';
-import dsWeeklyCalendarSuggestable from '../components/DaySpanWeeklyCalendarSuggestable.vue';
 import dsWeeklyCalendar from '../components/DaySpanWeeklyCalendar.vue';
 
 export default {
-  name: 'WeeklyCalendarSuggestable',
+  name: 'SuggestibleCalendar',
   props: {
     events: {
       type: Object
     },
+    username: {
+      type: String,
+      required: true
+    }
   },
   components: {
-    dsWeeklyCalendarSuggestable,
     dsWeeklyCalendar
   },
   data: vm => ({
