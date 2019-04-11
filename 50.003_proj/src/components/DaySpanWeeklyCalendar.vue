@@ -180,6 +180,9 @@ export default {
     suggestible: {
       type: Boolean
     },
+    requestable: {
+      type: Boolean
+    },
     events: {
       type: Array
     },
@@ -422,6 +425,9 @@ export default {
         if (this.suggestible){
           eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.username, locked: false});
         } 
+        else if (this.requestable){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {requestedBy:this.username, locked: false});
+        }
         else {
           eventDialog.add(day);
         }
@@ -444,6 +450,9 @@ export default {
         //fill in suggestedBy and locked status by default for suggestible mode
         if (this.suggestible){
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy:this.username, locked: false});
+        } 
+        else if (this.requestable){
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy:this.username, locked: false});
         } 
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
@@ -476,6 +485,9 @@ export default {
         if (this.suggestible){
           eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy:this.username, locked: false});
         } 
+        else if (this.requestable){
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy:this.username, locked: false});
+        } 
         else {
           eventDialog.add( day );
         }
@@ -507,7 +519,7 @@ export default {
     handleMove(moveEvent)
     {
       //if suggestible and event chosen is locked, no action is taken
-      if (this.suggestible && moveEvent.calendarEvent.event.data.locked){
+      if ((this.suggestible || this.requestable) && moveEvent.calendarEvent.event.data.locked){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;

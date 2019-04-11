@@ -701,12 +701,12 @@ export default {
           if (e.isSelected === true && lesson.data.calendarType === 'Academic'){
             var suggestingEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
             suggestingEvent.data.locked = false;
-            suggestingEvent.data.suggestedBy = this.username 
+            suggestingEvent.data.suggestedBy = this.username; 
             this.suggestibleCalendarEvents.suggestible.push(suggestingEvent);
-            var lockedEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
+            var lockedEvent = JSON.parse(JSON.stringify(lesson)); //copying event object
             lockedEvent.data.locked = true;
             lockedEvent.data.color = "#EBEBE4";
-            this.suggestibleCalendarEvents.locked.push(lockedEvent)
+            this.suggestibleCalendarEvents.locked.push(lockedEvent);
           }
           else if (e.isSelected === false && lesson.data.calendarType === 'Academic'){
             for (let index = 0; index < this.suggestibleCalendarEvents.locked.length; index ++){
@@ -723,6 +723,7 @@ export default {
       for (let index = 0; index < this.suggestibleCalendarEvents.locked.length; index ++){
         var event = JSON.parse(JSON.stringify(this.suggestibleCalendarEvents.locked[index]));
         event.data.locked = false;
+        event.data.color = this.suggestibleCalendarEvents.suggestible[index].data.color;
         this.suggestibleCalendarEvents.suggestible[index] = event; 
       }
       this.$refs.suggestCalendar.applyEvents();
