@@ -1,5 +1,7 @@
 django
+pytz
 django-crispy-forms
 django-brutebuster2
 djangorestframework
 django-cors-headers
+django-webpack-loader

@@ -3,7 +3,8 @@
     <v-layout>
       <v-flex xs12>
         <v-toolbar color="white">
-          <v-flex xs1>
+          <v-flex xs1/>
+
           <v-layout align-center justify-center>
             <div>
               <slot name="prev" v-bind="{prev, prevLabel, calendar}">
@@ -64,6 +65,7 @@
             </slot>
           </v-flex>
         </v-toolbar>
+
         <ds-gestures @swipeleft="next" @swiperight="prev">
           <div v-if="currentType.schedule" class="ds-expand">
             <slot

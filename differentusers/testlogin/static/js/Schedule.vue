@@ -11,8 +11,22 @@
           @selected-search-item="updateCalendar"
         ></search-bar>
         <list-selection :courseList="courseTable"></list-selection>
-        <weekly-calendar-finalised :events="selectedCalendarEvents">></weekly-calendar-finalised>
-        <weekly-calendar-suggestable :events="selectedCalendarEvents">></weekly-calendar-suggestable>
+        <suggestible-calendar
+          ref="suggestCalendar"
+          :events="modifiableCalendarEvent"
+          :username="username"
+          @revert-state="revertState"
+          @event-update="updateModifiable"
+          v-if="activeComp.viewTimetableToSuggest"
+        ></suggestible-calendar>
+        <requestable-calendar
+          ref="requestCalendar"
+          :events="modifiableCalendarEvent"
+          :username="username"
+          @revert-state="revertState"
+          @event-update="updateModifiable"
+          v-if="activeComp.requestChangesToCalendar"
+        ></requestable-calendar>
       </v-content>
     </v-app>
   </div>
@@ -24,8 +38,9 @@ import { Calendar, Weekday } from "dayspan";
 import Colors from "dayspan-vuetify/src/colors.js";
 import SearchBar from "./components/SearchBar.vue";
 import ListSelection from "./components/ListSelection.vue";
-import weeklyCalendarSuggestable from "./components/WeeklyCalendarSuggestable.vue";
-import weeklyCalendarFinalised from "./components/WeeklyCalendarFinalised.vue";
+import FinalisedCalendar from "./components/FinalisedCalendar.vue";
+import SuggestibleCalendar from "./components/SuggestibleCalendar.vue";
+import RequestableCalendar from "./components/RequestableCalendar.vue";
 
 export default {
   name: "scheduler",
