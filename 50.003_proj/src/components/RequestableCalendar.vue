@@ -2,17 +2,17 @@
   <modifiable-calendar
     :username="username"
     :events="currentEvents"
-    :isInMode="isSuggesting"
-    mode="suggestible"   
+    :isInMode="isRequesting"
+    mode="requestable"   
     @event-update="updateCalendar"
     ref="calendar" 
   >   
     <template slot="switchModeButton">
       <v-btn 
         color="primary"
-        @click="isSuggesting=true"
+        @click="isRequesting=true"
       >
-        Suggest Timings
+        Request Changes
       </v-btn>
     </template>
     <template slot="cancelButton">
@@ -27,7 +27,7 @@
       <v-btn 
         color="primary"
       >
-        Push Suggestions
+        Push Request
       </v-btn>
     </template>
   </modifiable-calendar>
@@ -51,7 +51,7 @@ export default {
     ModifiableCalendar
   },
   data: vm => ({
-    isSuggesting: false
+    isRequesting: false
   }),
   computed: {
     currentEvents(){
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     revertState(){
-      this.isSuggesting = false;
+      this.isRequesting = false;
       this.$emit('revert-state');
     },
     updateCalendar(event){

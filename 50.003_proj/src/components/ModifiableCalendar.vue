@@ -3,7 +3,7 @@
 		<v-layout justify-end pb-3>	
     	<template v-if="!isInMode">
 				<slot name="switchModeButton">
-					<v-btn color="primary">Modifying</v-btn>
+					<v-btn color="primary">Modify</v-btn>
 				</slot>
 			</template>
 			<template v-else>
@@ -11,7 +11,7 @@
 					<v-btn color="grey">Cancel</v-btn>
 				</slot>
 				<slot name="pushButton">
-					<v-btn color="primary">Push Suggestions</v-btn>
+					<v-btn color="primary">Push</v-btn>
 				</slot>
 			</template>
 		</v-layout>
@@ -31,13 +31,13 @@
 						<v-select
 						single-line solo flat
 						prepend-icon="location_on"
+						label="Add Location"
 						:items="$locations"
-						:readonly="details.locked"
+						:readonly="!isInMode || details.locked"
 						v-model="details.location">
 						<template slot="item" slot-scope="{ item }">
 							<v-list-tile-content>
 								{{ item }}
-								{{ details.locked + " " + !isInMode }}
 							</v-list-tile-content>
 						</template>
 					</v-select>
@@ -49,7 +49,7 @@
 						hide-details single-line solo flat
 						prepend-icon="subject"
 						label="Add Description"
-						:readonly="details.locked"
+						:readonly="!isInMode || details.locked"
 						v-model="details.description"
 					></v-textarea>
 				</template>
@@ -60,7 +60,7 @@
 						single-line hide-details solo flat
 						prepend-icon="event"
 						:items="$calendarTypes"
-						:readonly="details.locked"
+						:readonly="!isInMode || details.locked"
 						v-model="details.calendarType">
 						<template slot="item" slot-scope="{ item }">
 							<v-list-tile-content>
@@ -74,7 +74,7 @@
 						single-line hide-details solo flat
 						prepend-icon="school"
 						label="Professor/Organiser"
-						:readonly="details.locked"
+						:readonly="!isInMode || details.locked"
 						v-model="details.professor"
 					></v-text-field>
 
@@ -83,13 +83,13 @@
 						single-line hide-details solo flat
 						prepend-icon="group"
 						label="Participants"
-						:readonly="details.locked"
+						:readonly="!isInMode || details.locked"
 						v-model="details.classEnrolled"
 					></v-text-field>
 
 					<!-- Suggestion by -->
 					<v-text-field 
-						v-if="details.suggestedBy"
+						v-if="mode==='suggestible'&& details.suggestedBy"
 						single-line hide-details solo flat
 						prepend-icon="feedback"
 						label="Suggested By"
@@ -99,7 +99,7 @@
 					
 					<!-- Requested by -->
 					<v-text-field 
-						v-if="details.requestedBy"
+						v-if="mode==='requestable' && details.requestedBy"
 						single-line hide-details solo flat
 						prepend-icon=""
 						label="Requested By"
@@ -108,7 +108,7 @@
 					></v-text-field>
 
 					<!-- Status -->
-					<template v-if="mode='suggestible'">
+					<template v-if="mode==='suggestible'">
 						<v-text-field 
 							single-line hide-details solo flat
 							:prepend-icon="details.locked ? 'lock' : 'lock_open'"
@@ -117,7 +117,7 @@
 							v-model="details.suggestBy"
 						></v-text-field>
 					</template>
-					<template v-else-if="mode='requestable'">
+					<template v-else-if="mode==='requestable'">
 						<v-text-field 
 							single-line hide-details solo flat
 							:prepend-icon="details.locked ? 'lock' : 'lock_open'"

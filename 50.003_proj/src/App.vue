@@ -17,11 +17,17 @@
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <finalised-calendar :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></finalised-calendar>
         <suggestible-calendar ref='suggestCalendar'
-          :events="suggestibleCalendarEvents"
+          :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
-          @event-update="updateSuggestible"
+          @event-update="updateModifiable"
           v-if="activeComp.viewTimetableToSuggest"></suggestible-calendar>
+        <requestable-calendar ref='requestCalendar'
+          :events="modifiableCalendarEvent"
+          :username="username"
+          @revert-state="revertState"
+          @event-update="updateModifiable"
+          v-if="activeComp.viewTimetableToSuggest"></requestable-calendar>
       </v-content>
     </v-app>
   </div>
@@ -37,6 +43,7 @@ import WeeklyCalendar from './components/WeeklyCalendar.vue';
 import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
 import FinalisedCalendar from './components/FinalisedCalendar.vue'
 import SuggestibleCalendar from './components/SuggestibleCalendar.vue'
+import RequestableCalendar from "./components/RequestableCalendar.vue";
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -44,7 +51,7 @@ export default {
   data: () => ({
     calendar: Calendar.weeks(),
     coloursUsed: [],
-    suggestibleCalendarEvents: {locked:[], suggestible:[]},
+    modifiableCalendarEvent: {locked:[], modifiable:[]},
     username: "username", //TO CHANGE: replace with username
     //TO CHANGE: get from database (main table)
     //main database table
@@ -578,7 +585,8 @@ export default {
     dsWeeklyCalendar,
     FormSubmit,
     FinalisedCalendar,
-    SuggestibleCalendar
+    SuggestibleCalendar,
+    RequestableCalendar
   },
   computed: {
     selectedCalendarEvents() {
@@ -697,42 +705,46 @@ export default {
       for (var lesson of this.calendarEventTable){
         if (lesson.data[e.searchCategory] === e.item){
           lesson.data.isSelected = e.isSelected;
-          //updating suggestible calendar
+          //updating modifiable calendar
           if (e.isSelected === true && lesson.data.calendarType === 'Academic'){
-            var suggestingEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
-            suggestingEvent.data.locked = false;
-            suggestingEvent.data.suggestedBy = this.username; 
-            this.suggestibleCalendarEvents.suggestible.push(suggestingEvent);
+            //updating modifiable
+            var modifiableEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
+            modifiableEvent.data.locked = false;
+            modifiableEvent.data.suggestedBy = this.username;
+            modifiableEvent.data.requestedBy = this.username; 
+            this.modifiableCalendarEvent.modifiable.push(modifiableEvent);
             var lockedEvent = JSON.parse(JSON.stringify(lesson)); //copying event object
             lockedEvent.data.locked = true;
             lockedEvent.data.color = "#EBEBE4";
-            this.suggestibleCalendarEvents.locked.push(lockedEvent);
+            this.modifiableCalendarEvent.locked.push(lockedEvent);
           }
           else if (e.isSelected === false && lesson.data.calendarType === 'Academic'){
-            for (let index = 0; index < this.suggestibleCalendarEvents.locked.length; index ++){
-              if (this.suggestibleCalendarEvents.locked[index].data.id === lesson.data.id){
-                this.suggestibleCalendarEvents.locked.splice(index, 1); 
-                this.suggestibleCalendarEvents.suggestible.splice(index, 1);
+            for (let index = 0; index < this.modifiableCalendarEvent.locked.length; index ++){
+              if (this.modifiableCalendarEvent.locked[index].data.id === lesson.data.id){
+                this.modifiableCalendarEvent.locked.splice(index, 1); 
+                this.modifiableCalendarEvent.modifiable.splice(index, 1);
               }
             }
+
           }
         }
       }
     },
     revertState(){
-      for (let index = 0; index < this.suggestibleCalendarEvents.locked.length; index ++){
-        var event = JSON.parse(JSON.stringify(this.suggestibleCalendarEvents.locked[index]));
+      for (let index = 0; index < this.modifiableCalendarEvent.locked.length; index ++){
+        var event = JSON.parse(JSON.stringify(this.modifiableCalendarEvent.locked[index]));
         event.data.locked = false;
-        event.data.color = this.suggestibleCalendarEvents.suggestible[index].data.color;
-        this.suggestibleCalendarEvents.suggestible[index] = event; 
+        event.data.color = this.modifiableCalendarEvent.modifiable[index].data.color;
+        this.modifiableCalendarEvent.modifiable[index] = event; 
       }
       this.$refs.suggestCalendar.applyEvents();
+      this.$refs.requestCalendar.applyEvents();
     },
-    updateSuggestible(event){
-      for (let index = 0; index < this.suggestibleCalendarEvents.suggestible.length; index ++){
-        if (event.data.id === this.suggestibleCalendarEvents.suggestible[index].data.id){
-          const updatedEventData = {...this.suggestibleCalendarEvents.suggestible[index].data, ...event.data };
-          this.suggestibleCalendarEvents.suggestible[index] = {data: updatedEventData, schedule: event.schedule};
+    updateModifiable(event){
+      for (let index = 0; index < this.modifiableCalendarEvent.modifiable.length; index ++){
+        if (event.data.id === this.modifiableCalendarEvent.modifiable[index].data.id){
+          const updatedEventData = {...this.modifiableCalendarEvent.modifiable[index].data, ...event.data };
+          this.modifiableCalendarEvent.modifiable[index] = {data: updatedEventData, schedule: event.schedule};
         }
       }
     }
