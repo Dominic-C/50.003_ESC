@@ -740,8 +740,11 @@ export default {
         event.data.color = this.modifiableCalendarEvent.modifiable[index].data.color;
         this.modifiableCalendarEvent.modifiable[index] = event; 
       }
-      this.$refs.suggestCalendar.applyEvents();
-      this.$refs.requestCalendar.applyEvents();
+      if (this.activeComp.viewTimetableToSuggest){
+        this.$refs.suggestCalendar.applyEvents();
+      } else{
+        this.$refs.requestCalendar.applyEvents();
+      }
     },
     updateModifiable(event){
       for (let index = 0; index < this.modifiableCalendarEvent.modifiable.length; index ++){

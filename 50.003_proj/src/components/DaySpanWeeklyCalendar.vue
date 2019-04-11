@@ -99,18 +99,18 @@
             </div>
           </ds-gestures>
 
-          <slot name="weeklyCalendarEventDialog" v-bind="{$scopedSlots, $listeners, calendar, eventFinish}">
+          <slot name="calendarAppEventDialog" v-bind="{$scopedSlots, $listeners, calendar, eventFinish}">
             <ds-event-dialog ref="eventDialog"
               v-bind="{$scopedSlots}"
               v-on="$listeners"
               :calendar="calendar"
-              :read-only="readOnly"
+              :read-only="readOnly || eventLocked"
               @saved="eventFinish"
               @actioned="eventFinish"
             ></ds-event-dialog>
           </slot>
 
-          <slot name="weeklyCalendarOptions" v-bind="{optionsVisible, optionsDialog, options, chooseOption}">
+          <slot name="calendarAppOptions" v-bind="{optionsVisible, optionsDialog, options, chooseOption}">
             <v-dialog ref="optionsDialog"
               v-model="optionsVisible"
               v-bind="optionsDialog"
@@ -125,7 +125,7 @@
             </v-dialog>
           </slot>
 
-          <slot name="weeklyCalendarConfirmPrompt" v-bind="{promptVisible, promptDialog, promptQuestion, choosePrompt}">
+          <slot name="calendarAppPrompt" v-bind="{promptVisible, promptDialog, promptQuestion, choosePrompt}">
             <v-dialog ref="promptDialog"
               v-model="promptVisible"
               v-bind="promptDialog">
@@ -144,7 +144,7 @@
             </v-dialog>
           </slot>
 
-          <slot name="weeklyCalendarAdd" v-bind="{allowsAddToday, addToday}">
+          <slot name="calendarAppAdd" v-bind="{allowsAddToday, addToday}">
             <v-fab-transition v-if="!readOnly">
               <v-btn
                 class="ds-add-event-today"
@@ -156,6 +156,7 @@
               </v-btn>
             </v-fab-transition>
           </slot>
+          <slot name="containerInside" v-bind="{events, calendar}"></slot>
          </v-flex>
       </v-layout>
     </v-container>
@@ -256,6 +257,7 @@ export default {
     promptVisible: false,
     promptQuestion: '',
     promptCallback: null,
+    eventLocked: true
   }),
   watch:
   {
@@ -399,6 +401,7 @@ export default {
     {
       let eventDialog = this.$refs.eventDialog;
       eventDialog.edit(calendarEvent);
+      this.eventLocked = calendarEvent.data.locked;
     },
     editPlaceholder(createEdit)
     {
@@ -519,7 +522,8 @@ export default {
     handleMove(moveEvent)
     {
       //if suggestible and event chosen is locked, no action is taken
-      if ((this.suggestible || this.requestable) && moveEvent.calendarEvent.event.data.locked){
+      //moveEvent.calendarEvent.event.data.locked
+      if ((this.suggestible || this.requestable) && this.eventLocked){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;
