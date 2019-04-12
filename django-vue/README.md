@@ -2,9 +2,12 @@
 
 ## Install required libraries
 
-`pip3 install -r requirements.txt`
-change directories to the `vue` subfolder
-`npm install`
+Run `pip3 install -r requirements.txt`, or if that fails, try doing the following:
+
+``pip3 install Django``
+``pip3 install --upgrade django-crispy-forms``
+``pip3 install django-brutebuster2``
+``pip3 install djangorestframework``
 
 ## Running
 `cd` to the location of this folder \
