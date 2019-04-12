@@ -2,7 +2,7 @@
     <v-container fluid fill-height class="ds-calendar-container">
       <v-layout>
         <v-flex xs12>
-          <v-toolbar color="white">
+          <v-toolbar color="white" flat>
             <v-flex xs1/>
       
             <v-layout align-center justify-center>

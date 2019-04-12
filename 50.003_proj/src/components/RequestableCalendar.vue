@@ -38,7 +38,7 @@
 import ModifiableCalendar from '../components/ModifiableCalendar.vue'
 
 export default {
-  name: 'SuggestibleCalendar',
+  name: 'RequestableCalendar',
   props: {
     events: {
       type: Object

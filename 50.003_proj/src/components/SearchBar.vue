@@ -1,6 +1,6 @@
 <template>
   <!-- <v-form @submit.prevent> -->
-    <v-container fluid class="pa-4">
+    <v-container fluid class="pa-4 pb-0">
       <v-layout wrap>
         <v-flex xs12>
           <v-autocomplete

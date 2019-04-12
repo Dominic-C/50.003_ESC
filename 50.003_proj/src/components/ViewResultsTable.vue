@@ -26,14 +26,16 @@
    -->
 		<v-data-table
 		:headers="headers"
+    headers-length="6"
 		:items="suggestions"
+    item-key="suggestedBy"
 		class="elevation-1"
 	>
     <!-- table headers -->
     <template v-slot:headers="props">
       <tr class="text-xs-center">
-        <template v-for="prop in props.headers">
-          <th v-if="!prop.children" :key="prop.text" rowspan="2">{{ prop.text }}</th>
+        <template v-for="(prop, index) in props.headers">
+          <th v-if="!prop.children" :key="prop.text" rowspan="2" style="border-bottom: solid 2px grey;">{{ prop.text }}</th>
           <th v-else :key="prop.text" colspan="3" text-xs-center>{{ prop.text }}</th>
         </template>
       </tr>
@@ -68,6 +70,13 @@
           </td>
       </tr>
 		</template>
+
+    <!-- Calendar view -->
+    <template v-slot:expand="props">
+      <v-flex class="pa-4" style="height:500px">
+        <finalised-calendar></finalised-calendar>
+      </v-flex>
+      </template>
 	</v-data-table>
   </v-container>
 </template>
