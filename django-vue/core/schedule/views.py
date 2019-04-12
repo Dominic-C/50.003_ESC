@@ -23,11 +23,11 @@ class ScheduleListView(ListView):
     model = Schedule
     template_name = "schedule/schedule_list.html"
     queryset = Schedule.objects.all()
-    ser_data = serializers.serialize("json", queryset)
+    # ser_data = serializers.serialize("json", queryset)
 
     def get_context_data(self, **kwargs):
         context = super(ScheduleListView, self).get_context_data(**kwargs)
-        context['jsonset'] = self.ser_data
+        # context['jsonset'] = self.ser_data
         context['component'] = "calendar.js"
         return context
 
@@ -55,13 +55,13 @@ def add_schedule(request):
     else:  # no post data, resulting in empty form.
         form = CreateSchedule()
 
-    queryset = Schedule.objects.all()
-    jsonset = serializers.serialize('json', queryset)
-    context = {
-        'form': form,
-        'jsonset': queryset
-    }
-    return render(request, 'schedule/createSchedule_form.html', context)
+    # queryset = Schedule.objects.all()
+    # jsonset = serializers.serialize('json', queryset)
+    # context = {
+    #     'form': form,
+    #     'jsonset': queryset
+    # }
+    # return render(request, 'schedule/createSchedule_form.html', context)
 
 
 def serialized_schedule(request):

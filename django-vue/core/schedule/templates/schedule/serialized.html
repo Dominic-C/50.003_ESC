@@ -5,7 +5,7 @@
 {% block content %}
 
 <script>
-	var tables = {{ jsonset|safe }};
+	var tables = {{ serialized|safe }};
 </script>
 
 	<h3>Schedule List</h3>
@@ -41,7 +41,20 @@
 		{% endfor %}{% endcomment %}
 
 	</table>
-<script src="/static/js/{{component}}"></script>
+
+{% verbatim %}
+<script type='text/javascript'>
+Vue.component('show-schedules', {
+  props: ['{object_list}'],
+  template: ''
+})
+
+new Vue({
+	el: '#list-schedule-items',
+	data: { this.tables }
+})
+</script>
+{% endverbatim %}
 
 
 {% endblock %}
