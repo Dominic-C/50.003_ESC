@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'webpack_loader',
     'crispy_forms',
     'BruteBuster',
+    'login',
+    'schedule',
 ]
 
 MIDDLEWARE = [
@@ -147,4 +149,17 @@ MESSAGE_TAGS = {
     
 }
 
+# Crispy Template Config
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Custom Django auth settings
+
+AUTH_USER_MODEL = 'login.User'
+
+LOGIN_URL = 'login'
+
+LOGOUT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = 'home'
+
+LOGOUT_REDIRECT_URL = 'home'
