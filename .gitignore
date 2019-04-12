@@ -1,5 +1,3 @@
-
-*.pyc
 *.pyc
 differentusers/testlogin/node_modules/*
-
+node_modules

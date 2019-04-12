@@ -3,7 +3,8 @@
     <v-layout>
       <v-flex xs12>
         <v-toolbar color="white">
-          <v-flex xs1>
+          <v-flex xs1/>
+
           <v-layout align-center justify-center>
             <div>
               <slot name="prev" v-bind="{prev, prevLabel, calendar}">
@@ -28,28 +29,6 @@
               </slot>
             </div>
 
-<<<<<<< HEAD
-          <slot name="calendarAppEventDialog" v-bind="{$scopedSlots, $listeners, calendar, eventFinish}">
-            <ds-event-dialog ref="eventDialog"
-              v-bind="{$scopedSlots}"
-              v-on="$listeners"
-              :calendar="calendar"
-              :read-only="readOnly || eventLocked"
-              @saved="eventFinish"
-              @actioned="eventFinish"
-            ></ds-event-dialog>
-          </slot>
-
-          <slot name="calendarAppOptions" v-bind="{optionsVisible, optionsDialog, options, chooseOption}">
-            <v-dialog ref="optionsDialog"
-              v-model="optionsVisible"
-              v-bind="optionsDialog"
-              :fullscreen="$dayspan.fullscreenDialogs">
-              <v-list>
-                <template v-for="option in options">
-                  <v-list-tile :key="option.text" @click="chooseOption( option )">
-                    {{ option.text }}
-=======
             <div>
               <slot name="next" v-bind="{next, nextLabel, calendar}">
                 <v-tooltip bottom>
@@ -80,13 +59,13 @@
                     <v-list-tile-content>
                       <v-list-tile-title>{{ type.label }}</v-list-tile-title>
                     </v-list-tile-content>
->>>>>>> 46324c0be8c97daede0c7b68b118ea96e31ddd0c
                   </v-list-tile>
                 </v-list>
               </v-menu>
             </slot>
           </v-flex>
         </v-toolbar>
+
         <ds-gestures @swipeleft="next" @swiperight="prev">
           <div v-if="currentType.schedule" class="ds-expand">
             <slot
@@ -105,43 +84,6 @@
             </slot>
           </div>
 
-<<<<<<< HEAD
-          <slot name="calendarAppPrompt" v-bind="{promptVisible, promptDialog, promptQuestion, choosePrompt}">
-            <v-dialog ref="promptDialog"
-              v-model="promptVisible"
-              v-bind="promptDialog">
-              <v-card>
-                <v-card-title>{{ promptQuestion }}</v-card-title>
-                <v-card-actions>
-                  <v-btn color="primary" flat @click="choosePrompt( true )">
-                    {{ labels.promptConfirm }}
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="secondary" flat @click="choosePrompt( false )">
-                    {{ labels.promptCancel }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </slot>
-
-          <slot name="calendarAppAdd" v-bind="{allowsAddToday, addToday}">
-            <v-fab-transition v-if="!readOnly">
-              <v-btn
-                class="ds-add-event-today"
-                color="primary"
-                fixed bottom right fab
-                v-model="allowsAddToday"
-                @click="addToday">
-                <v-icon>add</v-icon>
-              </v-btn>
-            </v-fab-transition>
-          </slot>
-          <slot name="containerInside" v-bind="{events, calendar}"></slot>
-         </v-flex>
-      </v-layout>
-    </v-container>
-=======
           <div v-else class="ds-expand">
             <slot
               name="weeklyCalendar"
@@ -236,7 +178,6 @@
       </v-flex>
     </v-layout>
   </v-container>
->>>>>>> 46324c0be8c97daede0c7b68b118ea96e31ddd0c
 </template>
 
 <script>
@@ -343,14 +284,8 @@ export default {
     optionsVisible: false,
     options: [],
     promptVisible: false,
-<<<<<<< HEAD
-    promptQuestion: '',
-    promptCallback: null,
-    eventLocked: true
-=======
     promptQuestion: "",
     promptCallback: null
->>>>>>> 46324c0be8c97daede0c7b68b118ea96e31ddd0c
   }),
   watch: {
     events: "applyEvents",
@@ -480,7 +415,6 @@ export default {
     edit(calendarEvent) {
       let eventDialog = this.$refs.eventDialog;
       eventDialog.edit(calendarEvent);
-      this.eventLocked = calendarEvent.data.locked;
     },
     editPlaceholder(createEdit) {
       let placeholder = createEdit.calendarEvent;
@@ -597,15 +531,10 @@ export default {
     },
     handleMove(moveEvent) {
       //if suggestible and event chosen is locked, no action is taken
-<<<<<<< HEAD
-      //moveEvent.calendarEvent.event.data.locked
-      if ((this.suggestible || this.requestable) && this.eventLocked){
-=======
       if (
         (this.suggestible || this.requestable) &&
         moveEvent.calendarEvent.event.data.locked
       ) {
->>>>>>> 46324c0be8c97daede0c7b68b118ea96e31ddd0c
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;
