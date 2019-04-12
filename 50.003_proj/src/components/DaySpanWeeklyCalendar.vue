@@ -523,7 +523,7 @@ export default {
     {
       //if suggestible and event chosen is locked, no action is taken
       //moveEvent.calendarEvent.event.data.locked
-      if ((this.suggestible || this.requestable) && this.eventLocked){
+      if ((this.suggestible || this.requestable) && moveEvent.calendarEvent.event.data.locked){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;
