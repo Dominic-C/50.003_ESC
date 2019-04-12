@@ -41,8 +41,6 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'BruteBuster',
-    'login',
-    'schedule',
 ]
 
 MIDDLEWARE = [
@@ -152,6 +150,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
+<<<<<<< HEAD:django-vue/testlogin/testlogin/settings.py
 # Crispy Template Config
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -166,3 +165,6 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 
 LOGOUT_REDIRECT_URL = 'home'
+=======
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+>>>>>>> parent of 5d99401... Port over of previous Django work:django-vue/core/core/settings.py

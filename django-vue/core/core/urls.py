@@ -15,21 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import include
 from django.views.generic import TemplateView
-
-from login.views import classroom, students, professors, coordinators, planners, sutdadmin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(
-        template_name="../templates/core/app.html"), name="home"),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/signup/', classroom.SignUpView.as_view(), name='signup'),
-    path('accounts/signup/student/', students.StudentSignUpView.as_view(), name='student_signup'),
-    path('accounts/signup/professor/', professors.ProfessorSignUpView.as_view(), name='professor_signup'),
-    path('accounts/signup/coordinator/', coordinators.CoordinatorSignUpView.as_view(), name='coordinator_signup'),
-    path('accounts/signup/planner/', planners.PlannerSignUpView.as_view(), name='planner_signup'),
-    path('accounts/signup/sutdadmin/', sutdadmin.SutdAdminSignUpView.as_view(), name='sutdadmin_signup'),
-    path('schedule/', include('schedule.urls')),
+        template_name="../templates/core/app.html"), name="home")
 ]
