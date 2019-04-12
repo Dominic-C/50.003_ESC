@@ -1,5 +1,4 @@
 django
-django-brutebuster2
 django-crispy-forms
-django-webpack-loader
+django-brutebuster2
 djangorestframework
