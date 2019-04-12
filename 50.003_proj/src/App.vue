@@ -28,6 +28,7 @@
           @revert-state="revertState"
           @event-update="updateModifiable"
           v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
+        <view-results-table  v-if="activeComp.viewSuggestions"></view-results-table>
       </v-content>
     </v-app>
   </div>
@@ -44,6 +45,7 @@ import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
 import FinalisedCalendar from './components/FinalisedCalendar.vue'
 import SuggestibleCalendar from './components/SuggestibleCalendar.vue'
 import RequestableCalendar from "./components/RequestableCalendar.vue";
+import ViewResultsTable from "./components/ViewResultsTable";
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -586,7 +588,8 @@ export default {
     FormSubmit,
     FinalisedCalendar,
     SuggestibleCalendar,
-    RequestableCalendar
+    RequestableCalendar,
+    ViewResultsTable
   },
   computed: {
     selectedCalendarEvents() {
@@ -667,32 +670,36 @@ export default {
       this.activeComp.viewExistingRequests = false;
       this.activeComp.requestChangesToCalendar = false;
       this.activeComp.courseListingForViewer = false;
+      this.activeComp.viewSuggestions = false;
 
       if(item == "formSubmitNewCourse"){
-        this.activeComp.formSubmitNewCourse = true
+        this.activeComp.formSubmitNewCourse = true;
       }
       if(item == "viewCurrSuggestions"){
-        this.activeComp.viewCurrSuggestions = true
+        this.activeComp.viewCurrSuggestions = true;
       }
       if(item == "exportCoursesForPlanner"){
-        this.activeComp.exportCoursesForPlanner = true
+        this.activeComp.exportCoursesForPlanner = true;
       }
       if(item == "viewTimetableToSuggest"){
         // this.modifiableCalendarEvent = {locked:[], modifiable: []};
         this.activeComp.viewTimetableToSuggest = true
       }
       if(item == "viewExistingRequests"){
-        this.activeComp.viewExistingRequests = true
+        this.activeComp.viewExistingRequests = true;
       }
       if(item == "requestChangesToCalendar"){
         // this.modifiableCalendarEvent = {locked:[], modifiable: []};
-        this.activeComp.requestChangesToCalendar = true
+        this.activeComp.requestChangesToCalendar = true;
       }
       if(item == "courseListingForViewer"){
-        this.activeComp.courseListingForViewer = true
+        this.activeComp.courseListingForViewer = true;
       }
       if(item == "viewFinalTimetable"){
-        this.activeComp.viewFinalTimetable = true
+        this.activeComp.viewFinalTimetable = true;
+      }
+      if(item == "viewSuggestions"){
+        this.activeComp.viewSuggestions = true;
       }
     },
     getColour(){
