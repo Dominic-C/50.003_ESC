@@ -11,19 +11,18 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
-FRONTEND_DIR = os.path.join(BASE_DIR, 'vue')
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pa0xmeq0qd_&$jf(nyn)ctbadi5zxis86t@5zn=(it%(tluh&g'
+SECRET_KEY = 'x5h&5rw$d3w%kxgrch3d%+teek(%qelyqukqvf)#2m=!c7ma#2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',
     'webpack_loader',
     'crispy_forms',
     'BruteBuster',
@@ -62,7 +60,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,46 +123,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'dist'),
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(FRONTEND_DIR, 'dist')
-]
+)
+STATIC_ROOT = os.path.join(BASE_DIR, 'public')
+STATIC_URL = '/static/'
 
-# Webpack Loader configuration
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'CACHE': DEBUG,
-        'BUNDLE_DIR_NAME': '',  # must end with slash
-        'STATS_FILE': os.path.join(FRONTEND_DIR, '/build/webpack-stats.json'),
+        'BUNDLE_DIR_NAME': '',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
     }
 }
 
-# Custom Django auth settings
-"""
-AUTH_USER_MODEL = 'loginpage.User'
-
-LOGIN_URL = 'login'
-
-LOGOUT_URL = 'logout'
-
-LOGIN_REDIRECT_URL = 'home'
-
-LOGOUT_REDIRECT_URL = 'home'
-
-
-# Messages built-in framework
-
+# Messages inbuilt framework
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
     messages.INFO: 'alert-info',
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
+    
 }
 
-
-# Third party apps configuration
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-"""

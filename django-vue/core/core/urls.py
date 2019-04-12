@@ -19,5 +19,6 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("schedule/", TemplateView.as_view(template_name="calendarapp.html"), name="app")
+    path('', TemplateView.as_view(
+        template_name="../templates/core/app.html"), name="home")
 ]
