@@ -26,6 +26,7 @@
     <template slot="pushButton">
       <v-btn 
         color="primary"
+        @click="pushToDatabase"
       >
         Push Request
       </v-btn>
@@ -50,7 +51,8 @@ export default {
   components: {
     ModifiableCalendar
   },
-  data: vm => ({
+  data: () => ({
+    storeKey: 'requestableCalendar',
     isRequesting: false
   }),
   computed: {
@@ -68,6 +70,12 @@ export default {
     },
     applyEvents(){
       this.$refs.calendar.applyEvents();
+    },
+    pushToDatabase(){
+      //TO CHANGE: save to database eventually
+      let state = this.calendar.toInput(true);
+      let json = JSON.stringify(state);
+      localStorage.setItem(this.storeKey, json);
     }
   }  
 }

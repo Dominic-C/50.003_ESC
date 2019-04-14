@@ -98,7 +98,7 @@ export default {
 					text: 'Forms',
 					open: false,
 					children: [
-						{ name: 'formSubmitNewCourse', icon:'send', 		text: 'Submit Form' },
+						{ name: 'formSubmitNewCourse', icon:'send', text: 'Submit Form' },
 						{ name: 'viewCurrSuggestions', icon:'pageview', text: 'View Submissions' }
 					]
 				},
@@ -108,11 +108,12 @@ export default {
           text: 'Calendar',
           open: false,
           children: [
-            { name: 'viewFinalTimetable', 	icon:'calendar_view', text: 'View Calendar' },
-            { name: 'exportCoursesForPlanner', 	icon:'save_alt', 			text: 'Export Calendar' },
-            { name: 'viewTimetableToSuggest',		icon:'timelapse', 		text: 'Suggest Timings' },
-            { name: 'requestChangesToCalendar', icon:'reply_all', 		text: 'Request Changes' },
-            { name: 'viewExistingRequests', 		icon:'view_array', 		text: 'View Requests' }
+            { name: 'viewFinalTimetable', icon:'calendar_view', text: 'View Calendar' },
+            { name: 'exportCoursesForPlanner', icon:'save_alt', text: 'Export Calendar' },
+			{ name: 'viewTimetableToSuggest', icon:'timelapse', text: 'Suggest Timings' },
+			{ name: 'viewSuggestions', icon:'timelapse', text: 'View Suggestions' },
+            { name: 'requestChangesToCalendar', icon:'reply_all', text: 'Request Changes' },
+            { name: 'viewExistingRequests', icon:'view_array', text: 'View Requests' }
           ]
 				},
 				{ name: 'courseListingForViewer', icon: 'line_style', text: 'Course List'}
