@@ -20,13 +20,11 @@
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
-          @event-update="updateModifiable"
           v-if="activeComp.viewTimetableToSuggest"></suggestible-calendar>
         <requestable-calendar ref='requestCalendar'
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
-          @event-update="updateModifiable"
           v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
         <view-results-table  v-if="activeComp.viewSuggestions"></view-results-table>
       </v-content>
@@ -659,6 +657,12 @@ export default {
       return selectionCandidates; 
     },
   },
+  created() {
+    this.$eventHub.$on('event-update', this.updateModifiable);
+  },
+  beforeDestroy() {
+      this.$eventHub.$off('event-update');
+  },
   methods: {
     toggleVisible : function(item) {
       this.activeComp.formSubmitNewCourse = false;
@@ -746,11 +750,7 @@ export default {
         event.data.color = this.modifiableCalendarEvent.modifiable[index].data.color;
         this.modifiableCalendarEvent.modifiable[index] = event; 
       }
-      if (this.activeComp.viewTimetableToSuggest){
-        this.$refs.suggestCalendar.applyEvents();
-      } else{
-        this.$refs.requestCalendar.applyEvents();
-      }
+      this.$eventHub.$emit('apply-events');
     },
     updateModifiable(event){
       for (let index = 0; index < this.modifiableCalendarEvent.modifiable.length; index ++){

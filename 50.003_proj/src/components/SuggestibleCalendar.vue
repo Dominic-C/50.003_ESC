@@ -4,7 +4,6 @@
     :events="currentEvents"
     :isInMode="isSuggesting"
     mode="suggestible"   
-    @event-update="updateCalendar"
     ref="calendar" 
   >   
     <template slot="switchModeButton">
@@ -68,12 +67,6 @@ export default {
     revertState(){
       this.isSuggesting = false;
       this.$emit('revert-state');
-    },
-    updateCalendar(event){
-      this.$emit('event-update', event);
-    },
-    applyEvents(){
-      this.$refs.calendar.applyEvents();
     },
     pushToDatabase(){
       //TO CHANGE: save to database eventually

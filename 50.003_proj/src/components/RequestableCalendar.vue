@@ -4,7 +4,6 @@
     :events="currentEvents"
     :isInMode="isRequesting"
     mode="requestable"   
-    @event-update="updateCalendar"
     ref="calendar" 
   >   
     <template slot="switchModeButton">
@@ -61,19 +60,13 @@ export default {
   }),
   computed: {
     currentEvents(){
-      return this.events.locked.concat(this.events.calendar);
+      return this.events.locked.concat(this.events.modifiable);
     }    
   },
   methods: {
     revertState(){
       this.isRequesting = false;
       this.$emit('revert-state');
-    },
-    updateCalendar(event){
-      this.$emit('event-update', event);
-    },
-    applyEvents(){
-      this.$refs.calendar.applyEvents();
     },
     pushToDatabase(){
       //TO CHANGE: save to database eventually

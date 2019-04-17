@@ -320,6 +320,9 @@ export default {
       return this.$dayspan.features.addTime && !this.readOnly && !this.$dayspan.readOnly;
     }
   },
+  created() {
+    this.$eventHub.$on('apply-events', this.applyEvents);
+  },
   mounted()
   {
     if (!this.$dayspan.promptOpen)
@@ -332,6 +335,9 @@ export default {
       };
     }
     this.applyEvents();
+  },
+  beforeDestroy() {
+      this.$eventHub.$off('apply-events');
   },
   methods:
   {

@@ -37,6 +37,7 @@ Vue.prototype.$locations = [
   "Lecture Theatre 5"
 ];
 Vue.prototype.$termStartDate = moment([2019, 9, 16]);
+Vue.prototype.$eventHub = new Vue(); // Global event bus
 
 new Vue({
   render: h => h(App)

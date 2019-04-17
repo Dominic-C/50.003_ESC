@@ -5,9 +5,7 @@
 				<slot name="switchModeButton"/>
 			</template>
 			<template v-else>
-				<slot name="cancelButton">
-					<v-btn color="grey">Cancel</v-btn>
-				</slot>
+				<slot name="cancelButton"/>
 				<slot name="pushButton"/>
 			</template>
 		</v-layout>
@@ -172,11 +170,8 @@ export default {
   },
   methods: {
     updateCalendar(event){
-      this.$emit('event-update', event);	//from DaySpanCalendar 
+      this.$eventHub.$emit('event-update', event);
     },
-    applyEvents(){
-      this.$refs.calendar.applyEvents();	//from App.vue to DaySpanCalendar
-		},
 		viewDay(day){
 			this.$refs.calendar.viewDay(day);
 		}
