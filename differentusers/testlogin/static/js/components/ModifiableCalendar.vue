@@ -134,7 +134,7 @@
 
 <script>
 import { Calendar } from 'dayspan';
-import dsWeeklyCalendar from '../components/DaySpanWeeklyCalendar.vue';
+import dsWeeklyCalendar from '../components/DaySpanCalendar.vue';
 
 export default {
   name: 'ModifiableCalendar',

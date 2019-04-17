@@ -1,5 +1,5 @@
 <template>
-  <modifiable-calendar
+  <app-calendar
     :username="username"
     :events="currentEvents"
     :isInMode="isRequesting"
@@ -31,11 +31,11 @@
         Push Request
       </v-btn>
     </template>
-  </modifiable-calendar>
+  </app-calendar>
 </template>
 
 <script>
-import ModifiableCalendar from '../components/ModifiableCalendar.vue'
+import AppCalendar from '../components/AppCalendar.vue'
 
 export default {
   name: 'RequestableCalendar',
@@ -49,7 +49,7 @@ export default {
     }
   },
   components: {
-    ModifiableCalendar
+    AppCalendar
   },
   data: () => ({
     storeKey: 'requestableCalendar',
@@ -57,7 +57,7 @@ export default {
   }),
   computed: {
     currentEvents(){
-      return this.events.locked.concat(this.events.modifiable);
+      return this.events.locked.concat(this.events.calendar);
     }    
   },
   methods: {

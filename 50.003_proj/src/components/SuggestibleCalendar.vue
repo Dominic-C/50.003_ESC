@@ -1,5 +1,5 @@
 <template>
-  <modifiable-calendar
+  <app-calendar
     :username="username"
     :events="currentEvents"
     :isInMode="isSuggesting"
@@ -31,11 +31,11 @@
         Push Suggestions
       </v-btn>
     </template>
-  </modifiable-calendar>
+  </app-calendar>
 </template>
 
 <script>
-import ModifiableCalendar from '../components/ModifiableCalendar.vue'
+import AppCalendar from '../components/AppCalendar.vue'
 
 export default {
   name: 'SuggestibleCalendar',
@@ -49,7 +49,7 @@ export default {
     }
   },
   components: {
-    ModifiableCalendar
+    AppCalendar
   },
   data: () => ({
     storeKey: 'suggestableCalendar',

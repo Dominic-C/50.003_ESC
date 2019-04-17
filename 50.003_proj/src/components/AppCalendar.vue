@@ -2,21 +2,17 @@
   <div>
 		<v-layout justify-end pb-3>	
     	<template v-if="!isInMode">
-				<slot name="switchModeButton">
-					<v-btn color="primary">Modify</v-btn>
-				</slot>
+				<slot name="switchModeButton"/>
 			</template>
 			<template v-else>
 				<slot name="cancelButton">
 					<v-btn color="grey">Cancel</v-btn>
 				</slot>
-				<slot name="pushButton">
-					<v-btn color="primary">Push</v-btn>
-				</slot>
+				<slot name="pushButton"/>
 			</template>
 		</v-layout>
     <div style="height: 500px">
-			<ds-weekly-calendar 
+			<ds-calendar 
 				:events="events" 
 				:calendar="calendar" 
 				:suggestible="isSuggestible" 
@@ -127,17 +123,17 @@
 						></v-text-field>
 					</template>
 				</template>
-			</ds-weekly-calendar>
+			</ds-calendar>
     </div>
   </div>
 </template>
 
 <script>
 import { Calendar } from 'dayspan';
-import dsWeeklyCalendar from '../components/DaySpanWeeklyCalendar.vue';
+import dsCalendar from '../components/DaySpanCalendar.vue';
 
 export default {
-  name: 'ModifiableCalendar',
+  name: 'CalendarApp',
   props: {
     events: {
       type: Array
@@ -150,18 +146,21 @@ export default {
       type: String,
       validator: function (value) {
         //check that it is in either suggestible or requestable mode
-        return ['suggestible', 'requestable'].indexOf(value) !== -1
+        return ['suggestible', 'requestable', 'finalised'].indexOf(value) !== -1
       }
 		},
 		isInMode: {
-			type: Boolean
+			type: Boolean,
+			default: false
+		},
+		calendar: {
+			type: Calendar
 		}
   },
   components: {
-    dsWeeklyCalendar
+    dsCalendar
   },
   data: () => ({
-		calendar: Calendar.weeks(),
   }),
   computed: {
 		isSuggestible(){

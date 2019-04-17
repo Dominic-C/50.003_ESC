@@ -40,8 +40,8 @@ import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
 import ListSelection from './components/ListSelection.vue';
-import WeeklyCalendar from './components/WeeklyCalendar.vue';
-import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
+// import WeeklyCalendar from './components/WeeklyCalendar.vue';
+// import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
 import FinalisedCalendar from './components/FinalisedCalendar.vue'
 import SuggestibleCalendar from './components/SuggestibleCalendar.vue'
 import RequestableCalendar from "./components/RequestableCalendar.vue";
@@ -583,8 +583,8 @@ export default {
     AppHeader,
     SearchBar,
     ListSelection,
-    WeeklyCalendar,
-    dsWeeklyCalendar,
+    // WeeklyCalendar,
+    // dsWeeklyCalendar,
     FormSubmit,
     FinalisedCalendar,
     SuggestibleCalendar,
