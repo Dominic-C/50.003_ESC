@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { Calendar, Weekday } from 'dayspan';
+import { Weekday } from 'dayspan';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
@@ -51,7 +51,6 @@ import FormSubmit from './components/FormSubmit.vue';
 export default {
   name: 'app',
   data: () => ({
-    calendar: Calendar.weeks(),
     coloursUsed: [],
     modifiableCalendarEvent: {locked:[], modifiable:[]},
     username: "username", //TO CHANGE: replace with username

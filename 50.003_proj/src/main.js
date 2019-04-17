@@ -3,6 +3,7 @@ import "./plugins/vuetify";
 import Vuetify from "vuetify";
 import App from "./App.vue";
 import DaySpanVuetify from "dayspan-vuetify";
+import * as moment from 'moment';
 
 import "vuetify/dist/vuetify.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
@@ -35,6 +36,7 @@ Vue.prototype.$locations = [
   "Lecture Theatre 4",
   "Lecture Theatre 5"
 ];
+Vue.prototype.$termStartDate = moment([2019, 9, 16]);
 
 new Vue({
   render: h => h(App)

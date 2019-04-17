@@ -26,7 +26,7 @@
    -->
 		<v-data-table
 		:headers="headers"
-    headers-length="6"
+    :headers-length="6"
 		:items="suggestions"
     item-key="suggestedBy"
 		class="elevation-1"
@@ -74,7 +74,10 @@
     <!-- Calendar view -->
     <template v-slot:expand="props">
       <v-flex class="pa-4" style="height:500px">
-        <finalised-calendar></finalised-calendar>
+        <finalised-calendar 
+          :events="props.item.conflict" 
+          :calendar="dayCalendar"
+        ></finalised-calendar>
       </v-flex>
       </template>
 	</v-data-table>
@@ -82,13 +85,16 @@
 </template>
 
 <script>
+import { Calendar, Day } from 'dayspan';
 import FinalisedCalendar from "../components/FinalisedCalendar";
+
 export default {
   name: 'ViewResultsTable',
   components: {
     FinalisedCalendar
   },
 	data: () => ({
+    dayCalendar: Calendar.days(),
 		headers: [
 			{ text: 'Suggested By', value: 'suggestedBy' },
 			{ text: 'Submitted On', value: 'submittedOn' },
@@ -108,14 +114,110 @@ export default {
         submittedOn: new Date('01 Mar 2019 09:30:00'),
         locationConflict: true,
         classConflict: false,
-        professorConflict: false
+        professorConflict: false,
+        conflict: [
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "001",
+              "title": "50.003 Tutorial",
+              "color": "#9C27B0",
+              "location": "2.501",
+              "professor": "Sun Jun",
+              "classEnrolled": "F01",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": null,
+              "requestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [1],
+              "times": ["09:00"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          },
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "002",
+              "title": "50.003 Tutorial",
+              "color": "#1976d2",
+              "location": "2.501",
+              "professor": "Sudipta",
+              "classEnrolled": "F02",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": null,
+              "requestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [1],
+              "times": ["09:30"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          }
+        ]
       },
       {
         suggestedBy: 'Prof B',
         submittedOn: new Date('24 Mar 2019 11:34:00'),
         locationConflict: false,
         classConflict: true,
-        professorConflict: false
+        professorConflict: false,
+        conflict: [
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "001",
+              "title": "50.003 Tutorial",
+              "color": "#9C27B0",
+              "location": "2.501",
+              "professor": "Sun Jun",
+              "classEnrolled": "F01",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": null,
+              "requestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [1],
+              "times": ["09:00"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          },
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "002",
+              "title": "50.005 Tutorial",
+              "color": "#1976d2",
+              "location": "2.507",
+              "professor": "Gemma Roig",
+              "classEnrolled": "F01",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": null,
+              "requestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [1],
+              "times": ["09:30"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          }
+        ]
       }
     ]
   }),
@@ -128,6 +230,7 @@ export default {
     },
     showCalendar(props){
       props.expanded = !props.expanded;
+      // this.dayCalendar.viewDay(new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
     }
   }
 }

@@ -176,6 +176,9 @@ export default {
     },
     applyEvents(){
       this.$refs.calendar.applyEvents();	//from App.vue to DaySpanCalendar
+		},
+		viewDay(day){
+			this.$refs.calendar.viewDay(day);
 		}
   }  
 }

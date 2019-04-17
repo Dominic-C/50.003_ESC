@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { Calendar } from 'dayspan';
 import AppCalendar from '../components/AppCalendar.vue'
 
 export default {
@@ -46,7 +47,10 @@ export default {
     username: {
       type: String,
       required: true
-    }
+    },
+    calendar: {
+			type: Calendar
+		}
   },
   components: {
     AppCalendar
