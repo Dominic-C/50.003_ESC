@@ -5,7 +5,8 @@ from .forms import CreateSchedule
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
 from django.http import HttpResponse, Http404
-
+from loginpage.decorators import professor_required, drafting_required, beforefirstdraft_required
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -31,7 +32,9 @@ class ScheduleListView(ListView):
         context['component'] = "calendar.js"
         return context
 
-
+@professor_required
+@login_required
+@drafting_required
 def add_schedule(request):
     if request.method == "POST":
         # creates form instance and binds form data to it. request.post contains form data
