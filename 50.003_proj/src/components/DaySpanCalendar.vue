@@ -43,23 +43,23 @@
             </v-layout>
             
             <v-flex xs1>
-                <slot name="view" v-bind="{currentType, types}">
-                  <v-menu>
-                    <v-btn flat slot="activator">
-                      {{ currentType.label }}
-                      <v-icon>arrow_drop_down</v-icon>
-                    </v-btn>
-                    <v-list>
-                      <v-list-tile v-for="type in types"
-                        :key="type.id"
-                        @click="currentType = type">
-                        <v-list-tile-content>
-                          <v-list-tile-title>{{ type.label }}</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
-                    </v-list>
-                  </v-menu>
-                </slot>
+              <slot name="view" v-bind="{currentType, types}">
+                <v-menu>
+                  <v-btn flat slot="activator">
+                    {{ currentType.label }}
+                    <v-icon>arrow_drop_down</v-icon>
+                  </v-btn>
+                  <v-list>
+                    <v-list-tile v-for="type in types"
+                      :key="type.id"
+                      @click="currentType = type">
+                      <v-list-tile-content>
+                        <v-list-tile-title>{{ type.label }}</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+              </slot>
             </v-flex>
           </v-toolbar>
         
@@ -322,6 +322,7 @@ export default {
   },
   created() {
     this.$eventHub.$on('apply-events', this.applyEvents);
+    this.$eventHub.$on('view-day', this.viewDay);
   },
   mounted()
   {
@@ -338,6 +339,7 @@ export default {
   },
   beforeDestroy() {
       this.$eventHub.$off('apply-events');
+      this.$eventHub.$off('view-day', this.viewDay);
   },
   methods:
   {

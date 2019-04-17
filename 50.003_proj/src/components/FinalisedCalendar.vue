@@ -1,6 +1,7 @@
 <template>
   <app-calendar
     :events="events"
+    :calendar="calendar"
     username="Guest"
     mode="finalised"   
   >

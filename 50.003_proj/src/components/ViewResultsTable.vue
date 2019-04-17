@@ -188,7 +188,7 @@ export default {
               "isSelected": false
             },
             "schedule": {
-              "dayOfWeek": [1],
+              "dayOfWeek": [2],
               "times": ["09:00"],
               "duration": 60,
               "durationUnit": "minutes"
@@ -211,7 +211,7 @@ export default {
               "isSelected": false
             },
             "schedule": {
-              "dayOfWeek": [1],
+              "dayOfWeek": [2],
               "times": ["09:30"],
               "duration": 60,
               "durationUnit": "minutes"
@@ -230,7 +230,7 @@ export default {
     },
     showCalendar(props){
       props.expanded = !props.expanded;
-      // this.dayCalendar.viewDay(new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+      this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
     }
   }
 }

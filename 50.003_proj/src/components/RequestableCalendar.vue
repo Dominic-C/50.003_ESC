@@ -3,6 +3,7 @@
     :username="username"
     :events="currentEvents"
     :isInMode="isRequesting"
+    :calendar="calendar"
     mode="requestable"   
     ref="calendar" 
   >   
