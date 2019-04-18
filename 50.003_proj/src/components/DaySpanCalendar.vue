@@ -338,8 +338,8 @@ export default {
     this.applyEvents();
   },
   beforeDestroy() {
-      this.$eventHub.$off('apply-events');
-      this.$eventHub.$off('view-day', this.viewDay);
+    this.$eventHub.$off('apply-events');
+    this.$eventHub.$off('view-day', this.viewDay);
   },
   methods:
   {

@@ -189,7 +189,7 @@ export default {
             },
             "schedule": {
               "dayOfWeek": [2],
-              "times": ["09:00"],
+              "times": ["10:00"],
               "duration": 60,
               "durationUnit": "minutes"
             }
@@ -212,7 +212,7 @@ export default {
             },
             "schedule": {
               "dayOfWeek": [2],
-              "times": ["09:30"],
+              "times": ["10:30"],
               "duration": 60,
               "durationUnit": "minutes"
             }
@@ -228,9 +228,16 @@ export default {
     reject(){
       console.log("rejected")
     },
-    showCalendar(props){
+    async showCalendar(props){
       props.expanded = !props.expanded;
-      this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+      if (props.expanded){
+        await this.$nextTick(); //waiting for calendar to be rendered
+        this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+      }
+    },
+    callingCalendar(open){
+      this.calendarCreated = open;
+      console.log(this.calendarCreated);
     }
   }
 }
