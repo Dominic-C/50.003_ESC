@@ -1,30 +1,6 @@
 <template>
   <v-container>
-    <!-- <b-button @click="toggleBusy">Toggle Busy State</b-button>
-    <b-table responsive 
-      :busy="isBusy" 
-      :items="items"
-      selectable
-      :select-mode="single"
-      selectedVariant="success">
-      <div slot="table-busy" class="text-center text-danger my-2">
-        <b-spinner class="align-middle"></b-spinner>
-        <strong>Loading...</strong>
-      </div>
-    </b-table> -->
-
-    <!-- <div class="table-responsive  table-hover">
-      <table class="table">
-        <th colspan="3"></th>
-        <td class="bg-primary">...</td>
-        <td class="bg-success">...</td>
-        <td class="bg-warning">...</td>
-        <td class="bg-danger">...</td>
-        <td class="bg-info">...</td>
-      </table>
-    </div>
-   -->
-		<v-data-table
+    <v-data-table
 		:headers="headers"
     :headers-length="6"
 		:items="suggestions"
@@ -55,19 +31,26 @@
         <td :class="[props.item.classConflict ? 'red' : '']"></td>
         <td :class="[props.item.professorConflict ? 'red' : '']"></td>
         <td class="justify-center align-center layout px-0">
-          <v-icon
-          color="green"
-            @click="approve(props.item)"
-          >
-            check
-          </v-icon>
-          <v-icon
-          color="red"
-            @click="reject(props.item)"
-          >
-            close
-          </v-icon>
-          </td>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon color="green" v-on="on" @click.stop="approve(props.item)">check</v-icon>
+            </template>
+            <span>Accept Suggestion</span>
+          </v-tooltip>
+          
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon color="red" v-on="on" @click.stop="reject(props.item)">close</v-icon>
+            </template>
+            <span>Reject Suggestion</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon v-on="on" @click.stop="approve(props.item)">visibility</v-icon>
+            </template>
+            <span>View/Modify in Calendar</span>
+          </v-tooltip>
+        </td>
       </tr>
 		</template>
 
@@ -79,7 +62,7 @@
           :calendar="dayCalendar"
         ></finalised-calendar>
       </v-flex>
-      </template>
+  </template>
 	</v-data-table>
   </v-container>
 </template>
@@ -222,10 +205,10 @@ export default {
     ]
   }),
   methods: {
-    approve(){
+    approve(item){
       console.log("approved")
     },
-    reject(){
+    reject(item){
       console.log("rejected")
     },
     async showCalendar(props){
