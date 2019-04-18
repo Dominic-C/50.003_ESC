@@ -25,24 +25,25 @@
 
 ## Mapping JS to Django Schema
 
-| Javascript Model      | Django Schedule Model | Covered | Computed Value |
-|-----------------------|-----------------------|---------|----------------|
-| data.courseName       | title -> courseName   | Y       |                |
-| data.pillar           | None -> pillarType    | N       |                |
-| data.ID               | None -> ID            | N       |                |
-| data.title            | None -> eventName     | N       |                |
-| data.color            | None                  | N       | Y              |
-| data.location         | location              | Y       |                |
-| data.professor        | lecturer              | Y       |                |
-| data.classEnrolled    | None -> classEnrolled | N       |                |
-| data.calendarType     | isEvent               | Y       | Y              |
-| data.locked           | None                  | Y       | Y              |
-| data.suggestedBy      | None -> initiatedBy   | N       | Y              |
-| data.requestedBy      | None -> initiatedBy   | N       | Y              |
-| schedule.dayOfWeek    | None -> dayOfWeek     | N       | Y              |
-| schedule.times        | start_time            | Y       |                |
-| schedule.duration     | None                  | Y       | Y              |
-| schedule.durationType | None                  | Y       | Y              |
+| Django Schedule Model | Javascript Model      | Data Type         | Covered | Computed Value |
+|-----------------------|-----------------------|-------------------|---------|----------------|
+| title -> courseName   | data.courseName       | char[120]         | Y       |                |
+| None -> pillarType    | data.pillar           | char[10]          | N       |                |
+| None -> ID            | data.id               | int               | N       |                |
+| None -> eventName     | data.title            | char[120]         | N       |                |
+| None                  | data.color            | hexcode           | N       | Y              |
+| location              | data.location         | char[50]          | Y       |                |
+| lecturer              | data.professor        | char[50]          | Y       |                |
+| None -> classEnrolled | data.classEnrolled    | char[4]           | N       |                |
+| isEvent               | data.calendarType     | boolean -> string | Y       | Y              |
+| None                  | data.locked           | boolean           | Y       | Y              |
+| None -> initiatedBy   | data.suggestedBy      | int               | N       | Y              |
+| None -> initiatedBy   | data.requestedBy      | int               | N       | Y              |
+| None -> dayOfWeek     | schedule.dayOfWeek    | int[]             | N       | Y              |
+| start_time            | schedule.times        | [char[5]]         | Y       |                |
+| None                  | schedule.duration     | int               | Y       | Y              |
+| None                  | schedule.durationType | char[7]           | Y       | Y              |
+
 class Schedule(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(blank=True, null=True)
