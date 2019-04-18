@@ -67,36 +67,74 @@
       </template>
     </v-data-table>
 
-    <finalised-calendar 
+    <app-calendar 
       transition="slide-x-reverse-transition" 
       v-if="activeComp.calendar" 
       :events="eventsToShow"
       :calendar="dayCalendar"
+      :username="username"
+      :isInMode="isModifying"
+      mode="suggestible"
     >
-      <template slot="header">
-        <v-btn 
-          color="primary"
-          @click="toggleVisible('table')"
-        >
-          Back
-        </v-btn>
+      <template slot="switchModeButton">
+        <v-layout justify-space-between> 
+          <v-btn 
+            color="grey"
+            @click="toggleVisible('table')"
+          >
+            <v-icon dark left>arrow_back</v-icon>Back
+          </v-btn>
+          <v-btn 
+            color="primary"
+            @click="isModifying = !isModifying"
+          >
+            Modify
+          </v-btn>
+        </v-layout>
       </template>
-    </finalised-calendar>
+
+      <template slot="cancelButton">
+      <v-btn 
+        color="grey"
+        @click="revertState"
+      >
+        Cancel
+      </v-btn>
+    </template>
+
+    <template slot="pushButton">
+      <v-btn 
+        color="primary"
+        @click="pushToDatabase"
+      >
+        Push Suggestions
+      </v-btn>
+    </template>
+    </app-calendar>
   </v-container>
 </template>
 
 <script>
 import { Calendar, Day } from 'dayspan';
 import FinalisedCalendar from "../components/FinalisedCalendar";
+import AppCalendar from "../components/AppCalendar";
 
 export default {
   name: 'ViewResultsTable',
   components: {
-    FinalisedCalendar
+    FinalisedCalendar,
+    AppCalendar
+  },
+  props: {
+    username: {
+      type: String,
+      required: true
+    }
   },
 	data: () => ({
     dayCalendar: Calendar.days(),
     eventsToShow: [],
+    isModifying: false,
     activeComp: {
       table : true,
       calendar : false,
@@ -229,9 +267,11 @@ export default {
   }),
   methods: {
     approve(item){
+      //TO CHANGE: update database
       console.log("approved")
     },
     reject(item){
+      //TO CHANGE: update database
       console.log("rejected")
     },
     async showCalendar(props){
@@ -256,6 +296,16 @@ export default {
       if(item == "calendar"){
         this.activeComp.calendar = true;
       }
+    },
+    revertState(){
+      this.isModifying = false;
+      console.log(this.eventsToShow);
+      this.$eventHub.$emit('apply-events');
+    },
+    pushToDatabase(){
+      //TO CHANGE: update database
+      console.log("pushing to database...");
+      this.isModifying = false;
     }
   }
 }

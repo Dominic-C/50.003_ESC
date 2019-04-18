@@ -26,7 +26,7 @@
           :username="username"
           @revert-state="revertState"
           v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
-        <view-results-table  v-if="activeComp.viewSuggestions"></view-results-table>
+        <view-results-table  :username="username" v-if="activeComp.viewSuggestions"></view-results-table>
       </v-content>
     </v-app>
   </div>
