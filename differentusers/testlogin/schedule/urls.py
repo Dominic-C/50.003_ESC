@@ -1,5 +1,5 @@
 from django.urls import include, path
-from schedule.views import ScheduleListView
+# from schedule.views import ScheduleListView
 from . import views
 
 app_name = 'schedule'

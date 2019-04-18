@@ -20,17 +20,17 @@ from django.contrib.auth.decorators import login_required
 #         return redirect('schedule:list')
 
 
-class ScheduleListView(ListView):
-    model = NewSchedule
-    template_name = "schedule/schedule_list.html"
-    queryset = NewSchedule.objects.all()
-    ser_data = serializers.serialize("json", queryset)
+# class ScheduleListView(ListView):
+#     model = NewSchedule
+#     template_name = "schedule/schedule_list.html"
+#     queryset = NewSchedule.objects.all()
+#     ser_data = serializers.serialize("json", queryset)
 
-    def get_context_data(self, **kwargs):
-        context = super(ScheduleListView, self).get_context_data(**kwargs)
-        context['jsonset'] = self.ser_data
-        context['component'] = "calendar.js"
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(ScheduleListView, self).get_context_data(**kwargs)
+#         context['jsonset'] = self.ser_data
+#         context['component'] = "calendar.js"
+#         return context
 
 @professor_required
 @login_required
