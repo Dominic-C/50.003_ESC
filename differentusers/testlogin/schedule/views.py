@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
-from .models import Schedule
+from .models import NewSchedule
 from .forms import CreateSchedule
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
@@ -10,20 +10,20 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-class ScheduleCreateView(CreateView):
-    model = Schedule
-    template_name = "schedule/schedule_create.html"
-    fields = '__all__'
+# class ScheduleCreateView(CreateView):
+#     model = Schedule
+#     template_name = "schedule/schedule_create.html"
+#     fields = '__all__'
 
-    def form_valid(self, form):
-        form.save()
-        return redirect('schedule:list')
+#     def form_valid(self, form):
+#         form.save()
+#         return redirect('schedule:list')
 
 
 class ScheduleListView(ListView):
-    model = Schedule
+    model = NewSchedule
     template_name = "schedule/schedule_list.html"
-    queryset = Schedule.objects.all()
+    queryset = NewSchedule.objects.all()
     ser_data = serializers.serialize("json", queryset)
 
     def get_context_data(self, **kwargs):
@@ -41,11 +41,11 @@ def add_schedule(request):
         form = CreateSchedule(request.POST)
         # check if form is valid
         if form.is_valid():
-            print(Schedule.objects.filter(location=2))
+            print(NewSchedule.objects.filter(location=2))
             print(form.cleaned_data['start_time'],
                   form.cleaned_data['end_time'])
-            if(Schedule.objects.filter(location=2)):
-                lectureTheaterBookings = Schedule.objects.filter(location=2)
+            if(NewSchedule.objects.filter(location=2)):
+                lectureTheaterBookings = NewSchedule.objects.filter(location=2)
                 conflict = False
 
                 for i in lectureTheaterBookings:
@@ -58,7 +58,7 @@ def add_schedule(request):
     else:  # no post data, resulting in empty form.
         form = CreateSchedule()
 
-    queryset = Schedule.objects.all()
+    queryset = NewSchedule.objects.all()
     jsonset = serializers.serialize('json', queryset)
     context = {
         'form': form,
@@ -67,7 +67,7 @@ def add_schedule(request):
     return render(request, 'schedule/createSchedule_form.html', context)
 
 
-def serialized_schedule(request):
-    queryset = Schedule.objects.all()
-    queryset = serializers.serialize('json', queryset)
-    return HttpResponse(queryset, content_type="application/json")
+# def serialized_schedule(request):
+#     queryset = Schedule.objects.all()
+#     queryset = serializers.serialize('json', queryset)
+#     return HttpResponse(queryset, content_type="application/json")
