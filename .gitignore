@@ -1,3 +1,4 @@
 *.pyc
 differentusers/testlogin/node_modules/*
 node_modules
+django-vue/core/webpack-stats.json
