@@ -1,11 +1,14 @@
 <template>
-  <app-calendar
-    :events="events"
-    :calendar="calendar"
-    username="Guest"
-    mode="finalised"   
-  >
-  </app-calendar>
+  <div>
+    <slot name="header"></slot>
+    <app-calendar
+      :events="events"
+      :calendar="calendar"
+      username="Guest"
+      mode="finalised"   
+    >
+    </app-calendar>
+  </div>
 </template>
 
 <script>

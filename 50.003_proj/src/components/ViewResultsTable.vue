@@ -6,64 +6,82 @@
 		:items="suggestions"
     item-key="suggestedBy"
 		class="elevation-1"
+    v-if="activeComp.table"
 	>
     <!-- table headers -->
-    <template v-slot:headers="props">
-      <tr class="text-xs-center">
-        <template v-for="prop in props.headers">
-          <th v-if="!prop.children" :key="prop.text" rowspan="2" style="border-bottom: solid 2px grey;">{{ prop.text }}</th>
-          <th v-else :key="prop.text" colspan="3" text-xs-center>{{ prop.text }}</th>
-        </template>
-      </tr>
-      <tr class="text-xs-center">
-        <template v-for="prop in props.headers">
-          <th v-for="child in prop.children" :key="child.text" width="100px">{{ child.text }}</th>
-        </template>
-      </tr>
-    </template>
+      <template v-slot:headers="props">
+        <tr class="text-xs-center">
+          <template v-for="prop in props.headers">
+            <th v-if="!prop.children" :key="prop.text" rowspan="2" style="border-bottom: solid 2px grey;">{{ prop.text }}</th>
+            <th v-else :key="prop.text" colspan="3" text-xs-center>{{ prop.text }}</th>
+          </template>
+        </tr>
+        <tr class="text-xs-center">
+          <template v-for="prop in props.headers">
+            <th v-for="child in prop.children" :key="child.text" width="100px">{{ child.text }}</th>
+          </template>
+        </tr>
+      </template>
 
-    <!-- table rows -->
-		<template v-slot:items="props">
-      <tr @click="showCalendar(props)">
-        <td class="text-xs-right">{{ props.item.suggestedBy }}</td>
-        <td class="text-xs-right">{{ props.item.submittedOn }}</td>
-        <td :class="[props.item.locationConflict ? 'red' : '']"></td>
-        <td :class="[props.item.classConflict ? 'red' : '']"></td>
-        <td :class="[props.item.professorConflict ? 'red' : '']"></td>
-        <td class="justify-center align-center layout px-0">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon color="green" v-on="on" @click.stop="approve(props.item)">check</v-icon>
-            </template>
-            <span>Accept Suggestion</span>
-          </v-tooltip>
-          
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon color="red" v-on="on" @click.stop="reject(props.item)">close</v-icon>
-            </template>
-            <span>Reject Suggestion</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on" @click.stop="approve(props.item)">visibility</v-icon>
-            </template>
-            <span>View/Modify in Calendar</span>
-          </v-tooltip>
-        </td>
-      </tr>
-		</template>
+      <!-- table rows -->
+      <template v-slot:items="props">
+        <tr @click="showCalendar(props)">
+          <td class="text-xs-right">{{ props.item.suggestedBy }}</td>
+          <td class="text-xs-right">{{ props.item.submittedOn }}</td>
+          <td :class="[props.item.locationConflict ? 'red' : '']"></td>
+          <td :class="[props.item.classConflict ? 'red' : '']"></td>
+          <td :class="[props.item.professorConflict ? 'red' : '']"></td>
+          <td class="justify-center align-center layout px-0">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon color="green" v-on="on" @click.stop="approve(props.item)">check</v-icon>
+              </template>
+              <span>Accept Suggestion</span>
+            </v-tooltip>
+            
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon color="red" v-on="on" @click.stop="reject(props.item)">close</v-icon>
+              </template>
+              <span>Reject Suggestion</span>
+            </v-tooltip>
+            
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon v-on="on" @click.stop="goToCalendar(props.item)">visibility</v-icon>
+              </template>
+              <span>View/Modify in Calendar</span>
+            </v-tooltip>
+          </td>
+        </tr>
+      </template>
 
-    <!-- Calendar view -->
-    <template v-slot:expand="props">
-      <v-flex class="pa-4" style="height:500px">
-        <finalised-calendar 
-          :events="props.item.conflict" 
-          :calendar="dayCalendar"
-        ></finalised-calendar>
-      </v-flex>
-  </template>
-	</v-data-table>
+      <!-- Calendar view -->
+      <template v-slot:expand="props">
+        <v-flex class="pa-4" style="height:500px">
+          <finalised-calendar 
+            :events="props.item.conflict"
+            :calendar="dayCalendar"
+          ></finalised-calendar>
+        </v-flex>
+      </template>
+    </v-data-table>
+
+    <finalised-calendar 
+      transition="slide-x-reverse-transition" 
+      v-if="activeComp.calendar" 
+      :events="eventsToShow"
+      :calendar="dayCalendar"
+    >
+      <template slot="header">
+        <v-btn 
+          color="primary"
+          @click="toggleVisible('table')"
+        >
+          Back
+        </v-btn>
+      </template>
+    </finalised-calendar>
   </v-container>
 </template>
 
@@ -78,6 +96,11 @@ export default {
   },
 	data: () => ({
     dayCalendar: Calendar.days(),
+    eventsToShow: [],
+    activeComp: {
+      table : true,
+      calendar : false,
+    },
 		headers: [
 			{ text: 'Suggested By', value: 'suggestedBy' },
 			{ text: 'Submitted On', value: 'submittedOn' },
@@ -218,9 +241,21 @@ export default {
         this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
       }
     },
-    callingCalendar(open){
-      this.calendarCreated = open;
-      console.log(this.calendarCreated);
+    async goToCalendar(item){
+      this.toggleVisible('calendar');
+      this.eventsToShow = item.conflict;
+      await this.$nextTick(); //waiting for calendar to be rendered
+      this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
+    },
+    toggleVisible : function(item) {
+      this.activeComp.table = false;
+      this.activeComp.calendar = false;
+      if(item == "table"){
+        this.activeComp.table = true;
+      }
+      if(item == "calendar"){
+        this.activeComp.calendar = true;
+      }
     }
   }
 }
