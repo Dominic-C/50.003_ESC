@@ -43,13 +43,3 @@
 | start_time            | schedule.times        | [char[5]]         | Y       |                |
 | None                  | schedule.duration     | int               | Y       | Y              |
 | None                  | schedule.durationType | char[7]           | Y       | Y              |
-
-class Schedule(models.Model):
-    title = models.CharField(max_length=120)
-    description = models.TextField(blank=True, null=True)
-    date = models.DateField(("Date"), default=datetime.date.today)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    lecturer = models.CharField(max_length=50)
-    location = models.CharField(max_length=50)
-    isEvent = models.BooleanField(default=False)

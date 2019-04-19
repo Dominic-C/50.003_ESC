@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} - Schedule List{% endblock %}
+
+{% block content %}
+
+<script>
+	var tables = {{ jsonset|safe }};
+</script>
+	{% render_bundle 'app' %}
+			{% comment %} {% for item in object_list %}
+		    	 
+		    	 <tr>
+					<td>{{ item.title }} </td>
+					<td>{{ item.description }}</td>
+					<td>{{ item.start_time }} to {{ item.end_time }}</td>
+					<td>{{ item.lecturer }} </td>
+					<td>{{ item.location }}</td>
+					
+				</tr> 
+
+	   	{% empty %}
+	    	<tr> 
+				<td>No schedules yet </td>
+				<td></td>
+				<td></td>
+	    	</tr>
+
+		{% endfor %}{% endcomment %}
+
+	</table>
+{% endblock %}

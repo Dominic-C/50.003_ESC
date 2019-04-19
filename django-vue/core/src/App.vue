@@ -49,8 +49,10 @@ import ViewResultsTable from "./components/ViewResultsTable";
 export default {
   name: "app",
   data: () => ({
-//TODO: PUT IN DATA LOADED FROM DJANGO HERE
-
+    coloursUsed : [],
+    modifiableCalendarEvent: {locked:[], modifiable:[]},
+    username : "",
+    
   }),
   components: {
     SearchBar,

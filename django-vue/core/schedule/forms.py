@@ -11,7 +11,7 @@ usertypes = {
     'student' : 5
     } 
 
-HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(0, 24)]
+HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(7, 24)]
 LOCATION_CHOICES = (
     # ('1', 'Think Tank 1'),
     # ('2', 'Think Tank 2'),
@@ -25,17 +25,19 @@ LOCATION_CHOICES = (
     ('1', 'any'),
     ('2', 'Lecture Theatre'),
 )
-class CreateSchedule(forms.ModelForm):
+class CreateScheduleForm(forms.ModelForm):
     # if location is LT, then check if time clashes in queryset
     queryset = Schedule.objects.all()
 
     lecturer = forms.ModelChoiceField(queryset=User.objects.filter(user_type=usertypes['professor'])) # TODO: change to Professor model in future
+    initiatedBy = forms.ModelChoiceField(queryset=User.objects.all())
     
     class Meta:
         model = Schedule
         fields = '__all__'
         widgets = {'start_time': forms.Select(choices=HOUR_CHOICES),
-        'end_time':forms.Select(choices=HOUR_CHOICES), 'location':forms.Select(choices=LOCATION_CHOICES)
+        'end_time':forms.Select(choices=HOUR_CHOICES), 
+        'location':forms.Select(choices=LOCATION_CHOICES)
         }
 
         # iff lecturer wants to book lt, then check if available.
