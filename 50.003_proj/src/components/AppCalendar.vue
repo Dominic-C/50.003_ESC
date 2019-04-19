@@ -15,6 +15,7 @@
 				:calendar="calendar" 
 				:suggestible="isSuggestible" 
 				:requestable="isRequestable"
+				:editable="isEditable"
 				:read-only="!isInMode"
 				:username="username"
 				@event-update="updateCalendar"
@@ -22,7 +23,7 @@
 				>
 				<template slot="eventDetailsLocation" slot-scope="{ details }">
 					<!-- Location -->
-						<v-select
+					<v-select
 						single-line solo flat
 						prepend-icon="location_on"
 						label="Add Location"
@@ -81,45 +82,11 @@
 						v-model="details.classEnrolled"
 					></v-text-field>
 
-					<!-- Suggestion by -->
-					<v-text-field 
-						v-if="mode==='suggestible'&& details.suggestedBy"
-						single-line hide-details solo flat
-						prepend-icon="feedback"
-						label="Suggested By"
-						disabled
-						v-model="details.suggestedBy"
-					></v-text-field>
-					
-					<!-- Requested by -->
-					<v-text-field 
-						v-if="mode==='requestable' && details.requestedBy"
-						single-line hide-details solo flat
-						prepend-icon=""
-						label="Requested By"
-						disabled
-						v-model="details.requestedBy"
-					></v-text-field>
-
 					<!-- Status -->
-					<template v-if="mode==='suggestible'">
-						<v-text-field 
-							single-line hide-details solo flat
-							:prepend-icon="details.locked ? 'lock' : 'lock_open'"
-							:label="details.locked ? 'First Draft' : 'Suggested Change'"
-							disabled
-							v-model="details.suggestBy"
-						></v-text-field>
-					</template>
-					<template v-else-if="mode==='requestable'">
-						<v-text-field 
-							single-line hide-details solo flat
-							:prepend-icon="details.locked ? 'lock' : 'lock_open'"
-							:label="details.locked ? 'Current Calendar' : 'Requested Change'"
-							disabled
-							v-model="details.requestedBy"
-						></v-text-field>
-					</template>
+					<slot name="status" v-bind="{ details }"></slot>
+
+					<!-- Suggested/Edited/Requested by -->
+					<slot name="additionalInfo" v-bind="{ details }"></slot>
 				</template>
 
 				<template slot="eventPopover" slot-scope="slotData">
@@ -127,16 +94,6 @@
 						v-bind="slotData"
 						:read-only="!isInMode"
 					></ds-calendar-event-popover>
-				</template>
-
-				<template slot="eventCreatePopover" slot-scope="{placeholder, calendar}">
-					<ds-calendar-event-create-popover
-						:calendar-event="placeholder"
-						:calendar="calendar"
-						:close="$refs.calendar.$refs.calendar.clearPlaceholder"
-						@create-edit="$refs.calendar.editPlaceholder"
-						@create-popover-closed="saveState"
-					></ds-calendar-event-create-popover>
 				</template>
 
 				<template slot="eventTimeTitle" slot-scope="{calendarEvent, details}">
@@ -174,7 +131,7 @@ export default {
       type: String,
       validator: function (value) {
         //check that it is in either suggestible or requestable mode
-        return ['suggestible', 'requestable', 'finalised'].indexOf(value) !== -1
+        return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
       }
 		},
 		isInMode: {
@@ -196,6 +153,9 @@ export default {
 		},
 		isRequestable(){
 			return this.mode==="requestable";
+		},
+		isEditable(){
+			return this.mode==="editable";
 		}
   },
   methods: {

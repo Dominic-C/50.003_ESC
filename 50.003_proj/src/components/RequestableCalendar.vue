@@ -31,6 +31,34 @@
         Push Request
       </v-btn>
     </template>
+
+    <!-- Status -->
+    <template slot="status" slot-scope="{ details }">
+      <v-text-field 
+        single-line hide-details solo flat
+        :prepend-icon="details.locked ? 'lock' : 'lock_open'"
+        :label="details.locked ? 'Current Calendar' : 'Requested Change'"
+        disabled
+      ></v-text-field>
+    </template>
+
+    <!-- Requested by -->
+    <template slot="additionalInfo" slot-scope="{ details }">
+      <v-layout row>
+        <v-flex xs2>
+          <v-subheader v-if="details.requestedBy">Requested by</v-subheader>
+        </v-flex>
+        <v-flex xs10>
+          <v-text-field 
+            v-if="details.requestedBy"
+            single-line hide-details solo flat
+            disabled
+            v-model="details.requestedBy"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+    </template>
+
   </app-calendar>
 </template>
 

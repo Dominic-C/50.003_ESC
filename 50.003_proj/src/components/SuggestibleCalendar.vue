@@ -31,6 +31,33 @@
         Push Suggestions
       </v-btn>
     </template>
+
+    <!-- Status -->
+    <template slot="status" slot-scope="{ details }">
+      <v-text-field 
+        single-line hide-details solo flat
+        :prepend-icon="details.locked ? 'lock' : 'lock_open'"
+        :label="details.locked ? 'First Draft' : 'Suggested Change'"
+        disabled
+      ></v-text-field>
+    </template>
+
+    <!-- Suggested by -->
+    <template slot="additionalInfo" slot-scope="{ details }">
+      <v-layout row>
+        <v-flex xs2>
+          <v-subheader v-if="details.suggestedBy">Suggested by</v-subheader>
+        </v-flex>
+        <v-flex xs10>
+          <v-text-field 
+            v-if="details.suggestedBy"
+            single-line hide-details solo flat
+            disabled
+            v-model="details.suggestedBy"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+    </template>
   </app-calendar>
 </template>
 

@@ -50,7 +50,7 @@
               <template v-slot:activator="{ on }">
                 <v-icon v-on="on" @click.stop="goToCalendar(props.item)">visibility</v-icon>
               </template>
-              <span>View/Modify in Calendar</span>
+              <span>View/edit in Calendar</span>
             </v-tooltip>
           </td>
         </tr>
@@ -65,7 +65,24 @@
             ref="expandedCalendar"
             username="username"
             mode="finalised"   
-          ></app-calendar>
+          >
+            <!-- Suggested by -->
+            <template slot="additionalInfo" slot-scope="{ details }">
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader v-if="details.suggestedBy">Suggested by</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-text-field 
+                    v-if="details.suggestedBy"
+                    single-line hide-details solo flat
+                    disabled
+                    v-model="details.suggestedBy"
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+            </template>
+          </app-calendar>
         </v-flex>
       </template>
     </v-data-table>
@@ -76,9 +93,9 @@
       :events="eventsToShow"
       :calendar="dayCalendar"
       :username="username"
-      :isInMode="isModifying"
-      mode="suggestible"
-      ref="modifyCalendar"
+      :isInMode="isEditing"
+      mode="editable"
+      ref="editCalendar"
     >
       <template slot="switchModeButton">
         <v-layout justify-space-between> 
@@ -90,30 +107,61 @@
           </v-btn>
           <v-btn 
             color="primary"
-            @click="isModifying = !isModifying"
+            @click="isEditing = !isEditing"
           >
-            Modify
+            Edit
           </v-btn>
         </v-layout>
       </template>
 
       <template slot="cancelButton">
-      <v-btn 
-        color="grey"
-        @click="revertState"
-      >
-        Cancel
-      </v-btn>
-    </template>
+        <v-btn 
+          color="grey"
+          @click="revertState"
+        >
+          Cancel
+        </v-btn>
+      </template>
 
-    <template slot="pushButton">
-      <v-btn 
-        color="primary"
-        @click="pushToDatabase"
-      >
-        Push Suggestions
-      </v-btn>
-    </template>
+      <template slot="pushButton">
+        <v-btn 
+          color="primary"
+          @click="pushToDatabase"
+        >
+          Push Edit
+        </v-btn>
+      </template>
+
+      <!-- Edited & Suggested by -->
+      <template slot="additionalInfo" slot-scope="{ details }">
+        <v-layout row>
+          <v-flex xs2>
+            <v-subheader v-if="details.suggestedBy">Suggested by</v-subheader>
+          </v-flex>
+          <v-flex xs10>
+            <v-text-field 
+              v-if="details.suggestedBy"
+              single-line hide-details solo flat
+              disabled
+              v-model="details.suggestedBy"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+
+          <v-layout row>
+            <v-flex xs2>
+              <v-subheader v-if="details.editedBy">Edited by</v-subheader>
+            </v-flex>
+            <v-flex xs10>
+              <v-text-field 
+                v-if="details.editedBy"
+                single-line hide-details solo flat
+                disabled
+                v-model="details.editedBy"
+              ></v-text-field>
+            </v-flex>
+        </v-layout>
+      </template>
     </app-calendar>
   </v-container>
 </template>
@@ -136,7 +184,7 @@ export default {
 	data: () => ({
     dayCalendar: Calendar.days(),
     eventsToShow: [],
-    isModifying: false,
+    isEditing: false,
     activeComp: {
       table : true,
       calendar : false,
@@ -197,7 +245,7 @@ export default {
               "classEnrolled": "F02",
               "calendarType": "Academic",
               "locked": null,
-              "suggestedBy": null,
+              "suggestedBy": "Prof A",
               "requestedBy": null,
               "isSelected": false
             },
@@ -252,8 +300,7 @@ export default {
               "classEnrolled": "F01",
               "calendarType": "Academic",
               "locked": null,
-              "suggestedBy": null,
-              "requestedBy": null,
+              "suggestedBy": "Prof B",
               "isSelected": false
             },
             "schedule": {
@@ -287,7 +334,7 @@ export default {
       this.toggleVisible('calendar');
       this.eventsToShow = item.conflict;
       await this.$nextTick(); //waiting for calendar to be rendered
-      this.$refs.modifyCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
+      this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
     },
     toggleVisible : function(item) {
       this.activeComp.table = false;
@@ -300,13 +347,13 @@ export default {
       }
     },
     revertState(){
-      this.isModifying = false;
+      this.isEditing = false;
       this.$eventHub.$emit('apply-events');
     },
     pushToDatabase(){
       //TO CHANGE: update database
       console.log("pushing to database...");
-      this.isModifying = false;
+      this.isEditing = false;
     }
   }
 }
