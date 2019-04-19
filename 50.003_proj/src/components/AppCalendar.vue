@@ -121,6 +121,36 @@
 						></v-text-field>
 					</template>
 				</template>
+
+				<template slot="eventPopover" slot-scope="slotData">
+					<ds-calendar-event-popover
+						v-bind="slotData"
+						:read-only="!isInMode"
+					></ds-calendar-event-popover>
+				</template>
+
+				<template slot="eventCreatePopover" slot-scope="{placeholder, calendar}">
+					<ds-calendar-event-create-popover
+						:calendar-event="placeholder"
+						:calendar="calendar"
+						:close="$refs.calendar.$refs.calendar.clearPlaceholder"
+						@create-edit="$refs.calendar.editPlaceholder"
+						@create-popover-closed="saveState"
+					></ds-calendar-event-create-popover>
+				</template>
+
+				<template slot="eventTimeTitle" slot-scope="{calendarEvent, details}">
+					<div>
+						<v-icon class="ds-ev-icon"
+							v-if="details.icon"
+							size="14"
+							:style="{color: details.forecolor}">
+							{{ details.icon }}
+						</v-icon>
+						<strong class="ds-ev-title">{{ details.title }}</strong>
+					</div>
+					<div class="ds-ev-description">{{ getCalendarTime( calendarEvent ) }}</div>
+				</template>
 			</ds-calendar>
     </div>
   </div>
@@ -172,9 +202,21 @@ export default {
     updateCalendar(event){
       this.$eventHub.$emit('event-update', event);
     },
-		viewDay(day){
-			this.$refs.calendar.viewDay(day);
-		}
+		getCalendarTime(calendarEvent){
+      let sa = calendarEvent.start.format('a');
+      let ea = calendarEvent.end.format('a');
+      let sh = calendarEvent.start.format('h');
+      let eh = calendarEvent.end.format('h');
+      if (calendarEvent.start.minute !== 0)
+      {
+        sh += calendarEvent.start.format(':mm');
+      }
+      if (calendarEvent.end.minute !== 0)
+      {
+        eh += calendarEvent.end.format(':mm');
+      }
+      return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
+    }
   }  
 }
 </script>

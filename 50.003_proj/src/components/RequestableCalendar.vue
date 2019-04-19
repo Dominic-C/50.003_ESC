@@ -49,7 +49,10 @@ export default {
       required: true
     },
     calendar: {
-			type: Calendar
+      type: Calendar,
+      default(){
+        return Calendar.weeks();
+      }
 		}
   },
   components: {

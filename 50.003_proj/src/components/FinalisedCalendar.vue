@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <slot name="header"></slot>
-    <app-calendar
-      :events="events"
-      :calendar="calendar"
-      username="Guest"
-      mode="finalised"   
-    >
-    </app-calendar>
-  </div>
+  <app-calendar
+    :events="events"
+    :calendar="calendar"
+    username="Guest"
+    mode="finalised"   
+  >
+  </app-calendar>
 </template>
 
 <script>
@@ -28,7 +25,7 @@ export default {
     components: {
       AppCalendar
     },
-    data: vm => ({
+    data: () => ({
     })
 }
 </script>

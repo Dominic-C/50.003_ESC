@@ -59,10 +59,13 @@
       <!-- Calendar view -->
       <template v-slot:expand="props">
         <v-flex class="pa-4" style="height:500px">
-          <finalised-calendar 
+          <app-calendar
             :events="props.item.conflict"
             :calendar="dayCalendar"
-          ></finalised-calendar>
+            ref="expandedCalendar"
+            username="username"
+            mode="finalised"   
+          ></app-calendar>
         </v-flex>
       </template>
     </v-data-table>
@@ -75,6 +78,7 @@
       :username="username"
       :isInMode="isModifying"
       mode="suggestible"
+      ref="modifyCalendar"
     >
       <template slot="switchModeButton">
         <v-layout justify-space-between> 
@@ -116,13 +120,11 @@
 
 <script>
 import { Calendar, Day } from 'dayspan';
-import FinalisedCalendar from "../components/FinalisedCalendar";
 import AppCalendar from "../components/AppCalendar";
 
 export default {
   name: 'ViewResultsTable',
   components: {
-    FinalisedCalendar,
     AppCalendar
   },
   props: {
@@ -278,14 +280,14 @@ export default {
       props.expanded = !props.expanded;
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
-        this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
       }
     },
     async goToCalendar(item){
       this.toggleVisible('calendar');
       this.eventsToShow = item.conflict;
       await this.$nextTick(); //waiting for calendar to be rendered
-      this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
+      this.$refs.modifyCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
     },
     toggleVisible : function(item) {
       this.activeComp.table = false;
@@ -299,7 +301,6 @@ export default {
     },
     revertState(){
       this.isModifying = false;
-      console.log(this.eventsToShow);
       this.$eventHub.$emit('apply-events');
     },
     pushToDatabase(){
