@@ -1,0 +1,76 @@
+1555642661861	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\It\'sMine\\AppData\\Local\\Temp\\rust_mozprofile.hHwkIT7hxIpo"
+1555642662900	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1555642662901	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1555642665551	Marionette	INFO	Listening on port 57283
+1555642665730	Marionette	WARN	TLS certificate errors will be ignored for this session
+1555642666210	Marionette	INFO	Stopped listening on port 57283
+[Child 31984, Ch[rCohmiel_dC h3i0l1d6T8h,r eCahdr]o mWeA_CRhNiIlNdGTh:r epaipde]  error: 10W9A: fRiNlIeNG :z :/pbuiilpde/b uiledr/srorr: c109: /fiilpec /zchromium/s:/bruci/lcdh/rbouimel/d/csrc/ipcommon/ipc_c/hchromiaunnelm/s_win.cc, rlc/chromei/conmem o332
+[nC/ipc_channel_win.cc, line 332
+[Ch[Child 30868, Chrome_ChildThread] WARNING: pipe error: 109: file JzavaSc:r/buipitl edr/buildr/sorrc:/ irpec/socurcher:o/miu/m/src/chrome/commongre/modul/eipc_chs/Sqanlinete.l_winj.scmc, line 841: E, line 332
+r[ror: Connection is not open.
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1555642715623	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\It\'sMine\\AppData\\Local\\Temp\\rust_mozprofile.AHuQsbD9NLs8"
+1555642716347	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1555642716349	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1555642718451	Marionette	INFO	Listening on port 57388
+1555642718855	Marionette	WARN	TLS certificate errors will be ignored for this session
+1555642730442	Marionette	INFO	Stopped listening on port 57388
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1555642843076	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\It\'sMine\\AppData\\Local\\Temp\\rust_mozprofile.0S3kO1lxxxGW"
+1555642843933	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1555642843935	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1555642846692	Marionette	INFO	Listening on port 57650
+1555642846921	Marionette	WARN	TLS certificate errors will be ignored for this session
+1555642848553	Marionette	INFO	Stopped listening on port 57650
+[Child 25988, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 25988, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromiJavaScript error: jar:file:///C:/Program%20Files/Mozilla%20Firefox/omni.ja!/components/nsUrlClassifierListManager.js, line 597: TypeError: this.tablesData[table] is undefined
+[Parent 29012, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 29740, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[C
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1555642874535	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\It\'sMine\\AppData\\Local\\Temp\\rust_mozprofile.7h1iHkg7otZP"
+1555642875252	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1555642875254	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1555642877507	Marionette	INFO	Listening on port 57741
+1555642877783	Marionette	WARN	TLS certificate errors will be ignored for this session
+1555642879364	Marionette	INFO	Stopped listening on port 57741
+[Parent 17016, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 28376, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 28376, Chrome_Ch
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1555642893199	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\It\'sMine\\AppData\\Local\\Temp\\rust_mozprofile.5a1PPYTMDjZB"
+1555642893979	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1555642893981	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1555642896109	Marionette	INFO	Listening on port 57816
+1555642896432	Marionette	WARN	TLS certificate errors will be ignored for this session
+1555642898350	Marionette	INFO	Stopped listening on port 57816
+JavaScript error: jar:file:///C:/Program%20Files/Mozilla%20Firefox/omni.ja!/components/nsUrlClassifierListManager.js, line 597: TypeError: this.tablesData[table] is undefined
+[Parent 23536, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 22860, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src[C/hi[ipPlcaren/dtc  h22ro33m58i31u62m,,/  sGCrehccr/kome_ChildThreadco]h_ rIWoOAmTRehN/rIceNoaGmd] WARNING: pipe error: 109: fi: pipe elmrroeon/ipc_cha rnz:/buin:ld/build/src/ipc/chromium/src/chrome/e cl1ommon/ipc_channel_win.cc, line 332
+_0w9in:[. Ccfhcii,ll edl  iz2n:72/e7b 6u3,i3 l2Cd
+h/rboumiel_dC/hsirlcd/Tihprce/acdh]r oWmAiRuNmI/NsGr:c p/ipchroem ee/rcromomro:n /109i:p c_channel_wfin.iclc, e lizne:/ 3bu32
+ild/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+

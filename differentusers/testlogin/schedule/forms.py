@@ -1,5 +1,5 @@
 from django import forms
-from schedule.models import NewSchedule
+from schedule.models import Schedule
 from loginpage.models import User
 import datetime as dt
 
@@ -16,17 +16,19 @@ LOCATION_CHOICES = (
     ('1', 'any'),
     ('2', 'Lecture Theatre'),
 )
-class CreateSchedule(forms.ModelForm):
+
+class CreateScheduleForm(forms.ModelForm):
     # if location is LT, then check if time clashes in queryset
-    queryset = NewSchedule.objects.all()
+    queryset = Schedule.objects.all()
 
     lecturer = forms.ModelChoiceField(queryset=User.objects.filter(user_type=usertypes['professor'])) # TODO: change to Professor model in future
     
     class Meta:
-        model = NewSchedule
+        model = Schedule
         fields = '__all__'
         widgets = {'start_time': forms.Select(choices=HOUR_CHOICES),
-        'end_time':forms.Select(choices=HOUR_CHOICES), 'location':forms.Select(choices=LOCATION_CHOICES)
+        'end_time':forms.Select(choices=HOUR_CHOICES), 
+        'location':forms.Select(choices=LOCATION_CHOICES)
         }
 
         # iff lecturer wants to book lt, then check if available.

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
-from .models import NewSchedule
-from .forms import CreateSchedule
+from .models import Schedule
+from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
 from django.http import HttpResponse, Http404
@@ -38,14 +38,14 @@ from django.contrib.auth.decorators import login_required
 def add_schedule(request):
     if request.method == "POST":
         # creates form instance and binds form data to it. request.post contains form data
-        form = CreateSchedule(request.POST)
+        form = CreateScheduleForm(request.POST)
         # check if form is valid
         if form.is_valid():
-            print(NewSchedule.objects.filter(location=2))
+            print(Schedule.objects.filter(location=2))
             print(form.cleaned_data['start_time'],
                   form.cleaned_data['end_time'])
-            if(NewSchedule.objects.filter(location=2)):
-                lectureTheaterBookings = NewSchedule.objects.filter(location=2)
+            if(Schedule.objects.filter(location=2)):
+                lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
 
                 for i in lectureTheaterBookings:
@@ -56,9 +56,9 @@ def add_schedule(request):
             schedule_item = form.save(commit=False)
             schedule_item.save()
     else:  # no post data, resulting in empty form.
-        form = CreateSchedule()
+        form = CreateScheduleForm()
 
-    queryset = NewSchedule.objects.all()
+    queryset = Schedule.objects.all()
     jsonset = serializers.serialize('json', queryset)
     context = {
         'form': form,
