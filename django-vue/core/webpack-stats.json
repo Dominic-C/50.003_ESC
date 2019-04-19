@@ -1,1 +1,1 @@
-{"status":"error","publicPath":"http://localhost:8080/","error":"ModuleNotFoundError","message":"Module not found: Error: Can't resolve 'dayspan' in 'D:\\Github\\50.003_ESC\\django-vue\\core\\src'"}
+{"status":"error","publicPath":"http://localhost:8080/","error":"ModuleNotFoundError","message":"Module not found: Error: Can't resolve 'moment' in 'D:\\Github\\50.003_ESC\\django-vue\\core\\node_modules\\dayspan\\lib'"}

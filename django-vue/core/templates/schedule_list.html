@@ -6,6 +6,10 @@
 
 <script>
 	var tables = {{ jsonset|safe }};
+	var simpleTable = {}
+	for (item in tables){
+		simpleTable[item] = tables[i].fields;
+	}
 </script>
 	{% render_bundle 'app' %}
 			{% comment %} {% for item in object_list %}
