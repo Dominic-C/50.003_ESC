@@ -4,7 +4,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import Vuetify from "vuetify";
 import DaySpanVuetify from "dayspan-vuetify";
-
 import "./plugins/vuetify";
 import * as moment from "moment";
 
@@ -45,6 +44,6 @@ Vue.prototype.$eventHub = new Vue(); // Global event bus
 
 new Vue({
   el: "#app",
+  template: "<App/>",
   components: { App },
-  template: "<App/>"
 });

@@ -1,100 +1,198 @@
 <template>
   <v-container>
-    <!-- <b-button @click="toggleBusy">Toggle Busy State</b-button>
-    <b-table responsive 
-      :busy="isBusy" 
-      :items="items"
-      selectable
-      :select-mode="single"
-      selectedVariant="success">
-      <div slot="table-busy" class="text-center text-danger my-2">
-        <b-spinner class="align-middle"></b-spinner>
-        <strong>Loading...</strong>
-      </div>
-    </b-table> -->
-
-    <!-- <div class="table-responsive  table-hover">
-      <table class="table">
-        <th colspan="3"></th>
-        <td class="bg-primary">...</td>
-        <td class="bg-success">...</td>
-        <td class="bg-warning">...</td>
-        <td class="bg-danger">...</td>
-        <td class="bg-info">...</td>
-      </table>
-    </div>
-   -->
-		<v-data-table
+    <v-data-table
 		:headers="headers"
     :headers-length="6"
 		:items="suggestions"
     item-key="suggestedBy"
 		class="elevation-1"
+    v-if="activeComp.table"
 	>
     <!-- table headers -->
-    <template v-slot:headers="props">
-      <tr class="text-xs-center">
-        <template v-for="prop in props.headers">
-          <th v-if="!prop.children" :key="prop.text" rowspan="2" style="border-bottom: solid 2px grey;">{{ prop.text }}</th>
-          <th v-else :key="prop.text" colspan="3" text-xs-center>{{ prop.text }}</th>
-        </template>
-      </tr>
-      <tr class="text-xs-center">
-        <template v-for="prop in props.headers">
-          <th v-for="child in prop.children" :key="child.text" width="100px">{{ child.text }}</th>
-        </template>
-      </tr>
-    </template>
-
-    <!-- table rows -->
-		<template v-slot:items="props">
-      <tr @click="showCalendar(props)">
-        <td class="text-xs-right">{{ props.item.suggestedBy }}</td>
-        <td class="text-xs-right">{{ props.item.submittedOn }}</td>
-        <td :class="[props.item.locationConflict ? 'red' : '']"></td>
-        <td :class="[props.item.classConflict ? 'red' : '']"></td>
-        <td :class="[props.item.professorConflict ? 'red' : '']"></td>
-        <td class="justify-center align-center layout px-0">
-          <v-icon
-          color="green"
-            @click="approve(props.item)"
-          >
-            check
-          </v-icon>
-          <v-icon
-          color="red"
-            @click="reject(props.item)"
-          >
-            close
-          </v-icon>
-          </td>
-      </tr>
-		</template>
-
-    <!-- Calendar view -->
-    <template v-slot:expand="props">
-      <v-flex class="pa-4" style="height:500px">
-        <finalised-calendar 
-          :events="props.item.conflict" 
-          :calendar="dayCalendar"
-        ></finalised-calendar>
-      </v-flex>
+      <template v-slot:headers="props">
+        <tr class="text-xs-center">
+          <template v-for="prop in props.headers">
+            <th v-if="!prop.children" :key="prop.text" rowspan="2" style="border-bottom: solid 2px grey;">{{ prop.text }}</th>
+            <th v-else :key="prop.text" colspan="3" text-xs-center>{{ prop.text }}</th>
+          </template>
+        </tr>
+        <tr class="text-xs-center">
+          <template v-for="prop in props.headers">
+            <th v-for="child in prop.children" :key="child.text" width="100px">{{ child.text }}</th>
+          </template>
+        </tr>
       </template>
-	</v-data-table>
+
+      <!-- table rows -->
+      <template v-slot:items="props">
+        <tr @click="showCalendar(props)">
+          <td class="text-xs-right">{{ props.item.suggestedBy }}</td>
+          <td class="text-xs-right">{{ props.item.submittedOn }}</td>
+          <td :class="[props.item.locationConflict ? 'red' : '']"></td>
+          <td :class="[props.item.classConflict ? 'red' : '']"></td>
+          <td :class="[props.item.professorConflict ? 'red' : '']"></td>
+          <td class="justify-center align-center layout px-0">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon color="green" v-on="on" @click.stop="approve(props.item)">check</v-icon>
+              </template>
+              <span>Accept Suggestion</span>
+            </v-tooltip>
+            
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon color="red" v-on="on" @click.stop="reject(props.item)">close</v-icon>
+              </template>
+              <span>Reject Suggestion</span>
+            </v-tooltip>
+            
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon v-on="on" @click.stop="goToCalendar(props.item)">visibility</v-icon>
+              </template>
+              <span>View/edit in Calendar</span>
+            </v-tooltip>
+          </td>
+        </tr>
+      </template>
+
+      <!-- Calendar view -->
+      <template v-slot:expand="props">
+        <v-flex class="pa-4" style="height:500px">
+          <app-calendar
+            :events="props.item.conflict"
+            :calendar="dayCalendar"
+            ref="expandedCalendar"
+            username="username"
+            mode="finalised"   
+          >
+            <!-- Suggested by -->
+            <template slot="additionalInfo" slot-scope="{ details }">
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader v-if="details.suggestedBy">Suggested by</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-text-field 
+                    v-if="details.suggestedBy"
+                    single-line hide-details solo flat
+                    disabled
+                    v-model="details.suggestedBy"
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+            </template>
+          </app-calendar>
+        </v-flex>
+      </template>
+    </v-data-table>
+
+    <app-calendar 
+      transition="slide-x-reverse-transition" 
+      v-if="activeComp.calendar" 
+      :events="eventsToShow"
+      :calendar="dayCalendar"
+      :username="username"
+      :isInMode="isEditing"
+      mode="editable"
+      ref="editCalendar"
+    >
+      <template slot="switchModeButton">
+        <v-layout justify-space-between> 
+          <v-btn 
+            color="grey"
+            @click="toggleVisible('table')"
+          >
+            <v-icon dark left>arrow_back</v-icon>Back
+          </v-btn>
+          <v-btn 
+            color="primary"
+            @click="isEditing = !isEditing"
+          >
+            Edit
+          </v-btn>
+        </v-layout>
+      </template>
+
+      <template slot="cancelButton">
+        <v-btn 
+          color="grey"
+          @click="revertState"
+        >
+          Cancel
+        </v-btn>
+      </template>
+
+      <template slot="pushButton">
+        <v-btn 
+          color="primary"
+          @click="pushToDatabase"
+        >
+          Push Edit
+        </v-btn>
+      </template>
+
+      <!-- Edited & Suggested by -->
+      <template slot="additionalInfo" slot-scope="{ details }">
+        <v-layout row>
+          <v-flex xs2>
+            <v-subheader v-if="details.suggestedBy">Suggested by</v-subheader>
+          </v-flex>
+          <v-flex xs10>
+            <v-text-field 
+              v-if="details.suggestedBy"
+              single-line hide-details solo flat
+              disabled
+              v-model="details.suggestedBy"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+
+          <v-layout row>
+            <v-flex xs2>
+              <v-subheader v-if="details.editedBy">Edited by</v-subheader>
+            </v-flex>
+            <v-flex xs10>
+              <v-text-field 
+                v-if="details.editedBy"
+                single-line hide-details solo flat
+                disabled
+                v-model="details.editedBy"
+              ></v-text-field>
+            </v-flex>
+        </v-layout>
+      </template>
+    </app-calendar>
   </v-container>
 </template>
 
 <script>
 import { Calendar, Day } from 'dayspan';
-import FinalisedCalendar from "../components/FinalisedCalendar.vue";
+import AppCalendar from "../components/AppCalendar";
 
 export default {
   name: 'ViewResultsTable',
   components: {
-    FinalisedCalendar
+    AppCalendar
+  },
+  props: {
+    username: {
+      type: String,
+      required: true
+    },
+    possibleConflictingEvents: {
+      type: Array,
+      required: true
+      }
   },
 	data: () => ({
     dayCalendar: Calendar.days(),
+    eventsToShow: [],
+    isEditing: false,
+    activeComp: {
+      table : true,
+      calendar : false,
+    },
 		headers: [
 			{ text: 'Suggested By', value: 'suggestedBy' },
 			{ text: 'Submitted On', value: 'submittedOn' },
@@ -151,7 +249,7 @@ export default {
               "classEnrolled": "F02",
               "calendarType": "Academic",
               "locked": null,
-              "suggestedBy": null,
+              "suggestedBy": "Prof A",
               "requestedBy": null,
               "isSelected": false
             },
@@ -206,8 +304,7 @@ export default {
               "classEnrolled": "F01",
               "calendarType": "Academic",
               "locked": null,
-              "suggestedBy": null,
-              "requestedBy": null,
+              "suggestedBy": "Prof B",
               "isSelected": false
             },
             "schedule": {
@@ -222,22 +319,45 @@ export default {
     ]
   }),
   methods: {
-    approve(){
+    approve(item){
+      //TO CHANGE: update database
       console.log("approved")
     },
-    reject(){
+    reject(item){
+      //TO CHANGE: update database
       console.log("rejected")
     },
     async showCalendar(props){
       props.expanded = !props.expanded;
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
-        this.$eventHub.$emit('view-day', new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
       }
     },
-    callingCalendar(open){
-      this.calendarCreated = open;
-      console.log(this.calendarCreated);
+    async goToCalendar(item){
+      this.toggleVisible('calendar');
+      this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
+      await this.$nextTick(); //waiting for calendar to be rendered
+      this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
+    },
+    toggleVisible : function(item) {
+      this.activeComp.table = false;
+      this.activeComp.calendar = false;
+      if(item == "table"){
+        this.activeComp.table = true;
+      }
+      if(item == "calendar"){
+        this.activeComp.calendar = true;
+      }
+    },
+    revertState(){
+      this.isEditing = false;
+      this.$eventHub.$emit('apply-events');
+    },
+    pushToDatabase(){
+      //TO CHANGE: update database
+      console.log("pushing to database...");
+      this.isEditing = false;
     }
   }
 }

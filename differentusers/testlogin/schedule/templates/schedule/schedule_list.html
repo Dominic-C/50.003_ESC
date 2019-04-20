@@ -8,7 +8,7 @@
 	var tables = {{ jsonset|safe }};
 </script>
 
-	<h3>Schedule List</h3>
+	{% comment %} <h3>Schedule List</h3>
 	<table class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
@@ -20,7 +20,7 @@
 		  	</tr>
 			{% verbatim %}
 			{% endverbatim %}
-			{% comment %} {% for item in object_list %}
+			{% for item in object_list %}
 		    	 
 		    	 <tr>
 					<td>{{ item.title }} </td>
@@ -38,10 +38,10 @@
 				<td></td>
 	    	</tr>
 
-		{% endfor %}{% endcomment %}
+		{% endfor %} {% endcomment %}
 
-	</table>
-<script src="/static/js/{{component}}"></script>
+	{% comment %} </table>
+<script src="/static/js/{{component}}"></script> {% endcomment %}
 
 
 {% endblock %}
