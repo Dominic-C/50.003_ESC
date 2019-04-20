@@ -110,15 +110,25 @@
 				</template>
 			</ds-calendar>
     </div>
+
+		<div>
+			<app-calendar-confirm-dialog :dialog="dialog">
+				<template slot="title"><slot name="title"></slot></template>
+				<template slot="text"><slot name="text"></slot></template>
+				<template slot="noButton"><slot name="noButton"></slot></template>
+				<template slot="yesButton"><slot name="yesButton"></slot></template>
+			</app-calendar-confirm-dialog>
+		</div>
   </div>
 </template>
 
 <script>
 import { Calendar } from 'dayspan';
 import dsCalendar from '../components/DaySpanCalendar.vue';
+import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
 
 export default {
-  name: 'CalendarApp',
+  name: 'AppCalendar',
   props: {
     events: {
       type: Array
@@ -136,14 +146,21 @@ export default {
 		},
 		isInMode: {
 			type: Boolean,
-			default: false
+			default(){
+				return false;
+			} 
 		},
 		calendar: {
 			type: Calendar
+		},
+		dialog: {
+			type: Boolean,
+
 		}
   },
   components: {
-    dsCalendar
+		dsCalendar,
+		AppCalendarConfirmDialog
   },
   data: () => ({
   }),

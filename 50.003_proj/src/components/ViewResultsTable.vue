@@ -179,7 +179,11 @@ export default {
     username: {
       type: String,
       required: true
-    }
+    },
+    possibleConflictingEvents: {
+      type: Array,
+      required: true
+      }
   },
 	data: () => ({
     dayCalendar: Calendar.days(),
@@ -332,7 +336,7 @@ export default {
     },
     async goToCalendar(item){
       this.toggleVisible('calendar');
-      this.eventsToShow = item.conflict;
+      this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
       await this.$nextTick(); //waiting for calendar to be rendered
       this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
     },

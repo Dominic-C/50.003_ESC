@@ -4,6 +4,7 @@
     :events="currentEvents"
     :isInMode="isSuggesting"
     :calendar="calendar"
+    :dialog="dialog"
     mode="suggestible"   
     ref="calendar" 
   >   
@@ -26,7 +27,7 @@
     <template slot="pushButton">
       <v-btn 
         color="primary"
-        @click="pushToDatabase"
+        @click="dialog = true"
       >
         Push Suggestions
       </v-btn>
@@ -58,6 +59,35 @@
         </v-flex>
       </v-layout>
     </template>
+
+    <!-- confirm dialog -->
+    <template slot="title">
+      <v-card-title class="headline">Send suggestions?</v-card-title>
+    </template>
+    <template slot="text">
+      <v-card-text>
+          Push the suggestions you have made to database for the course coordinator to review.
+          Suggestions cannot be edited once sent, but a new suggestion can be made.
+        </v-card-text>
+    </template>
+    <template slot="noButton">
+      <v-btn
+					color="green darken-1"
+					flat="flat"
+					@click="dialog = false"
+				>
+					Cancel
+				</v-btn>
+    </template>
+    <template slot="yesButton">
+      <v-btn
+        color="green darken-1"
+        flat="flat"
+        @click="pushToDatabase"
+      >
+        OK
+      </v-btn>
+    </template>
   </app-calendar>
 </template>
 
@@ -87,7 +117,8 @@ export default {
   },
   data: () => ({
     storeKey: 'suggestableCalendar',
-    isSuggesting: false
+    isSuggesting: false,
+    dialog: false
   }),
   computed: {
     currentEvents(){
@@ -104,6 +135,8 @@ export default {
       let state = this.calendar.toInput(true);
       let json = JSON.stringify(state);
       localStorage.setItem(this.storeKey, json);
+      this.dialog = false;
+      this.isSuggesting = false;
     }
   }  
 }
