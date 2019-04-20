@@ -86,7 +86,7 @@
 
 <script>
 import { Calendar, Day } from 'dayspan';
-import FinalisedCalendar from "../components/FinalisedCalendar";
+import FinalisedCalendar from "../components/FinalisedCalendar.vue";
 
 export default {
   name: 'ViewResultsTable',

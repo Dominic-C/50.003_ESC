@@ -1,1 +1,1 @@
-{"status":"error","publicPath":"http://localhost:8080/","error":"ModuleNotFoundError","message":"Module not found: Error: Can't resolve 'moment' in 'D:\\Github\\50.003_ESC\\django-vue\\core\\node_modules\\dayspan\\lib'"}
+{"status":"done","publicPath":"http://localhost:8080/","chunks":{"app":[{"name":"app.js","publicPath":"http://localhost:8080/app.js","path":"D:\\github-repos\\50.003_ESC\\django-vue\\core\\dist\\app.js"}]}}

@@ -6,13 +6,13 @@ import Vuetify from "vuetify";
 import DaySpanVuetify from "dayspan-vuetify";
 
 import "./plugins/vuetify";
-import * as moment from 'moment';
+import * as moment from "moment";
 
 import "vuetify/dist/vuetify.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import "dayspan-vuetify/dist/lib/dayspan-vuetify.min.css";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
 
@@ -44,7 +44,7 @@ Vue.prototype.$eventHub = new Vue(); // Global event bus
 /* eslint-disable no-new */
 
 new Vue({
-  el: '#app',
+  el: "#app",
   components: { App },
-  template: '<App/>'
-})
+  template: "<App/>"
+});

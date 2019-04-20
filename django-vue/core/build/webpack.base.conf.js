@@ -9,6 +9,7 @@ function resolve(dir) {
 }
 
 let BundleTracker = require("webpack-bundle-tracker");
+let NpmInstallPlugin = require("npm-install-webpack-plugin");
 
 module.exports = {
   context: path.resolve(__dirname, "../"),
@@ -85,5 +86,12 @@ module.exports = {
     tls: "empty",
     child_process: "empty"
   },
-  plugins: [new BundleTracker({ filename: "./webpack-stats.json" })]
+  plugins: [
+    new BundleTracker({ filename: "./webpack-stats.json" }),
+    new NpmInstallPlugin({
+      dev: true,
+      peerDependencies: true,
+      quiet: false
+    })
+  ]
 };
