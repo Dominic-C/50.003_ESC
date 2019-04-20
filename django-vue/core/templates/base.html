@@ -1,4 +1,3 @@
-{% load render_bundle from webpack_loader %}
 {% load static %}<!doctype html>
 <html lang="en">
   <head>
@@ -79,7 +78,7 @@
 
               {% block content %}
               {% endblock %}
-              {% render_bundle 'app' %}
+              {% comment %} {% render_bundle 'app' %} {% endcomment %}
             </div>
           </div>
           <footer>

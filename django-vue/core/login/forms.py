@@ -13,8 +13,6 @@ usertypes = {
     'student' : 5
     }    
 
-
-
 class ProfessorSignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=True)
     last_name = forms.CharField(max_length=50, required=True)
