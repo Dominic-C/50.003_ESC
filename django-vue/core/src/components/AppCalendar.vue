@@ -15,6 +15,7 @@
 				:calendar="calendar" 
 				:suggestible="isSuggestible" 
 				:requestable="isRequestable"
+				:editable="isEditable"
 				:read-only="!isInMode"
 				:username="username"
 				@event-update="updateCalendar"
@@ -22,7 +23,7 @@
 				>
 				<template slot="eventDetailsLocation" slot-scope="{ details }">
 					<!-- Location -->
-						<v-select
+					<v-select
 						single-line solo flat
 						prepend-icon="location_on"
 						label="Add Location"
@@ -81,57 +82,53 @@
 						v-model="details.classEnrolled"
 					></v-text-field>
 
-					<!-- Suggestion by -->
-					<v-text-field 
-						v-if="mode==='suggestible'&& details.suggestedBy"
-						single-line hide-details solo flat
-						prepend-icon="feedback"
-						label="Suggested By"
-						disabled
-						v-model="details.suggestedBy"
-					></v-text-field>
-					
-					<!-- Requested by -->
-					<v-text-field 
-						v-if="mode==='requestable' && details.requestedBy"
-						single-line hide-details solo flat
-						prepend-icon=""
-						label="Requested By"
-						disabled
-						v-model="details.requestedBy"
-					></v-text-field>
-
 					<!-- Status -->
-					<template v-if="mode==='suggestible'">
-						<v-text-field 
-							single-line hide-details solo flat
-							:prepend-icon="details.locked ? 'lock' : 'lock_open'"
-							:label="details.locked ? 'First Draft' : 'Suggested Change'"
-							disabled
-							v-model="details.suggestBy"
-						></v-text-field>
-					</template>
-					<template v-else-if="mode==='requestable'">
-						<v-text-field 
-							single-line hide-details solo flat
-							:prepend-icon="details.locked ? 'lock' : 'lock_open'"
-							:label="details.locked ? 'Current Calendar' : 'Requested Change'"
-							disabled
-							v-model="details.requestedBy"
-						></v-text-field>
-					</template>
+					<slot name="status" v-bind="{ details }"></slot>
+
+					<!-- Suggested/Edited/Requested by -->
+					<slot name="additionalInfo" v-bind="{ details }"></slot>
+				</template>
+
+				<template slot="eventPopover" slot-scope="slotData">
+					<ds-calendar-event-popover
+						v-bind="slotData"
+						:read-only="!isInMode"
+					></ds-calendar-event-popover>
+				</template>
+
+				<template slot="eventTimeTitle" slot-scope="{calendarEvent, details}">
+					<div>
+						<v-icon class="ds-ev-icon"
+							v-if="details.icon"
+							size="14"
+							:style="{color: details.forecolor}">
+							{{ details.icon }}
+						</v-icon>
+						<strong class="ds-ev-title">{{ details.title }}</strong>
+					</div>
+					<div class="ds-ev-description">{{ getCalendarTime( calendarEvent ) }}</div>
 				</template>
 			</ds-calendar>
     </div>
+
+		<div>
+			<app-calendar-confirm-dialog :dialog="dialog">
+				<template slot="title"><slot name="title"></slot></template>
+				<template slot="text"><slot name="text"></slot></template>
+				<template slot="noButton"><slot name="noButton"></slot></template>
+				<template slot="yesButton"><slot name="yesButton"></slot></template>
+			</app-calendar-confirm-dialog>
+		</div>
   </div>
 </template>
 
 <script>
 import { Calendar } from 'dayspan';
 import dsCalendar from '../components/DaySpanCalendar.vue';
+import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
 
 export default {
-  name: 'CalendarApp',
+  name: 'AppCalendar',
   props: {
     events: {
       type: Array
@@ -144,19 +141,26 @@ export default {
       type: String,
       validator: function (value) {
         //check that it is in either suggestible or requestable mode
-        return ['suggestible', 'requestable', 'finalised'].indexOf(value) !== -1
+        return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
       }
 		},
 		isInMode: {
 			type: Boolean,
-			default: false
+			default(){
+				return false;
+			} 
 		},
 		calendar: {
 			type: Calendar
+		},
+		dialog: {
+			type: Boolean,
+
 		}
   },
   components: {
-    dsCalendar
+		dsCalendar,
+		AppCalendarConfirmDialog
   },
   data: () => ({
   }),
@@ -166,15 +170,30 @@ export default {
 		},
 		isRequestable(){
 			return this.mode==="requestable";
+		},
+		isEditable(){
+			return this.mode==="editable";
 		}
   },
   methods: {
     updateCalendar(event){
       this.$eventHub.$emit('event-update', event);
     },
-		viewDay(day){
-			this.$refs.calendar.viewDay(day);
-		}
+		getCalendarTime(calendarEvent){
+      let sa = calendarEvent.start.format('a');
+      let ea = calendarEvent.end.format('a');
+      let sh = calendarEvent.start.format('h');
+      let eh = calendarEvent.end.format('h');
+      if (calendarEvent.start.minute !== 0)
+      {
+        sh += calendarEvent.start.format(':mm');
+      }
+      if (calendarEvent.end.minute !== 0)
+      {
+        eh += calendarEvent.end.format(':mm');
+      }
+      return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
+    }
   }  
 }
 </script>
