@@ -336,10 +336,9 @@ export default {
     },
     async goToCalendar(item){
       this.toggleVisible('calendar');
-      this.$emit("view-conflicts", item);
-      await this.$nextTick();
+      this.$emit("view-conflicts", item); 
+      await this.$nextTick(); //waiting for possible conflicting events to be calculated
       this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
-      await this.$nextTick(); //waiting for calendar to be rendered
       this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
     },
     toggleVisible : function(item) {
