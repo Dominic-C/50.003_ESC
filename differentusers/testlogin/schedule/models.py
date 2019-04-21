@@ -29,6 +29,7 @@ class Schedule(models.Model):
     location = models.CharField(max_length=50)
     isEvent = models.BooleanField(default=False)
     initiatedBy = models.IntegerField()
+    isConflicting = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
