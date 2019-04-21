@@ -79,7 +79,11 @@
               
               {% block content %}
               {% endblock %}
-              {% render_bundle 'app' %}
+
+            <!-- PLEASE NOTE: THIS IS 'HARD CODED'-->
+              {% if request.path == "/schedule/" %}
+                {% render_bundle 'app' %}
+              {% endif %}
             </div>
           </div>
           <footer>

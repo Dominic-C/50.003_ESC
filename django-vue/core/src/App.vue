@@ -48,7 +48,7 @@ export default {
   data: () => ({
     coloursUsed: [],
     modifiableCalendarEvent: { locked: [], modifiable: [] },
-    username: "",
+    username: "user",
     calendarEventTable: [
       {
         "data": {
