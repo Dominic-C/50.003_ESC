@@ -26,7 +26,11 @@
           :username="username"
           @revert-state="revertState"
           v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
-        <view-results-table  :username="username" v-if="activeComp.viewSuggestions"></view-results-table>
+        <view-results-table  
+            :username="username" 
+            :possibleConflictingEvents="possibleConflictingEvents"
+            @view-conflicts="updateConflicts"
+            v-if="activeComp.viewSuggestions"></view-results-table>
       </v-content>
     </v-app>
   </div>
@@ -51,6 +55,7 @@ export default {
   data: () => ({
     coloursUsed: [],
     modifiableCalendarEvent: {locked:[], modifiable:[]},
+    possibleConflictingEvents: [],
     username: "username", //TO CHANGE: replace with username
     //TO CHANGE: get from database (main table)
     //main database table
@@ -757,6 +762,57 @@ export default {
         if (event.data.id === this.modifiableCalendarEvent.modifiable[index].data.id){
           const updatedEventData = {...this.modifiableCalendarEvent.modifiable[index].data, ...event.data };
           this.modifiableCalendarEvent.modifiable[index] = {data: updatedEventData, schedule: event.schedule};
+        }
+      }
+    },
+    updateConflicts(item){
+      this.possibleConflictingEvents = [];
+      if (item.locationConflict){
+        for (var lessonLocation of this.calendarEventTable){
+        //TO CHANGE: hardcoding change--to change in database
+          const location = item.conflict[0].data.location;
+          outer_block:{
+            if (lessonLocation.data.location === location){
+              for (var conflictLessonLocation of item.conflict){
+                if (conflictLessonLocation.data.id === lessonLocation.data.id){
+                  break outer_block;  //continue checking other lessons
+                }
+              }      
+              this.possibleConflictingEvents.push(lessonLocation);
+            }
+          }
+        }
+      }
+      if (item.classConflict){
+        //TO CHANGE: hardcoding change--to change in database
+        for (var lessonClass of this.calendarEventTable){
+          const classEnrolled = item.conflict[0].data.classEnrolled;
+          outer_block:{
+            if (lessonClass.data.classEnrolled === classEnrolled){
+              for (var conflictLessonClass of item.conflict){
+                if (conflictLessonClass.data.id === lessonClass.data.id){
+                  break outer_block;  //continue checking other lessons
+                }
+              }     
+              this.possibleConflictingEvents.push(lessonClass);
+            }
+          }
+        }
+      }
+      if (this.professorConflict){
+        //TO CHANGE: hardcoding change--to change in database
+        for (var lessonProf of this.calendarEventTable){
+          const professor = item.conflict[0].data.professor;
+          outer_block:{
+            if (lessonProf.data.professor === professor){
+              for (var conflictLessonProf of item.conflict){
+                if (conflictLessonProf.data.id === lessonProf.data.id){
+                  break outer_block;  //continue checking other lessons
+                }
+              }      
+              this.possibleConflictingEvents.push(lessonProf);
+            }
+          }
         }
       }
     }

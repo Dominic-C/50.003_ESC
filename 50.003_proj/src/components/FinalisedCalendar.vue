@@ -4,8 +4,7 @@
     :calendar="calendar"
     username="Guest"
     mode="finalised"   
-  >
-  </app-calendar>
+  ></app-calendar>
 </template>
 
 <script>
