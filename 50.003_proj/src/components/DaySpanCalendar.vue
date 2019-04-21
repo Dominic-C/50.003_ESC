@@ -407,7 +407,7 @@ export default {
       }
       let eventDialog = this.$refs.eventDialog;
       eventDialog.edit(calendarEvent);
-      this.eventLocked = calendarEvent.data.locked;
+      this.eventLocked = calendarEvent.data.readonly;
     },
     editPlaceholder(createEdit)
     {
@@ -430,15 +430,15 @@ export default {
       calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggestible mode
+        //fill in suggestedBy and readonly status by default for suggestible mode
         if (this.suggestible){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, locked: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, readonly: false});
         } 
         else if (this.requestable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {requestedBy: this.username, locked: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {requestedBy: this.username, readonly: false});
         }
         else if (this.editable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {editedBy: this.username, locked: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {editedBy: this.username, readonly: false});
         }
         else {
           eventDialog.add(day);
@@ -459,15 +459,15 @@ export default {
       calendar.addPlaceholder( at, false, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggestible mode
+        //fill in suggestedBy and readonly status by default for suggestible mode
         if (this.suggestible){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy: this.username, locked: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy: this.username, readonly: false});
         } 
         else if (this.requestable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, locked: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, readonly: false});
         }
         else if (this.editable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, locked: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false});
         }  
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
@@ -496,15 +496,15 @@ export default {
       calendar && calendar.addPlaceholder( day, true, useDialog );
       if (useDialog)
       {
-        //fill in suggestedBy and locked status by default for suggestible mode
+        //fill in suggestedBy and readonly status by default for suggestible mode
         if (this.suggestible){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, locked: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, readonly: false});
         } 
         else if (this.requestable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, locked: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, readonly: false});
         } 
         else if (this.editable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, locked: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false});
         } 
         else {
           eventDialog.add( day );
@@ -536,9 +536,9 @@ export default {
     },
     handleMove(moveEvent)
     {
-      //if suggestible and event chosen is locked, no action is taken
-      //moveEvent.calendarEvent.event.data.locked
-      if ((this.suggestible || this.requestable || this.editable) && moveEvent.calendarEvent.event.data.locked){
+      //if suggestible and event chosen is readonly, no action is taken
+      //moveEvent.calendarEvent.event.data.readonly
+      if ((this.suggestible || this.requestable || this.editable) && moveEvent.calendarEvent.event.data.readonly){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;

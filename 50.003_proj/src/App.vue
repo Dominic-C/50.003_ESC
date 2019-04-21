@@ -71,7 +71,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -94,7 +94,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -117,7 +117,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -140,7 +140,7 @@ export default {
           "professor": "Sudipta",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -163,7 +163,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -186,7 +186,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -209,7 +209,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -232,7 +232,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -255,7 +255,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -278,7 +278,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -301,7 +301,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -324,7 +324,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -347,7 +347,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -370,7 +370,7 @@ export default {
           "professor": "Sun Jun",
           "classEnrolled": "F01",
           "calendarType": "Academic",
-          "locked": null,
+          "readonly": null,
           "suggestedBy": null,
           "requestedBy": null,
           "isSelected": false
@@ -727,12 +727,12 @@ export default {
           if (e.isSelected === true && lesson.data.calendarType === 'Academic'){
             //updating modifiable
             var modifiableEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
-            modifiableEvent.data.locked = false;
+            modifiableEvent.data.readonly = false;
             modifiableEvent.data.suggestedBy = this.username;
             modifiableEvent.data.requestedBy = this.username; 
             this.modifiableCalendarEvent.modifiable.push(modifiableEvent);
             var lockedEvent = JSON.parse(JSON.stringify(lesson)); //copying event object
-            lockedEvent.data.locked = true;
+            lockedEvent.data.readonly = true;
             lockedEvent.data.color = "#EBEBE4";
             this.modifiableCalendarEvent.locked.push(lockedEvent);
           }
@@ -751,7 +751,7 @@ export default {
     revertState(){
       for (let index = 0; index < this.modifiableCalendarEvent.locked.length; index ++){
         var event = JSON.parse(JSON.stringify(this.modifiableCalendarEvent.locked[index]));
-        event.data.locked = false;
+        event.data.readonly = false;
         event.data.color = this.modifiableCalendarEvent.modifiable[index].data.color;
         this.modifiableCalendarEvent.modifiable[index] = event; 
       }

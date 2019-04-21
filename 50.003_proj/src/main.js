@@ -20,11 +20,23 @@ Vue.use(DaySpanVuetify, {
       busy: false,
       icon: false,
       calendar: false
+      },
+      defaults: {
+        dsCalendarEventPopover: {
+          allowEditOnReadOnly: false
+        },
+        dsEventDialog: {
+          dialogProps: {
+            persistent: false,
+            lazy: true,
+            maxWidth: '800px'
+          }
+        }
+      }
+    },
+    methods: {
+      getDefaultEventColor: () => "#1976d2"
     }
-  },
-  methods: {
-    getDefaultEventColor: () => "#1976d2"
-  }
 });
 
 Vue.prototype.$calendarTypes = ["Academic", "Events"];
