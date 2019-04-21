@@ -1,3 +1,4 @@
+{% load render_bundle from webpack_loader %}
 {% load static %}<!doctype html>
 <html lang="en">
   <head>
@@ -9,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/fontello-2f186091/css/fontello.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> {% endcomment %}
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
   </head>
@@ -75,10 +76,14 @@
                   </button>
                 </div>
               {% endfor %}
-
+              
               {% block content %}
               {% endblock %}
-              {% comment %} {% render_bundle 'app' %} {% endcomment %}
+
+            <!-- PLEASE NOTE: THIS IS 'HARD CODED'-->
+              {% if request.path == "/schedule/" %}
+                {% render_bundle 'app' %}
+              {% endif %}
             </div>
           </div>
           <footer>

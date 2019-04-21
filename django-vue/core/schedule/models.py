@@ -10,7 +10,7 @@ class Schedule(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField(("Date"), default=datetime.date.today)
     start_time = models.TimeField()
-    end_time = models.TimeField()
+    eventDuration = models.IntegerField(default=0)
     lecturer = models.CharField(max_length=50)
     classEnrolled = models.CharField(max_length=4, default="None")
     location = models.CharField(max_length=50)
