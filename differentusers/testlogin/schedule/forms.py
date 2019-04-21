@@ -30,5 +30,14 @@ class CreateScheduleForm(forms.ModelForm):
         'end_time':forms.Select(choices=HOUR_CHOICES), 
         'location':forms.Select(choices=LOCATION_CHOICES)
         }
+    
+    def save(self, commit=True, conflict=0):
+        m = super(CreateScheduleForm, self).save(commit=False)
+        # do custom stuff
+        if conflict == 1:
+            m.isConflicting = True
+        if commit:
+            m.save()
+        return m
 
         # iff lecturer wants to book lt, then check if available.
