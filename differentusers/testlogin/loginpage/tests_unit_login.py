@@ -1,7 +1,7 @@
 from django.test import TestCase, LiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
-from login.models import Student, User, Preferences
-from login.forms import ProfessorSignUpForm, SubmitCourseDetails, StudentSignUpForm
+from loginpage.models import Student, User, Preferences
+from loginpage.forms import ProfessorSignUpForm, SubmitCourseDetails, StudentSignUpForm
 from django.urls import reverse, reverse_lazy
 
 usertypes = { 
@@ -892,7 +892,7 @@ class PhasePermissionTests(TestCase):
         response = self.client.get(reverse("planners:nextphase"))
         response = self.client.get(reverse("planners:nextphase"))
 
-        # assert that phase is 2 now
+        # assert that phase is 3 now
         self.__class__.user.refresh_from_db()
         self.assertEqual(self.__class__.user.phase, 3)
 
@@ -906,7 +906,62 @@ class PhasePermissionTests(TestCase):
         # check that it returns 403: forbidden
         self.assertContains(response, 'Forbidden')
         response = self.client.get(reverse('professors:submitdetails'), follow=True)
-        # check that it returns 403: forbidden
+        # check that it returns status code 200
         self.assertEqual(response.status_code, 200)
     
 
+class RevertPhaseTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        cls.user = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Bob", last_name="Lee",
+            username="planner", password="sutd1234")
+
+    def test_revert_phase(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:nextphase"))
+
+        # assert that phase is 3 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 3)
+
+        # revert phase to phase 1
+        response = self.client.get(reverse("planners:revert"))
+        self.__class__.user.refresh_from_db()
+
+        # assert that phase is 1 now
+        self.assertEqual(self.__class__.user.phase, 1)
+
+    def test_revert_phase_phase_1(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+
+        # try to revert
+        response = self.client.get(reverse("planners:revert"), follow=True)
+        # check that it returns 403: forbidden
+        self.assertContains(response, 'Forbidden')
+        logout = self.client.logout()
+
+    def test_revert_phase_phase_2(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+
+        # assert that phase is 2 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 2)
+
+        # try to revert
+        response = self.client.get(reverse("planners:revert"), follow=True)
+
+        # check that it returns 403: forbidden
+        self.assertContains(response, 'Forbidden')
+        logout = self.client.logout()

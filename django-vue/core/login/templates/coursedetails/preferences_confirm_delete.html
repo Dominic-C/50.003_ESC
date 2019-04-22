@@ -8,7 +8,8 @@
 {% block content %}
 
 	<form method="post">{% csrf_token %}
-	    <p>Are you sure you want to delete "{{ object }}"?</p>
+	    <p>Are you sure you want to delete the record <b>{{ object }}</b>?</p>
+	     <a class="btn btn-secondary" href="{% url 'professors:details'  %}" role="button">Cancel</a>
 	    <input type="submit" class="btn btn-danger" value="Confirm">
 	</form>
 

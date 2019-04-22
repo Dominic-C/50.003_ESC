@@ -18,13 +18,13 @@ class PreferencesModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         cls.user = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
-        	username="bob", password="sutd1234")
+            username="bob", password="sutd1234")
         cls.pref = Preferences.objects.create(created_by=cls.user, first_name=cls.user.first_name, 
-        	last_name=cls.user.last_name, user_type=cls.user.user_type, subject_code="50.005", 
-        	subject_name="CSE", cohort_size=50, cohort_num=9)
+            last_name=cls.user.last_name, user_type=cls.user.user_type, subject_code="50.005", 
+            subject_name="CSE", cohort_size=50, cohort_num=9)
 
     def test_preferences_str(self):
-    	self.assertEqual(str(self.pref), "Bob Lee: 50.005 CSE | 50 x 9")
+        self.assertEqual(str(self.pref), "Bob Lee: 50.005 CSE | 50 x 9")
 
 
 class StudentModelTest(TestCase):
@@ -32,11 +32,11 @@ class StudentModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         cls.user = User.objects.create_user(user_type=usertypes['student'], first_name="Barry", last_name="Allen",
-        	username="barry", password="sutd1234")
+            username="barry", password="sutd1234")
         cls.student = Student.objects.create(user=cls.user)
 
     def test_student_str(self):
-    	self.assertEqual(str(self.student), "barry")
+        self.assertEqual(str(self.student), "barry")
 
 class PreferencesFormTest(TestCase):
     def test_preferences_form_label(self):
@@ -48,33 +48,33 @@ class PreferencesFormTest(TestCase):
         
     
     def test_preferences_form_empty_cohortnum_field(self):
-    	form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
-    		'cohort_size': 50}) 
-    	self.assertFalse(form.is_valid())
+        form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
+            'cohort_size': 50}) 
+        self.assertFalse(form.is_valid())
 
     def test_preferences_form_empty_cohortsize_field(self):
-    	form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
-    		'cohort_num': 10}) 
-    	self.assertFalse(form.is_valid())
+        form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
+            'cohort_num': 10}) 
+        self.assertFalse(form.is_valid())
 
     def test_preferences_form_empty_subjectcode_field(self):
-    	form = SubmitCourseDetails(data={'subject_name' : "CSE", 'cohort_num': 10,
-    		'cohort_size': 50}) 
-    	self.assertFalse(form.is_valid())
+        form = SubmitCourseDetails(data={'subject_name' : "CSE", 'cohort_num': 10,
+            'cohort_size': 50}) 
+        self.assertFalse(form.is_valid())
 
     def test_preferences_form_empty_subjectname_field(self):
-    	form = SubmitCourseDetails(data={'subject_code': "50.005",'cohort_size': 50 ,
-    		'cohort_num': 10}) 
-    	self.assertFalse(form.is_valid())
+        form = SubmitCourseDetails(data={'subject_code': "50.005",'cohort_size': 50 ,
+            'cohort_num': 10}) 
+        self.assertFalse(form.is_valid())
 
     def test_preferences_form_valid(self):
-    	user = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
-        	username="bob", password="sutd1234")
-    	form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
-    		'cohort_size': 50, 'cohort_num': 9, 'created_by': user, 'first_name':user.first_name,
-    		'last_name': user.last_name, 'user_type':user.user_type}) 
+        user = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
+            username="bob", password="sutd1234")
+        form = SubmitCourseDetails(data={'subject_code': "50.005", 'subject_name' : "CSE",
+            'cohort_size': 50, 'cohort_num': 9, 'created_by': user, 'first_name':user.first_name,
+            'last_name': user.last_name, 'user_type':user.user_type}) 
 
-    	self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid())
 
 
 class HomePageTests(TestCase):
@@ -94,10 +94,10 @@ class PermissionTests(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         cls.profuser = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
-        	username="prof", password="sutd1234")
+            username="prof", password="sutd1234")
         cls.pref = Preferences.objects.create(created_by=cls.profuser, first_name=cls.profuser.first_name, 
-        	last_name=cls.profuser.last_name, user_type=cls.profuser.user_type, subject_code="50.005", 
-        	subject_name="CSE", cohort_size=50, cohort_num=9)
+            last_name=cls.profuser.last_name, user_type=cls.profuser.user_type, subject_code="50.005", 
+            subject_name="CSE", cohort_size=50, cohort_num=9)
         cls.studentuser = User.objects.create_user(user_type=usertypes['student'], first_name="Barry", last_name="Lee",
             username="student", password="sutd1234")
         cls.coorduser = User.objects.create_user(user_type=usertypes['coursecoordinators'], first_name="Babby", last_name="Lee",
@@ -109,7 +109,7 @@ class PermissionTests(TestCase):
 # Tests -- Nobody Logged in
 #===========================
 
-	# students/
+    # students/
     def test_student_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('students:student_main'))
         # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
@@ -892,7 +892,7 @@ class PhasePermissionTests(TestCase):
         response = self.client.get(reverse("planners:nextphase"))
         response = self.client.get(reverse("planners:nextphase"))
 
-        # assert that phase is 2 now
+        # assert that phase is 3 now
         self.__class__.user.refresh_from_db()
         self.assertEqual(self.__class__.user.phase, 3)
 
@@ -906,7 +906,62 @@ class PhasePermissionTests(TestCase):
         # check that it returns 403: forbidden
         self.assertContains(response, 'Forbidden')
         response = self.client.get(reverse('professors:submitdetails'), follow=True)
-        # check that it returns 403: forbidden
+        # check that it returns status code 200
         self.assertEqual(response.status_code, 200)
     
 
+class RevertPhaseTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        cls.user = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Bob", last_name="Lee",
+            username="planner", password="sutd1234")
+
+    def test_revert_phase(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+        response = self.client.get(reverse("planners:nextphase"))
+
+        # assert that phase is 3 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 3)
+
+        # revert phase to phase 1
+        response = self.client.get(reverse("planners:revert"))
+        self.__class__.user.refresh_from_db()
+
+        # assert that phase is 1 now
+        self.assertEqual(self.__class__.user.phase, 1)
+
+    def test_revert_phase_phase_1(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+
+        # try to revert
+        response = self.client.get(reverse("planners:revert"), follow=True)
+        # check that it returns 403: forbidden
+        self.assertContains(response, 'Forbidden')
+        logout = self.client.logout()
+
+    def test_revert_phase_phase_2(self):
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 1)
+        # log the planner in to gain access
+        login = self.client.login(username='planner', password='sutd1234')
+        response = self.client.get(reverse("planners:nextphase"))
+
+        # assert that phase is 2 now
+        self.__class__.user.refresh_from_db()
+        self.assertEqual(self.__class__.user.phase, 2)
+
+        # try to revert
+        response = self.client.get(reverse("planners:revert"), follow=True)
+
+        # check that it returns 403: forbidden
+        self.assertContains(response, 'Forbidden')
+        logout = self.client.logout()

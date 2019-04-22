@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 
 from ..serializers import PreferencesSerializer
-from ..decorators import planner_required
+from ..decorators import planner_required, finalisation_required
 from ..forms import PlannerSignUpForm
 from ..models import User, Preferences, Lesson
 
@@ -119,6 +119,22 @@ class PreviousPhase(View):
         # to reset
         # User.objects.all().update(phase=1)
         return redirect('planners:currentphase')
+
+@method_decorator([login_required, planner_required, finalisation_required], name='dispatch')
+class RevertToPhase1(View):
+
+    def get(self, request, *args, **kwargs):
+        # delete all Preferences objects
+        Preferences.objects.filter(first_name="Parry").delete()
+        # delete all Lessons objects
+        #  !!!!!!!
+
+        current_phase = self.request.user.phase
+        # rever phase to phase 1
+        if (current_phase == 3 ):
+            User.objects.all().update(phase=1)
+        return redirect('planners:currentphase')
+
 
 
 @login_required

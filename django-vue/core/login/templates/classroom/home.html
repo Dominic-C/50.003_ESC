@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Welcome</h2>
-  <p class="lead">
-    If you already have an account, go ahead and <a href="{% url 'login' %}">log in</a>. If you are new, get started
-    by creating a <a href="{% url 'signup' %}">account</a>.
-  </p>
-  <hr>
-  <h3>About</h3>
+  <h2>Welcome to SUTDCalendar</h2>
   <p>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae corporis officia possimus? Reiciendis ipsam quos nostrum delectus, veritatis hic tenetur, vero blanditiis optio dolore perferendis natus consequuntur dignissimos atque expedita ut quo nobis explicabo consequatur animi ratione quaerat ad qui. Delectus velit excepturi quasi similique voluptates cupiditate aliquam accusamus consectetur expedita quidem doloremque praesentium, fugit odit deleniti deserunt repellendus illo voluptatum dolore neque ipsa a tempora dignissimos animi consequatur nam! Impedit repellendus, non natus vel dolore nobis consequatur similique excepturi!
+    SUTDCalendar is a secure gateway that assists timetabling processes by providing an efficient means to deconflict timetable clashes and to easily visually identify timetable clashes. It also provides a convenient tool by which you may easily stage your timetable planning phases, allowing planners full control over the process and reducing the amount of manual labour required in deconflicting what is oftentimes a messy, multi-dimensional problem.
+    <br><br>
+    <i>Be done with tomorrow's planning, today!</i>
   </p>
+  
+  <hr>
+
+  <p>
+    If you already have an account, click <a href="{% url 'login' %}">here to log in</a>.
+  </p>
+
+<!--   <hr>
+  <h3>About</h3>
+  <p class="lead">
+    If you already have an account, click <a href="{% url 'login' %}">here to log in</a>.
+  </p> -->
+  
 {% endblock %}
