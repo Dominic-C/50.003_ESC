@@ -667,7 +667,7 @@ export default {
         var tempschedule = {};
         tempdata["courseName"] = simpleTable[i].course_Name;
         tempdata["pillar"] = simpleTable[i].pillar_Type;
-        tempdata["id"] = simpleTable[i].schedule_ID;
+        tempdata["id"] = i;
         tempdata["eventName"] = simpleTable[i].event_Name;
         tempdata["color"] = "#1976d2";
         tempdata["location"] = simpleTable[i].location;
