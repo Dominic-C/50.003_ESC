@@ -545,7 +545,6 @@ export default {
             if (!this.coloursMap.get(e.item)) {
               const colour = this.getColour();
               this.coloursMap.set(e.item, colour);
-              console.log(colour)
             }
             lesson.data.color = this.coloursMap.get(e.item);
           }

@@ -140,6 +140,11 @@ export default {
       }
     }
   },
+  destroyed() {
+    for (var item of this.itemsSelected){
+      this.$emit('selected-search-item', {item: item, searchCategory: this.searchCategory, isSelected: false});
+    }
+  },
   methods: {
     remove (item) {
       const index = this.itemsSelected.indexOf(item)
