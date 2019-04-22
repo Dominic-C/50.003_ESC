@@ -11,6 +11,7 @@ To run the unit tests,
 ```$ python manage.py test --pattern="tests_unit*.py```
 
 ### System Tests
+- Make sure you have Selenium installed, try ```$ pip install selenium```
 - Run ```TestLogin.java```
 - Run ```$ python manage.py test --pattern="tests_selenium.py"```
 
