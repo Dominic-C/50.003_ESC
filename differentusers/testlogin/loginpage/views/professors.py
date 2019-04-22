@@ -77,15 +77,6 @@ class DetailsListView(ListView):
         # returns Preferences submited by the current User
         return Preferences.objects.filter(created_by=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super(DetailsListView, self).get_context_data(**kwargs)
-        qs = Preferences.objects.filter(created_by=self.request.user)
-        qs_json = serializers.serialize('json', qs)
-        context['json_list'] = qs_json
-        context['component'] = "course-details-app.js"
-        context['errorCatch'] = "errorCatch.js"
-        return context
-
 
 @method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
 class DetailsEditView(UpdateView):
@@ -111,8 +102,9 @@ class DetailsEditView(UpdateView):
 @method_decorator([login_required, professor_required, beforefirstdraft_required], name='dispatch')
 class DetailsDeleteView(DeleteView):
     model = Preferences
+    template_name = 'coursedetails/preferences_confirm_delete.html'
 
-    def get_success_url():
+    def get_success_url(self):
         return reverse('professors:details')
 
 
