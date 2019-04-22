@@ -4,8 +4,7 @@
     :calendar="calendar"
     username="Guest"
     mode="finalised"   
-  >
-  </app-calendar>
+  ></app-calendar>
 </template>
 
 <script>
@@ -25,7 +24,7 @@ export default {
     components: {
       AppCalendar
     },
-    data: vm => ({
+    data: () => ({
     })
 }
 </script>

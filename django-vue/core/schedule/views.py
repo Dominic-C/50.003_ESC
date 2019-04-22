@@ -9,13 +9,18 @@ from login.decorators import professor_required, drafting_required, beforefirstd
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+
 class ScheduleCreateView(CreateView):
     model = Schedule
     template_name = "schedule/schedule_create.html"
     fields = '__all__'
+
     def form_valid(self, form):
         form.save()
         return redirect('schedule:list')
+
+
 class ScheduleListView(ListView):
     model = Schedule
     template_name = "schedule/schedule_list.html"
@@ -27,6 +32,7 @@ class ScheduleListView(ListView):
         queryset = Schedule.objects.all()
         context['jsonset'] = serializers.serialize("json", queryset)
         return context
+
 
 @professor_required
 @login_required
@@ -47,6 +53,8 @@ def add_schedule(request):
                 for i in lectureTheaterBookings:
                     if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
+                        schedule_item = form.save(commit=False, conflict=1)
+                        schedule_item.save()
                         raise Http404('time conflict')
 
             schedule_item = form.save(commit=False)

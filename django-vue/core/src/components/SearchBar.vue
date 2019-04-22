@@ -1,67 +1,58 @@
 <template>
-  <!-- <v-form @submit.prevent> -->
-    <v-container fluid class="pa-4 pb-0">
-      <v-layout wrap>
-        <v-flex xs12>
-          <v-autocomplete
-            v-model="itemsSelected"
-            :items="searchTable[searchCategory]"
-            item-value="searchText"
-            chips
-            label="Search for courses/classes/professors/locations to add"
-            multiple
-            clearable
-            no-data-text="No such name"
-            :disabled="!categoryHasBeenChosen"
-          >
-            <!-- how selected items should be rendered -->
-            <template v-slot:selection="data">
-              <v-chip
-                close
-                class="chip--select-multi"
-                @input="remove(data.item.searchText)"
-              >
-                <v-icon 
-                  v-if="searchCategory!=='location'" 
-                  :color="pillarColours[data.item.pillar]"
-                  class="headline font-weight-heavy white--text" 
-                  left>
-                    {{ data.item.pillar.substring(0, 2) }}
-                  </v-icon>
-                <span v-text="data.item.searchText"></span>
-              </v-chip>
-            </template>
+  <v-container fluid class="pa-4 pb-0">
+    <v-layout wrap>
+      <v-flex xs12>
+        <v-autocomplete
+          v-model="itemsSelected"
+          :items="searchTable[searchCategory]"
+          item-text="searchText"
+          chips
+          label="Search for courses/classes/professors/locations to add"
+          multiple
+          clearable
+          no-data-text="No such name"
+          :disabled="!categoryHasBeenChosen"
+        >
+          <!-- how selected items should be rendered -->
+          <template v-slot:selection="data">
+            <v-chip
+              close
+              class="chip--select-multi"
+              @input="remove(data.item.searchText)"
+            >
+              <span v-text="data.item.searchText"></span>
+            </v-chip>
+          </template>
 
-            <!-- how list of searchable items should be rendered -->
-            <template v-slot:item="data">
-              <v-list-tile-avatar
+          <!-- how list of searchable items should be rendered -->
+          <template v-slot:item="data">
+            <v-list-tile-avatar
+              v-if="searchCategory!=='location'" 
+              :color="pillarColours[data.item.pillar]"
+              class="headline font-weight-light white--text"
+            >
+              {{ data.item.pillar.substring(0, 2) }}
+            </v-list-tile-avatar>
+            <v-list-tile-content @click="updateCalendar(data.item.searchText)">
+              <v-list-tile-title v-text="data.item.searchText"></v-list-tile-title>
+              <v-list-tile-sub-title 
                 v-if="searchCategory!=='location'" 
-                :color="pillarColours[data.item.pillar]"
-                class="headline font-weight-light white--text"
-              >
-                {{ data.item.pillar.substring(0, 2) }}
-              </v-list-tile-avatar>
-              <v-list-tile-content @click="updateCalendar(data.item.searchText)">
-                <v-list-tile-title v-text="data.item.searchText"></v-list-tile-title>
-                <v-list-tile-sub-title 
-                  v-if="searchCategory!=='location'" 
-                  v-html="data.item.pillar">
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </template>
-          </v-autocomplete>
+                v-html="data.item.pillar">
+              </v-list-tile-sub-title>
+            </v-list-tile-content>
+          </template>
+        </v-autocomplete>
 
-          <!-- choosing search category -->
-          <v-select
-            single-line solo flat
-            label="Search Category"
-            :items="searchCategories"
-            v-model="searchCategory">
-          </v-select>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  <!-- </v-form> -->
+        <!-- choosing search category -->
+        <v-select
+          single-line solo flat
+          label="Search Category"
+          :items="searchCategories"
+          v-model="searchCategory">
+        </v-select>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

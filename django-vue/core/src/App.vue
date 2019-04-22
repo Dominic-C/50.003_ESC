@@ -683,7 +683,7 @@ export default {
         tempschedule["dayOfWeek"] = simpleTable[i].dayOfWeek;
         tempschedule["times"] = simpleTable[i].start_time;
         tempschedule["duration"] = simpleTable[i].eventDuration;
-        tempschedule["durationType"] = "minutes";
+        tempschedule["durationUnit"] = "minutes";
 
         var pair = {
           data: tempdata,
