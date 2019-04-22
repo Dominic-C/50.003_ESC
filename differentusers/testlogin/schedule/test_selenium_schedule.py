@@ -90,6 +90,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.implicitly_wait(10)
         self.selenium.find_element_by_xpath('//a[@href="/schedule/testingdropdown"]').click()
 
+        # create handlers for fields
         title = self.selenium.find_element_by_name("title")
         pillarType = self.selenium.find_element_by_name("pillarType")
         scheduleID = self.selenium.find_element_by_name("scheduleID")
@@ -98,13 +99,16 @@ class MySeleniumTests(StaticLiveServerTestCase):
         description = self.selenium.find_element_by_name("description")
         date = self.selenium.find_element_by_name("date")
         date.clear()
+        classEnrolled = self.selenium.find_element_by_name("classEnrolled")
+        initiatedBy = self.selenium.find_element_by_name("initiatedBy")
 
-
+        # send keys to handlers
         title.send_keys("50.003 Elements of Software Construction")
         pillarType.send_keys("ISTD")
         scheduleID.send_keys("1000")
         description.send_keys("Elements of software Construction is a term 5 module")
         date.send_keys("2019-03-21")
+        EventName.send_keys("Lecture")
 
         select_start = Select(self.selenium.find_element_by_id('id_start_time'))
         select_start.select_by_visible_text("09:00")
@@ -115,22 +119,15 @@ class MySeleniumTests(StaticLiveServerTestCase):
         select_lecturer = Select(self.selenium.find_element_by_id('id_lecturer'))
         select_lecturer.select_by_value('1')
 
+        # select LT
+        select_lecturer = Select(self.selenium.find_element_by_id('id_location'))
+        select_lecturer.select_by_value('2')
 
+        classEnrolled.send_keys("F01")
 
+        initiatedBy.send_keys("010") # should ideally be primary key of lecturer
 
-
-
-        
-
-        # Planner - Logout
-        # logout = self.client.logout()
-
-
-        # Log Professor user in
-        # login = self.client.login(username='bob', password='sutd1234')
-        
-
-        time.sleep(5)
+        self.selenium.find_element_by_xpath("//input[@type='submit']").click()
 
         
     
