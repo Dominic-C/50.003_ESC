@@ -54,6 +54,7 @@ export default {
   name: 'app',
   data: () => ({
     coloursUsed: [],
+    coloursMap: new Map(),
     modifiableCalendarEvent: {locked:[], modifiable:[]},
     possibleConflictingEvents: [],
     username: "username", //TO CHANGE: replace with username
@@ -66,7 +67,7 @@ export default {
           "pillar": "ISTD",
           "id": "001",
           "title": "50.003 Tutorial",
-          "color": "#1976d2",
+          "color": null,
           "location": "2.501",
           "professor": "Sun Jun",
           "classEnrolled": "F01",
@@ -89,7 +90,7 @@ export default {
           "pillar": "ISTD",
           "id": "002",
           "title": "50.003 Lecture",
-          "color": "#1976d2",
+          "color": null,
           "location": "1.203",
           "professor": "Sun Jun",
           "classEnrolled": "F01",
@@ -540,9 +541,16 @@ export default {
       for (var lesson of this.calendarEventTable){
         if (lesson.data[e.searchCategory] === e.item){
           lesson.data.isSelected = e.isSelected;
+          if (e.isSelected){
+            if (!this.coloursMap.get(e.item)) {
+              const colour = this.getColour();
+              this.coloursMap.set(e.item, colour);
+              console.log(colour)
+            }
+            lesson.data.color = this.coloursMap.get(e.item);
+          }
           //updating modifiable calendar
           if (e.isSelected === true && lesson.data.calendarType === 'Academic'){
-            //updating modifiable
             var modifiableEvent = JSON.parse(JSON.stringify(lesson)) //copying event object
             modifiableEvent.data.readonly = false;
             modifiableEvent.data.suggestedBy = this.username;
