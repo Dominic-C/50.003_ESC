@@ -42,8 +42,6 @@ class CreateScheduleForm(forms.ModelForm):
 
     def save(self, commit=True, conflict=0):
         m = super(CreateScheduleForm, self).save(commit=False)
-        day_dict = dict((x, y) for y, x in DAY_CHOICES)
-        m.day_Of_Week = day_dict[m.day_Of_Week]
         # do custom stuff
         if conflict == 1:
             m.is_Conflicting = True
