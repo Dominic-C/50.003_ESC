@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
 		:headers="headers"
-    :headers-length="6"
+    :headers-length="7"
 		:items="suggestions"
     item-key="suggestedBy"
 		class="elevation-1"
@@ -31,6 +31,7 @@
           <td :class="[props.item.locationConflict ? 'red' : '']"></td>
           <td :class="[props.item.classConflict ? 'red' : '']"></td>
           <td :class="[props.item.professorConflict ? 'red' : '']"></td>
+          <td class="text-xs-right">{{ props.item.status }}</td>
           <td class="justify-center align-center layout px-0">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -94,6 +95,7 @@
       :calendar="dayCalendar"
       :username="username"
       :isInMode="isEditing"
+      :dialog="dialog"
       mode="editable"
       ref="editCalendar"
     >
@@ -126,7 +128,7 @@
       <template slot="pushButton">
         <v-btn 
           color="primary"
-          @click="pushToDatabase"
+          @click="openDialog"
         >
           Push Edit
         </v-btn>
@@ -162,6 +164,35 @@
             </v-flex>
         </v-layout>
       </template>
+
+      <!-- confirm dialog -->
+      <template slot="title">
+        <v-card-title class="headline">Modify suggestions?</v-card-title>
+      </template>
+      <template slot="text">
+        <v-card-text>
+            Push the modifications you have made to database for you to send to the timetable planner eventually. 
+            Modifications cannot be reverted once sent, but can be re-edited.
+          </v-card-text>
+      </template>
+      <template slot="noButton">
+        <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog = false"
+          >
+            Cancel
+          </v-btn>
+      </template>
+      <template slot="yesButton">
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="pushToDatabase"
+        >
+          OK
+        </v-btn>
+      </template>
     </app-calendar>
   </v-container>
 </template>
@@ -188,7 +219,9 @@ export default {
 	data: () => ({
     dayCalendar: Calendar.days(),
     eventsToShow: [],
+    dialog: false,
     isEditing: false,
+    itemChosen: [],
     activeComp: {
       table : true,
       calendar : false,
@@ -203,12 +236,14 @@ export default {
           {text: 'Professor', value: 'professor'}
         ]
       },
-      { text: 'Actions', value: 'name', sortable: false }
+      { text: 'Status', value: 'status' },
+      { text: 'Actions', value: 'action', sortable: false }
 
     ],
     suggestions:[
       {
         suggestedBy: 'Prof A',
+        status: "Pending",
         submittedOn: new Date('01 Mar 2019 09:30:00'),
         locationConflict: true,
         classConflict: false,
@@ -264,6 +299,7 @@ export default {
       },
       {
         suggestedBy: 'Prof B',
+        status: "Pending",
         submittedOn: new Date('24 Mar 2019 11:34:00'),
         locationConflict: false,
         classConflict: true,
@@ -321,11 +357,11 @@ export default {
   methods: {
     approve(item){
       //TO CHANGE: update database
-      console.log("approved")
+      item.status = "Accepted";
     },
     reject(item){
       //TO CHANGE: update database
-      console.log("rejected")
+      item.status = "Rejected"
     },
     async showCalendar(props){
       props.expanded = !props.expanded;
@@ -335,9 +371,11 @@ export default {
       }
     },
     async goToCalendar(item){
+      this.itemChosen = item;
       this.toggleVisible('calendar');
+      this.$emit("view-conflicts", item); 
+      await this.$nextTick(); //waiting for possible conflicting events to be calculated
       this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
-      await this.$nextTick(); //waiting for calendar to be rendered
       this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
     },
     toggleVisible : function(item) {
@@ -354,8 +392,14 @@ export default {
       this.isEditing = false;
       this.$eventHub.$emit('apply-events');
     },
+    openDialog(){
+      this.dialog = true;
+    },
     pushToDatabase(){
-      //TO CHANGE: update database
+      this.dialog = false;
+      this.isEditing = false;
+      //TO CHANGE: update database and check for conflicts
+      this.itemChosen.status = "Edited";
       console.log("pushing to database...");
       this.isEditing = false;
     }

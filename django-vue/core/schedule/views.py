@@ -9,13 +9,18 @@ from login.decorators import professor_required, drafting_required, beforefirstd
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+
 class ScheduleCreateView(CreateView):
     model = Schedule
     template_name = "schedule/schedule_create.html"
     fields = '__all__'
+
     def form_valid(self, form):
         form.save()
         return redirect('schedule:list')
+
+
 class ScheduleListView(ListView):
     model = Schedule
     template_name = "schedule/schedule_list.html"
@@ -27,6 +32,7 @@ class ScheduleListView(ListView):
         queryset = Schedule.objects.all()
         context['jsonset'] = serializers.serialize("json", queryset)
         return context
+
 
 @professor_required
 @login_required

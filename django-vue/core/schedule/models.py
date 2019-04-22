@@ -2,6 +2,8 @@ from django.db import models
 import datetime
 
 # Create your models here.
+
+
 class Schedule(models.Model):
     title = models.CharField(max_length=120)
     pillarType = models.CharField(max_length=10, default="Freshmore")
@@ -16,6 +18,7 @@ class Schedule(models.Model):
     location = models.CharField(max_length=50)
     isEvent = models.BooleanField(default=False)
     initiatedBy = models.CharField(max_length=50, default="Nobody")
+    isConflicting = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
