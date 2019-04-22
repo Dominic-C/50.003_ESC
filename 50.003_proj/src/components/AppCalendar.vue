@@ -23,19 +23,31 @@
 				>
 				<template slot="eventDetailsLocation" slot-scope="{ details }">
 					<!-- Location -->
-					<v-select
-						single-line solo flat
-						prepend-icon="location_on"
-						label="Add Location"
-						:items="$locations"
-						:readonly="!isInMode || details.locked"
-						v-model="details.location">
-						<template slot="item" slot-scope="{ item }">
-							<v-list-tile-content>
-								{{ item }}
-							</v-list-tile-content>
-						</template>
-					</v-select>
+					<template v-if="mode==='finalised' || (mode==='requestable' && details.locked === true)">
+						<v-text-field 
+							single-line hide-details solo flat
+							prepend-icon="location_on"
+							label="Add Location"
+							:items="$locations"
+							:readonly="!isInMode || details.locked"
+							v-model="details.location">
+						</v-text-field>
+					</template>
+					<template v-else>
+						<v-select
+							single-line solo flat
+							prepend-icon="location_on"
+							label="Add Location"
+							:items="$locations"
+							:readonly="!isInMode || details.locked"
+							v-model="details.location">
+							<template slot="item" slot-scope="{ item }">
+								<v-list-tile-content>
+									{{ item }}
+								</v-list-tile-content>
+							</template>
+						</v-select>
+					</template>
 				</template>
 
 				<!-- Description -->
@@ -55,8 +67,24 @@
 						single-line hide-details solo flat
 						prepend-icon="event"
 						:items="$calendarTypes"
+						label="Event Type"
 						:readonly="!isInMode || details.locked"
 						v-model="details.calendarType">
+						<template slot="item" slot-scope="{ item }">
+							<v-list-tile-content>
+								{{ item }}
+							</v-list-tile-content>
+						</template>
+					</v-select>
+
+					<v-select
+						v-if="details.calendarType === 'Academic'"
+						single-line  solo flat
+						prepend-icon="view_column"
+						:items="$pillars"
+						label="Pillar"
+						:readonly="!isInMode || details.locked"
+						v-model="details.pillar">
 						<template slot="item" slot-scope="{ item }">
 							<v-list-tile-content>
 								{{ item }}
@@ -87,6 +115,15 @@
 
 					<!-- Suggested/Edited/Requested by -->
 					<slot name="additionalInfo" v-bind="{ details }"></slot>
+
+					<!-- Additional comments -->
+					<v-textarea v-if="$dayspan.supports.description && isInMode"
+						hide-details single-line solo flat
+						prepend-icon="comment"
+						label="Add Comments"
+						:readonly="!isInMode || details.locked"
+						v-model="details.comments"
+					></v-textarea>
 				</template>
 
 				<template slot="eventPopover" slot-scope="slotData">

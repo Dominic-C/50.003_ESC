@@ -50,6 +50,7 @@ Vue.use(DaySpanVuetify, {
 });
 
 Vue.prototype.$calendarTypes = ["Academic", "Events"];
+Vue.prototype.$pillars = ["ISTD", "ESD", "EPD", "ASD", "FRESHMORE", "HASS"];
 Vue.prototype.$locations = [
   "Unspecified",
   "Lecture Theatre 1",
