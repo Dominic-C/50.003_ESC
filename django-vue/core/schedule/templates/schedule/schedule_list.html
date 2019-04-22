@@ -13,22 +13,22 @@
     for (var i = 0; i < simpleTable.length; i++) {
         var tempdata = {};
         var tempschedule = {};
-        tempdata["courseName"] = simpleTable[i].title;
-        tempdata["pillar"] = simpleTable[i].pillarType;
-        tempdata["id"] = simpleTable[i].id;
-        tempdata["eventName"] = simpleTable[i].eventName;
+        tempdata["courseName"] = simpleTable[i].course_Name;
+        tempdata["pillar"] = simpleTable[i].pillar_Type;
+        tempdata["id"] = i;
+        tempdata["eventName"] = simpleTable[i].event_Name;
         tempdata["color"] = "#1976d2";
         tempdata["location"] = simpleTable[i].location;
         tempdata["professor"] = simpleTable[i].lecturer;
-        tempdata["classEnrolled"] = simpleTable[i].classEnrolled;
-        tempdata["calendarType"] = simpleTable[i].isEvent ? "Event" : "Academic";
+        tempdata["classEnrolled"] = simpleTable[i].class_Enrolled;
+        tempdata["calendarType"] = simpleTable[i].is_Event ? "Event" : "Academic";
         tempdata["locked"] = false;
-        tempdata["suggestedBy"] = simpleTable[i].initiatedBy;
-        tempdata["requestedBy"] = simpleTable[i].initiatedBy;
+        tempdata["suggestedBy"] = simpleTable[i].initiated_By;
+        tempdata["requestedBy"] = simpleTable[i].initiated_By;
 
-        tempschedule["dayOfWeek"] = simpleTable[i].dayOfWeek;
-        tempschedule["times"] = simpleTable[i].start_time;
-        tempschedule["duration"] = simpleTable[i].eventDuration;
+        tempschedule["dayOfWeek"] = [simpleTable[i].day_Of_Week];
+        tempschedule["times"] = [simpleTable[i].start_Time];
+        tempschedule["duration"] = simpleTable[i].event_Duration;
         tempschedule["durationType"] = "minutes";
 
 		var pair = {

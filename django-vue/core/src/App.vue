@@ -680,8 +680,8 @@ export default {
         tempdata["suggestedBy"] = simpleTable[i].initiated_By;
         tempdata["requestedBy"] = simpleTable[i].initiated_By;
 
-        tempschedule["dayOfWeek"] = simpleTable[i].day_Of_Week;
-        tempschedule["times"] = simpleTable[i].start_Time;
+        tempschedule["dayOfWeek"] = [simpleTable[i].day_Of_Week];
+        tempschedule["times"] = [simpleTable[i].start_Time];
         tempschedule["duration"] = simpleTable[i].event_Duration;
         tempschedule["durationUnit"] = "minutes";
 

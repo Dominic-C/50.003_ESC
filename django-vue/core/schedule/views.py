@@ -11,27 +11,27 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-# class ScheduleCreateView(CreateView):
-#     model = Schedule
-#     template_name = "schedule/schedule_create.html"
-#     fields = '__all__'
+class ScheduleCreateView(CreateView):
+    model = Schedule
+    template_name = "schedule/schedule_create.html"
+    fields = '__all__'
 
-#     def form_valid(self, form):
-#         form.save()
-#         return redirect('schedule:list')
+    def form_valid(self, form):
+        form.save()
+        return redirect('schedule:list')
 
 
-# class ScheduleListView(ListView):
-#     model = Schedule
-#     template_name = "schedule/schedule_list.html"
-#     queryset = Schedule.objects.all()
-#     ser_data = serializers.serialize("json", queryset)
+class ScheduleListView(ListView):
+    model = Schedule
+    template_name = "schedule/schedule_list.html"
+    queryset = Schedule.objects.all()
+    ser_data = serializers.serialize("json", queryset)
 
-#     def get_context_data(self, **kwargs):
-#         context = super(ScheduleListView, self).get_context_data(**kwargs)
-#         queryset = Schedule.objects.all()
-#         context['jsonset'] = serializers.serialize("json", queryset)
-#         return context
+    def get_context_data(self, **kwargs):
+        context = super(ScheduleListView, self).get_context_data(**kwargs)
+        queryset = Schedule.objects.all()
+        context['jsonset'] = serializers.serialize("json", queryset)
+        return context
 
 
 @professor_required
@@ -44,13 +44,13 @@ def add_schedule(request):
         # check if form is valid
         if form.is_valid():
             print(Schedule.objects.filter(location=2))
-            print(form.cleaned_data['start_time'])
+            print(form.cleaned_data['start_Time'])
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
 
                 for i in lectureTheaterBookings:
-                    if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
+                    if (form.cleaned_data['start_Time'] >= i.start_Time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
                         schedule_item = form.save(commit=False, conflict=1)
                         schedule_item.save()
