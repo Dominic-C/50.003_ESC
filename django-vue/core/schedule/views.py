@@ -53,6 +53,8 @@ def add_schedule(request):
                 for i in lectureTheaterBookings:
                     if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
+                        schedule_item = form.save(commit=False, conflict=1)
+                        schedule_item.save()
                         raise Http404('time conflict')
 
             schedule_item = form.save(commit=False)
