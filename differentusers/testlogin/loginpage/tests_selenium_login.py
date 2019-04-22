@@ -5,7 +5,7 @@ from schedule.models import Schedule
 
 import csv
 import random
-
+import os
 
 usertypes = { 
     'professor': 1, 
@@ -17,51 +17,56 @@ usertypes = {
 
 class MySeleniumTests(LiveServerTestCase):
 
-	@classmethod
-	def setUpClass(cls):
-		super().setUpClass()
-		cls.selenium = WebDriver()
-		cls.selenium.implicitly_wait(10)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.user = User.objects.create_user(user_type=usertypes['professor'], first_name="Bob", last_name="Lee",
+            username="bob", password="sutd1234")
+        cls.planner = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Tracy", last_name="Liu", username="planner", password="sutd1234")
+        cls.selenium = WebDriver()
+        cls.selenium.implicitly_wait(10)
 
-	@classmethod
-	def tearDownClass(cls):
-		# cls.selenium.quit()
-		super().tearDownClass()
+    @classmethod
+    def tearDownClass(cls):
+        # cls.selenium.quit()
+        super().tearDownClass()
 
-	def setUp(self):
-		super(MySeleniumTests, self).setUp()
-		self.user = User.objects.create_user(user_type=usertypes['timetableplanner'], first_name="Bob", last_name="Lee",
-        	username="bob", password="sutd1234")
+    def test_upload_csv(self):
+        # initial log in as planner
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        username_input = self.selenium.find_element_by_name("username")
+        username_input.send_keys('planner')
+        password_input = self.selenium.find_element_by_name("password")
+        password_input.send_keys('sutd1234')
+        self.selenium.find_element_by_id("id_login").click()
 
+        # find Before First Draft dropdown and click
+        for a in self.selenium.find_elements_by_xpath('.//a'):
+            if(a.text == 'Before First Draft'):
+                a.click()
+                break
 
-	# def test_login(self):
-	# 	self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-		# username_input = self.selenium.find_element_by_name("username")
-		# username_input.send_keys('bob')
-		# password_input = self.selenium.find_element_by_name("password")
-		# password_input.send_keys('sutd1234')
-		# self.selenium.find_element_by_id("id_login").click()
+        # go to upload first draft
+        self.selenium.implicitly_wait(10)
+        self.selenium.find_element_by_xpath('//a[@href="/planners/upload"]').click()
 
-	def test_upload_csv(self):
-		self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-		username_input = self.selenium.find_element_by_name("username")
-		username_input.send_keys('bob')
-		password_input = self.selenium.find_element_by_name("password")
-		password_input.send_keys('sutd1234')
-		self.selenium.find_element_by_id("id_login").click()
-		self.selenium.get('%s%s' % (self.live_server_url, '/planners/upload/'))
-		
-		self.assertEqual(self.selenium.current_url, self.live_server_url + '/planners/upload/' )
-		# self.assertEqual(self.selenium.title, "SUTDCal - Upload")
-		# create the CSV file
-		# fuzzer = CSV_Fuzzer()
-		# fuzzer.csv_fuzzer(10)
-		# browse = self.selenium.find_element_by_class_name("custom-file-input")
-		# browse.send_keys("fuzzed_input.csv")
-		# upload_button = self.selenium.find_element_by_class_name("btn-primary")
-		# upload_button.click()
-		# alert = self.selenium.find_elements_by_class_name("alert-dismissible")
-		# self.assertEqual(alert.text, "File upload successful")
+        # assert that we are in the correct page
+        self.assertEqual(self.selenium.current_url, self.live_server_url + '/planners/upload' )
+
+        # create the CSV file
+        fuzzer = CSV_Fuzzer()
+        fuzzer.csv_fuzzer(10)
+        # find browse and click
+        browse = self.selenium.find_element_by_class_name("custom-file-input")
+        browse.send_keys(os.getcwd() + "/fuzzed_input.csv")
+
+        # find upload and click
+        for a in self.selenium.find_elements_by_xpath('.//button'):
+            if(a.text == 'Upload'):
+                a.click()
+
+        alert = self.selenium.find_elements_by_class_name("alert-dismissible")
+        self.assertEqual(alert.text, "File upload successful")
 
 
 

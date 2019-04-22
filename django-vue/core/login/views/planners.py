@@ -15,6 +15,7 @@ from ..serializers import PreferencesSerializer
 from ..decorators import planner_required, finalisation_required
 from ..forms import PlannerSignUpForm
 from ..models import User, Preferences, Lesson
+from schedule.models import Schedule
 
 usertypes = { 
     'professor': 1, 
@@ -87,7 +88,7 @@ class SampleDownloadView(View):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="sample.csv"'
         writer = csv.writer(response, delimiter=',')
-        writer.writerow(['Pillar', 'Course Name', 'Title', 'Location', 'Class Enrolled', 'Day of Week eg. (1/4/5)', 'Duration (mins)'])
+        writer.writerow(['Course Name', "Pillar", "Event Name", "Description", "Date", "Start Time", "Event Duration", "Lecturer", "Class Enrolled", "Location", "Initiated By", 'Day of Week'])
         return response
 
 
@@ -136,17 +137,21 @@ class RevertToPhase1(View):
         return redirect('planners:currentphase')
 
 
+
 @login_required
 @planner_required
 def csv_upload(request):
     template = "classroom/planners/phaser_upload.html"
 
-    prompt = {
-        'order': "Order of the CSV should be Pillar, Course Name, Title, Location, Class Enrolled, Day of Week, Duration"
-    }
+# course_Name, pillar_Type, event_Name, description, date, start_Time, event_Duration, lecturer, 
+# class_enrolled, location, is_event, initiated_by, 
+# is_conflicting, day_of_week
+
+# 'Course Name', "Pillar", "Event Name", "Description", "Date", "Start Time", "Event Duration", 
+# "Lecturer", "Class Enrolled", "Location", "Initiated By", 'Day of Week'
 
     if request.method == "GET":
-        return render(request, template, prompt)
+        return render(request, template)
 
     try:
         csv_file = request.FILES['file']
@@ -162,16 +167,24 @@ def csv_upload(request):
 
         data_set = csv_file.read().decode('utf-8')
         io_string = io.StringIO(data_set)
-        next(io_string)
+        next(io_string)         # skip first line
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-            _, created = Lesson.objects.update_or_create(
-                pillar=column[0],
-                course_name=column[1],
-                title=column[2],
-                location=column[3],
-                class_enrolled=column[4],
-                day_of_week=column[5],
-                duration=column[6],)
+            _, created = Schedule.objects.update_or_create(
+                course_Name=column[0],
+                pillar_Type=column[1],
+                event_Name=column[2],
+                description=column[3],
+                date=column[4],
+                start_Time=column[5],
+                event_Duration=column[6],
+                lecturer=column[7],
+                class_Enrolled=column[8],
+                location=column[9],
+                is_Event=False,
+                initiated_By=column[10],
+                is_Conflicting=False,
+                day_Of_Week=column[11],
+                )
 
         context = {}
         messages.success(request, 'File upload successful')
@@ -181,24 +194,4 @@ def csv_upload(request):
         messages.error(request,"Unable to upload file. " + repr(e))
         messages.error(request, "Unable to upload file! Check your format and for empty rows!")
         return HttpResponseRedirect(reverse("planners:uploaddata"))
-
-
-    # csv_file = request.FILES['file']
-
-    # if not csv_file.name.endswith('.csv'):
-    #     messages.error(request, "This file is not a .csv file")
-
-    # data_set = csv_file.read().decode('utf-8')
-    # io_string = io.StringIO(data_set)
-    # next(io_string)
-    # for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-    #     _, created = Example.objects.update_or_create(
-    #         class_number=column[0],
-    #         day=column[1],
-    #     )
-
-    # context = {}
-    # messages.success(request, 'File upload successful')
-    # return render(request, template, context)
-
 
