@@ -31,6 +31,16 @@ Vue.use(DaySpanVuetify, {
             lazy: true,
             maxWidth: '800px'
           }
+        },
+        dsScheduleActions: {
+          allowRemove: true,
+          allowExclude: true,
+          allowCancel: true,
+          allowUncancel: true,
+          allowMove: true,
+          allowInclude: true,
+          allowSetStart: false,
+          allowSetEnd: false
         }
       }
     },

@@ -584,7 +584,7 @@ export default {
     selectedCalendarEvents() {
       //TO CHANGE: iterating through all events to get those selected-- to do through database method eventually
       var selectedEvents = [];
-      for (var event of this.calendarEventTable) {
+      for (var event of this.mapCalendarEventTable) {
         if (event.data.isSelected) {
           selectedEvents.push(event);
         }
@@ -596,7 +596,7 @@ export default {
     professorTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.calendarEventTable) {
+      for (var event of this.mapCalendarEventTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({
@@ -614,7 +614,7 @@ export default {
     courseNameTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.calendarEventTable) {
+      for (var event of this.mapCalendarEventTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({
@@ -631,7 +631,7 @@ export default {
     locationTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.calendarEventTable) {
+      for (var event of this.mapCalendarEventTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({ searchText: event.data.location })
@@ -645,7 +645,7 @@ export default {
     classTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.calendarEventTable) {
+      for (var event of this.mapCalendarEventTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({
@@ -665,24 +665,24 @@ export default {
       for (var i = 0; i < simpleTable.length; i++) {
         var tempdata = {};
         var tempschedule = {};
-        tempdata["courseName"] = simpleTable[i].title;
-        tempdata["pillar"] = simpleTable[i].pillarType;
-        tempdata["id"] = simpleTable[i].id;
-        tempdata["eventName"] = simpleTable[i].eventName;
+        tempdata["courseName"] = simpleTable[i].course_Name;
+        tempdata["pillar"] = simpleTable[i].pillar_Type;
+        tempdata["id"] = i;
+        tempdata["eventName"] = simpleTable[i].event_Name;
         tempdata["color"] = "#1976d2";
         tempdata["location"] = simpleTable[i].location;
         tempdata["professor"] = simpleTable[i].lecturer;
-        tempdata["classEnrolled"] = simpleTable[i].classEnrolled;
-        tempdata["calendarType"] = simpleTable[i].isEvent
+        tempdata["classEnrolled"] = simpleTable[i].class_Enrolled;
+        tempdata["calendarType"] = simpleTable[i].is_Event
           ? "Event"
           : "Academic";
         tempdata["locked"] = false;
-        tempdata["suggestedBy"] = simpleTable[i].initiatedBy;
-        tempdata["requestedBy"] = simpleTable[i].initiatedBy;
+        tempdata["suggestedBy"] = simpleTable[i].initiated_By;
+        tempdata["requestedBy"] = simpleTable[i].initiated_By;
 
-        tempschedule["dayOfWeek"] = simpleTable[i].dayOfWeek;
-        tempschedule["times"] = simpleTable[i].start_time;
-        tempschedule["duration"] = simpleTable[i].eventDuration;
+        tempschedule["dayOfWeek"] = simpleTable[i].day_Of_Week;
+        tempschedule["times"] = simpleTable[i].start_Time;
+        tempschedule["duration"] = simpleTable[i].event_Duration;
         tempschedule["durationUnit"] = "minutes";
 
         var pair = {
@@ -714,7 +714,7 @@ export default {
     },
     updateCalendar(e) {
       //TO CHANGE: hardcoding change--to change in database
-      for (var lesson of this.calendarEventTable) {
+      for (var lesson of this.mapCalendarEventTable) {
         if (lesson.data[e.searchCategory] === e.item) {
           lesson.data.isSelected = e.isSelected;
           //updating modifiable calendar

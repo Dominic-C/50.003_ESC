@@ -122,7 +122,7 @@ export default {
 	},
 	methods: {
 		toggleVisible(name) {
-			this.$emit('changeComp', name)
+			this.$emit('changeComp', name);
 		}
 	}
 }

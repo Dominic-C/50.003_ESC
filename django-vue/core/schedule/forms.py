@@ -12,11 +12,14 @@ usertypes = {
 }
 
 HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(7, 24)]
-DURATION_CHOICES = ['{:02d}'.format(x*15) for x in range(1, 13)]
-LOCATION_CHOICES = (
-    ('1', 'any'),
-    ('2', 'Lecture Theatre'),
-)
+DURATION_CHOICES = [('{}'.format(x), '{:02d}'.format(x*15))
+                    for x in range(1, 13)]
+DAY_CHOICES = [('1', 'Monday'), ('2', 'Tuesday'),
+               ('3', 'Wednesday'), ('4', 'Thursday'),
+               ('5', 'Friday'), ('6', 'Saturday'), ('7', 'Sunday')]
+
+LOCATION_CHOICES = [('1', 'any'),
+                    ('2', 'Lecture Theatre')]
 
 
 class CreateScheduleForm(forms.ModelForm):
@@ -25,21 +28,25 @@ class CreateScheduleForm(forms.ModelForm):
 
     lecturer = forms.ModelChoiceField(queryset=User.objects.filter(
         user_type=usertypes['professor']))  # TODO: change to Professor model in future
-    initiatedBy = forms.ModelChoiceField(queryset=User.objects.all())
+    initiated_By = forms.ModelChoiceField(queryset=User.objects.all())
 
     class Meta:
         model = Schedule
         fields = '__all__'
-        widgets = {'start_time': forms.Select(choices=HOUR_CHOICES),
-                   'eventDuration': forms.Select(choices=DURATION_CHOICES),
+        exclude = ('initiated_By',)
+        widgets = {'start_Time': forms.Select(choices=HOUR_CHOICES),
+                   'event_Duration': forms.Select(choices=DURATION_CHOICES),
+                   'day_Of_Week': forms.Select(choices=DAY_CHOICES),
                    'location': forms.Select(choices=LOCATION_CHOICES)
                    }
 
     def save(self, commit=True, conflict=0):
         m = super(CreateScheduleForm, self).save(commit=False)
+        day_dict = dict((x, y) for y, x in DAY_CHOICES)
+        m.day_Of_Week = day_dict[m.day_Of_Week]
         # do custom stuff
         if conflict == 1:
-            m.isConflicting = True
+            m.is_Conflicting = True
         if commit:
             m.save()
         return m
