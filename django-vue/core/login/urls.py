@@ -32,6 +32,7 @@ urlpatterns = [
         path('nextphase', planners.NextPhase.as_view(), name="nextphase"),
         path('prevphase', planners.PreviousPhase.as_view(), name="prevphase"),
         path('downloadsample', planners.SampleDownloadView.as_view(), name="downloadsample"),
+        path('revert', planners.RevertToPhase1.as_view(), name="revert"),
     ], 'classroom'), namespace='planners')),
 
     path('sutdadmin/', include(([

@@ -42,6 +42,7 @@ public class TestLogin {
 // wrong username & correct password, wrong username & password) followed by correct details
 //    - Login as TimeTable Planner and test the upload function
 //    - Login as a TimeTable Planner and test the phase function
+//    - Login as a TimeTable Planner and test the revert function
 
     @BeforeClass
     public static void setup() {
@@ -446,7 +447,7 @@ public class TestLogin {
 
         if (currentPhase != null) currentPhase.click();
 
-        // checks if we are in upload first draft page
+        // checks if we are in the current phase page
         actualURL = driver.getCurrentUrl();
         assertNotNull(actualURL);
         assertEquals("http://127.0.0.1:8000/planners/phase", actualURL);
@@ -615,6 +616,147 @@ public class TestLogin {
             }
         }
         assertTrue(phaseNumber2.getText().contains("Phase 1"));
+    }
+
+    @Test
+    public void test_phase_revert(){
+        driver.get("http://127.0.0.1:8000");
+        java.util.List<WebElement> links = driver.findElements(By.tagName("a"));
+
+        // find Log in button
+        WebElement loginButton = null;
+        for (WebElement link : links) {
+            if (link.getText().equals("Log in")) {
+                loginButton = link;
+            }
+        }
+
+        if (loginButton != null) {
+            loginButton.click();
+        }
+
+        WebElement username = driver.findElement(By.id("id_username"));
+        username.clear();
+        username.sendKeys(PlannerUserName);
+
+        WebElement password = driver.findElement(By.id("id_password"));
+        password.clear();
+        password.sendKeys(PASSWORD);
+
+        WebElement LoginButton = driver.findElement(By.id("id_login"));
+        LoginButton.click();
+
+        // checks if we are in main page
+        String actualURL = driver.getCurrentUrl();
+        assertNotNull(actualURL);
+        assertEquals("http://127.0.0.1:8000/planners/", actualURL);
+
+        // clicks dropdown and goes to Current Phase
+        WebElement dropdown = driver.findElement(By.id("navbarDropdown"));
+        dropdown.click();
+
+        java.util.List<WebElement> dropdownItems = driver.findElements(By.className("dropdown-item"));
+        WebElement currentPhase = null;
+        for (WebElement item : dropdownItems) {
+            if (item.getText().equals("Current Phase")) {
+                currentPhase = item;
+                break;
+            }
+        }
+
+        if (currentPhase != null) currentPhase.click();
+
+        // checks if we are in the current phase page
+        actualURL = driver.getCurrentUrl();
+        assertNotNull(actualURL);
+        assertEquals("http://127.0.0.1:8000/planners/phase", actualURL);
+
+        // checks that we are in Phase 1
+        java.util.List<WebElement> pElements = driver.findElements(By.tagName("p"));
+        WebElement phaseNumber = null;
+        for (WebElement item : pElements){
+            if (item.getText().startsWith("We are currently")){
+                phaseNumber = item;
+                break;
+            }
+        }
+        assertTrue(phaseNumber.getText().contains("Phase 1"));
+
+        // find Next Phase button and click it
+        java.util.List<WebElement> buttons2 = driver.findElements(By.tagName("button"));
+        WebElement nextPhase = null;
+        for (WebElement item : buttons2){
+            if (item.getText().startsWith("Next Phase")){
+                nextPhase = item;
+                break;
+            }
+        }
+        if (nextPhase != null) nextPhase.click();
+
+        WebElement yesButton2 = driver.findElement(By.id("NextModal")).findElement(By.className("btn-danger"));
+        yesButton2.click();
+
+        // checks that we are in Phase 2 now
+        java.util.List<WebElement> pElements3 = driver.findElements(By.tagName("p"));
+        WebElement phaseNumber3 = null;
+        for (WebElement item : pElements3){
+            if (item.getText().startsWith("We are currently")){
+                phaseNumber3 = item;
+                break;
+            }
+        }
+        assertTrue(phaseNumber3.getText().contains("Phase 2"));
+
+
+        // find Next Phase button and click it
+        java.util.List<WebElement> buttons3 = driver.findElements(By.tagName("button"));
+        WebElement nextPhase2 = null;
+        for (WebElement item : buttons3){
+            if (item.getText().startsWith("Next Phase")){
+                nextPhase2 = item;
+                break;
+            }
+        }
+        if (nextPhase2 != null) nextPhase2.click();
+
+        WebElement yesButton3 = driver.findElement(By.id("NextModal")).findElement(By.className("btn-danger"));
+        yesButton3.click();
+
+        // checks that we are in Phase 3 now
+        java.util.List<WebElement> pElements4 = driver.findElements(By.tagName("p"));
+        WebElement phaseNumber4 = null;
+        for (WebElement item : pElements4){
+            if (item.getText().startsWith("We are currently")){
+                phaseNumber4 = item;
+                break;
+            }
+        }
+        assertTrue(phaseNumber4.getText().contains("Phase 3"));
+
+        // find the revert button and click it
+        buttons3 = driver.findElements(By.tagName("button"));
+        WebElement revert = null;
+        for (WebElement item : buttons3){
+            if (item.getText().startsWith("Revert")){
+                revert = item;
+                break;
+            }
+        }
+        if (revert != null) revert.click();
+        yesButton3 = driver.findElement(By.id("RevertModal")).findElement(By.className("btn-danger"));
+        yesButton3.click();
+
+        // checks that we are in Phase 1 now
+        pElements4 = driver.findElements(By.tagName("p"));
+        phaseNumber4 = null;
+        for (WebElement item : pElements4){
+            if (item.getText().startsWith("We are currently")){
+                phaseNumber4 = item;
+                break;
+            }
+        }
+        assertTrue(phaseNumber4.getText().contains("Phase 1"));
+
 
     }
 
