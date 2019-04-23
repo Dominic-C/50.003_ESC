@@ -4,7 +4,7 @@
 		:headers="headers"
     :headers-length="7"
 		:items="suggestions"
-    item-key="suggestedBy"
+    :item-key="suggesting ? 'suggestedBy' : 'requestedBy'"
 		class="elevation-1"
     v-if="activeComp.table"
 	>
@@ -26,7 +26,7 @@
       <!-- table rows -->
       <template v-slot:items="props">
         <tr @click="showCalendar(props)">
-          <td class="text-xs-right">{{ props.item.suggestedBy }}</td>
+          <td class="text-xs-right">{{ suggesting ? props.item.suggestedBy : props.item.requestedBy }}</td>
           <td class="text-xs-right">{{ props.item.submittedOn }}</td>
           <td :class="[props.item.locationConflict ? 'red' : '']"></td>
           <td :class="[props.item.classConflict ? 'red' : '']"></td>
@@ -37,14 +37,14 @@
               <template v-slot:activator="{ on }">
                 <v-icon color="green" v-on="on" @click.stop="approve(props.item)">check</v-icon>
               </template>
-              <span>Accept Suggestion</span>
+              <span>Accept {{ suggesting? 'Suggestion' : 'Request'}}</span>
             </v-tooltip>
             
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-icon color="red" v-on="on" @click.stop="reject(props.item)">close</v-icon>
               </template>
-              <span>Reject Suggestion</span>
+              <span>Reject {{ suggesting? 'Suggestion' : 'Request'}}</span>
             </v-tooltip>
             
             <v-tooltip bottom>
@@ -128,7 +128,7 @@
       <template slot="pushButton">
         <v-btn 
           color="primary"
-          @click="openDialog"
+          @click="dialog = true"
         >
           Push Edit
         </v-btn>
@@ -214,7 +214,11 @@ export default {
     possibleConflictingEvents: {
       type: Array,
       required: true
-      }
+    },
+    suggesting: {
+      type: Boolean,
+      required: true      
+		}
   },
 	data: () => ({
     dayCalendar: Calendar.days(),
@@ -226,23 +230,10 @@ export default {
       table : true,
       calendar : false,
     },
-		headers: [
-			{ text: 'Suggested By', value: 'suggestedBy' },
-			{ text: 'Submitted On', value: 'submittedOn' },
-      { text: 'Conflicts', value: 'conflicts', children: 
-        [
-          {text: 'Location', value: 'location'},
-          {text: 'Class', value: 'class'},
-          {text: 'Professor', value: 'professor'}
-        ]
-      },
-      { text: 'Status', value: 'status' },
-      { text: 'Actions', value: 'action', sortable: false }
-
-    ],
     suggestions:[
       {
         suggestedBy: 'Prof A',
+        "requestedBy": null,
         status: "Pending",
         submittedOn: new Date('01 Mar 2019 09:30:00'),
         locationConflict: true,
@@ -299,6 +290,7 @@ export default {
       },
       {
         suggestedBy: 'Prof B',
+        "requestedBy": null,
         status: "Pending",
         submittedOn: new Date('24 Mar 2019 11:34:00'),
         locationConflict: false,
@@ -341,6 +333,7 @@ export default {
               "calendarType": "Academic",
               "locked": null,
               "suggestedBy": "Prof B",
+              "requestedBy": null,
               "isSelected": false
             },
             "schedule": {
@@ -354,6 +347,29 @@ export default {
       }
     ]
   }),
+  computed: {
+    headers(){
+      let headers = [
+        { text: 'Submitted On', value: 'submittedOn' },
+        { text: 'Conflicts', value: 'conflicts', children: 
+          [
+            {text: 'Location', value: 'location'},
+            {text: 'Class', value: 'class'},
+            {text: 'Professor', value: 'professor'}
+          ]
+        },
+        { text: 'Status', value: 'status' },
+        { text: 'Actions', value: 'action', sortable: false }
+      ]
+      if (this.suggesting){
+        headers.unshift({ text: 'Suggested By', value: 'suggestedBy' });
+      }
+      else {
+        headers.unshift({ text: 'Requested By', value: 'requestedBy' });
+      }
+      return headers;
+    }
+  },
   methods: {
     approve(item){
       //TO CHANGE: update database
@@ -391,9 +407,6 @@ export default {
     revertState(){
       this.isEditing = false;
       this.$eventHub.$emit('apply-events');
-    },
-    openDialog(){
-      this.dialog = true;
     },
     pushToDatabase(){
       this.dialog = false;
