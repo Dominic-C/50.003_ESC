@@ -110,20 +110,21 @@
 						v-model="details.classEnrolled"
 					></v-text-field>
 
-					<!-- Status -->
-					<slot name="status" v-bind="{ details }"></slot>
-
-					<!-- Suggested/Edited/Requested by -->
-					<slot name="additionalInfo" v-bind="{ details }"></slot>
-
 					<!-- Additional comments -->
-					<v-textarea v-if="$dayspan.supports.description && isInMode"
+					<v-textarea v-if="isInMode && (isSuggestible || isRequestable)"
 						hide-details single-line solo flat
 						prepend-icon="comment"
 						label="Add Comments"
 						:readonly="!isInMode || details.locked"
 						v-model="details.comments"
 					></v-textarea>
+
+					<!-- Status -->
+					<slot name="status" v-bind="{ details }"></slot>
+
+					<!-- Suggested/Edited/Requested by -->
+					<slot name="additionalInfo" v-bind="{ details }"></slot>
+
 				</template>
 
 				<template slot="eventPopover" slot-scope="slotData">

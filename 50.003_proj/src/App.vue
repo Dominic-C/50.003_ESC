@@ -16,12 +16,12 @@
         <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
         <finalised-calendar :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></finalised-calendar>
-        <suggestible-calendar ref='suggestCalendar'
+        <suggestible-calendar 
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
           v-if="activeComp.viewTimetableToSuggest"></suggestible-calendar>
-        <requestable-calendar ref='requestCalendar'
+        <requestable-calendar
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
@@ -29,6 +29,7 @@
         <view-results-table  
             :username="username" 
             :possibleConflictingEvents="possibleConflictingEvents"
+            :suggesting="true"
             @view-conflicts="updateConflicts"
             v-if="activeComp.viewSuggestions"></view-results-table>
       </v-content>
