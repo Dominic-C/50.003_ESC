@@ -22,8 +22,6 @@ LOCATION_CHOICES = [('1', 'any'), ('2', 'Lecture Theatre')]
 """
 
 """
-
-
 class Schedule(models.Model):
     course_Name = models.CharField(max_length=120)
     pillar_Type = models.CharField(max_length=10, choices=PILLAR_CHOICES)
@@ -46,3 +44,8 @@ class Schedule(models.Model):
 
     def __str__(self):
         return self.pillar_Type + " - " + self.course_Name
+    
+    def __iter__(self):
+    for field_name in self._meta.get_all_field_names():
+        value = getattr(self, field_name, None)
+        yield (field_name, value)
