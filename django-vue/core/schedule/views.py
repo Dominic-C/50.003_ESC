@@ -7,8 +7,24 @@ from django.core import serializers
 from django.http import HttpResponse, Http404
 from login.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
+from django.ical.views import ICalFeed
 
 # Create your views here.
+
+
+# class ScheduleFeed(ICalFeed):
+#     """
+#     Calendar output
+#     """
+#     product_id = "-//sutdcal.com//"
+#     timezone = "UTC+8"
+#     file_name = "calendar.ics"
+
+#     def items(self):
+#         return Schedule.objects.all().order_by('-start_datetime')
+
+#     def item_title(self, item):
+#         return item.
 
 
 class ScheduleCreateView(CreateView):
