@@ -10,7 +10,7 @@
 		simpleTable[item] = tables[item].fields;
 	}
 	var json = [];
-    for (var i = 0; i < simpleTable.length; i++) {
+      for (var i = 0; i < simpleTable.length; i++) {
         var tempdata = {};
         var tempschedule = {};
         tempdata["courseName"] = simpleTable[i].course_Name;
@@ -21,23 +21,25 @@
         tempdata["location"] = simpleTable[i].location;
         tempdata["professor"] = simpleTable[i].lecturer;
         tempdata["classEnrolled"] = simpleTable[i].class_Enrolled;
-        tempdata["calendarType"] = simpleTable[i].is_Event ? "Event" : "Academic";
+        tempdata["calendarType"] = simpleTable[i].is_Event
+          ? "Event"
+          : "Academic";
         tempdata["locked"] = false;
         tempdata["suggestedBy"] = simpleTable[i].initiated_By;
         tempdata["requestedBy"] = simpleTable[i].initiated_By;
+        tempdata["isSelected"] = false;
 
         tempschedule["dayOfWeek"] = [simpleTable[i].day_Of_Week];
         tempschedule["times"] = [simpleTable[i].start_Time];
         tempschedule["duration"] = simpleTable[i].event_Duration;
-        tempschedule["durationType"] = "minutes";
+        tempschedule["durationUnit"] = "minutes";
 
-		var pair = {
-			data : tempdata,
-			schedule: tempschedule,
-		}
+        var pair = {
+          data: tempdata,
+          schedule: tempschedule
+        };
         json[i] = pair;
-        
-    }
+      }
 
 </script>
 <div id="app">

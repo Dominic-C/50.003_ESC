@@ -7,6 +7,7 @@ from django.core import serializers
 from django.http import HttpResponse, Http404
 from login.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
+
 # from django.ical.views import ICalFeed
 
 # Create your views here.
@@ -26,7 +27,12 @@ from django.contrib.auth.decorators import login_required
 #     def item_title(self, item):
 #         return item.
 
+def save_ical(request):
+    if request.method == "GET":
+        queryset =
 
+
+# @method_decorator([login_required], name='dispatch')
 class ScheduleCreateView(CreateView):
     model = Schedule
     template_name = "schedule/schedule_create.html"
@@ -37,6 +43,7 @@ class ScheduleCreateView(CreateView):
         return redirect('schedule:list')
 
 
+@method_decorator([login_required], name='dispatch')
 class ScheduleListView(ListView):
     model = Schedule
     template_name = "schedule/schedule_list.html"
