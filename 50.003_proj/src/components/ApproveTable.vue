@@ -33,16 +33,16 @@
           <td :class="[props.item.professorConflict ? 'red' : '']"></td>
           <td class="text-xs-center">{{ props.item.status }}</td>
           <td class="justify-center align-center layout px-0">
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="props.item.status === 'Pending'">
               <template v-slot:activator="{ on }">
-                <v-icon color="green" v-on="on" @click.stop="approve(props.item)">check</v-icon>
+                <v-icon color="green" v-on="on" @click.stop="showApproveDialog(props.item)">check</v-icon>
               </template>
               <span>Accept {{ suggesting? 'Suggestion' : 'Request'}}</span>
             </v-tooltip>
             
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="props.item.status === 'Pending'">
               <template v-slot:activator="{ on }">
-                <v-icon color="red" v-on="on" @click.stop="reject(props.item)">close</v-icon>
+                <v-icon color="red" v-on="on" @click.stop="showRejectDialog(props.item)">close</v-icon>
               </template>
               <span>Reject {{ suggesting? 'Suggestion' : 'Request'}}</span>
             </v-tooltip>
@@ -171,8 +171,8 @@
       </template>
       <template slot="text">
         <v-card-text>
-            Push the modifications you have made to database for you to send to the timetable planner eventually. 
-            Modifications cannot be reverted once sent, but can be re-edited.
+          Push the modifications you have made to database for you to send to the timetable planner eventually. 
+          Modifications cannot be reverted or re-edited again.
           </v-card-text>
       </template>
       <template slot="noButton">
@@ -194,6 +194,67 @@
         </v-btn>
       </template>
     </app-calendar>
+
+    <!-- Confirm Accept -->
+    <app-calendar-confirm-dialog :dialog="approveDialog">
+      <template slot="title">
+        <v-card-title class="headline">Accept {{ suggesting ? "suggestion" : "request"}}?</v-card-title>
+      </template>
+      <template slot="text">
+        <v-card-text>
+          Approve of the  {{ suggesting ? "suggested" : "requested" }} change.
+          Approval cannot be rescinded once given.
+        </v-card-text>
+      </template>
+      <template slot="noButton">
+      <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="approveDialog = false"
+        >
+          Cancel
+        </v-btn>
+      </template>
+      <template slot="yesButton">
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="approve()"
+        >
+          OK
+        </v-btn>
+      </template>
+		</app-calendar-confirm-dialog>
+
+    <!-- Reject Dialog -->
+    <app-calendar-confirm-dialog :dialog="rejectDialog">
+      <template slot="title">
+        <v-card-title class="headline">Reject {{ suggesting ? "suggestion" : "request"}}?</v-card-title>
+      </template>
+      <template slot="text">
+        <v-card-text>
+          Reject the  {{ suggesting ? "suggested" : "requested" }} change. This cannot be undone.
+        </v-card-text>
+      </template>
+      <template slot="noButton">
+      <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="rejectDialog = false"
+        >
+          Cancel
+        </v-btn>
+      </template>
+      <template slot="yesButton">
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="reject()"
+        >
+          OK
+        </v-btn>
+      </template>
+		</app-calendar-confirm-dialog>
   </v-container>
 </template>
 
@@ -201,11 +262,13 @@
 import * as moment from 'moment';
 import { Calendar, Day } from 'dayspan';
 import AppCalendar from "../components/AppCalendar";
+import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog"
 
 export default {
   name: 'ApproveTable',
   components: {
-    AppCalendar
+    AppCalendar,
+    AppCalendarConfirmDialog
   },
   props: {
     username: {
@@ -229,6 +292,8 @@ export default {
     dayCalendar: Calendar.days(),
     eventsToShow: [],
     dialog: false,
+    approveDialog: false,
+    rejectDialog: false,
     isEditing: false,
     itemChosen: {},
     activeComp: {
@@ -373,17 +438,27 @@ export default {
     }
   },
   methods: {
-    approve(item){
+    approve(){
       //TO CHANGE: update database
-      item.status = "Accepted";
+      this.itemChosen.status = "Accepted";
+      this.approveDialog = false;
     },
     reject(item){
       //TO CHANGE: update database
-      item.status = "Rejected"
+      this.itemChosen.status = "Rejected";
+      this.rejectDialog = false;
     },
     showDialog(item){
       this.itemChosen = item;
       this.dialog = true;
+    },
+    showApproveDialog(item){
+      this.itemChosen = item;
+      this.approveDialog = true;
+    },
+    showRejectDialog(item){
+      this.itemChosen = item;
+      this.rejectDialog = true;
     },
     async showCalendar(props){
       props.expanded = !props.expanded;

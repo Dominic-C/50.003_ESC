@@ -394,6 +394,7 @@ export default {
         }
       }
     ],
+    //TO CHANGE: get from database
     suggestibleTable: [],
     requestableTable: [],
     activeComp: {
@@ -652,7 +653,7 @@ export default {
         }
       }
     },
-    //TO CHANGE: check for conflict
+    //TO CHANGE: check for conflict and update database
     updateSuggested(calendar){
       this.suggestibleTable.push({
         suggestedBy: this.username,

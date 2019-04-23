@@ -100,7 +100,6 @@
       :calendar="weekCalendar"
       :username="username"
       :isInMode="isEditing"
-      :dialog="dialog"
       mode="editable"
       ref="editCalendar"
 			>
