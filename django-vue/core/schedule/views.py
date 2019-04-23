@@ -7,7 +7,7 @@ from django.core import serializers
 from django.http import HttpResponse, Http404
 from login.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
-from django.ical.views import ICalFeed
+# from django.ical.views import ICalFeed
 
 # Create your views here.
 
