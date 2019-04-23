@@ -20,35 +20,44 @@
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
+          @suggested="updateSuggested"
           v-if="activeComp.viewTimetableToSuggest"></suggestible-calendar>
         <requestable-calendar
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
+          @requested="updateRequested"
           v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
-        <view-results-table  
-            :username="username" 
-            :possibleConflictingEvents="possibleConflictingEvents"
-            :suggesting="true"
-            @view-conflicts="updateConflicts"
-            v-if="activeComp.viewSuggestions"></view-results-table>
+        <approve-table  
+          :username="username" 
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="true"
+          :suggestions="suggestibleTable"
+          @view-conflicts="updateConflicts"
+          v-if="activeComp.viewSuggestions"></approve-table>
+        <view-status-table  
+          :username="username" 
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="true"
+          :suggestions="suggestibleTable"
+          @view-conflicts="updateConflicts"
+          v-if="activeComp.viewSuggestions"></view-status-table>
+
       </v-content>
     </v-app>
   </div>
 </template>
 
 <script>
-import { Weekday } from 'dayspan';
+import * as moment from 'moment';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
-import ListSelection from './components/ListSelection.vue';
-// import WeeklyCalendar from './components/WeeklyCalendar.vue';
-// import dsWeeklyCalendar from './components/DaySpanWeeklyCalendar.vue';
 import FinalisedCalendar from './components/FinalisedCalendar.vue'
 import SuggestibleCalendar from './components/SuggestibleCalendar.vue'
 import RequestableCalendar from "./components/RequestableCalendar.vue";
-import ViewResultsTable from "./components/ViewResultsTable";
+import ApproveTable from "./components/ApproveTable";
+import ViewStatusTable from "./components/ViewStatusTable";
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -385,6 +394,8 @@ export default {
         }
       }
     ],
+    suggestibleTable: [],
+    requestableTable: [],
     activeComp: {
       // Submit new Course, Export Suggestions
       formSubmitNewCourse : false,
@@ -403,14 +414,14 @@ export default {
   components: {
     AppHeader,
     SearchBar,
-    ListSelection,
     // WeeklyCalendar,
     // dsWeeklyCalendar,
     FormSubmit,
     FinalisedCalendar,
     SuggestibleCalendar,
     RequestableCalendar,
-    ViewResultsTable
+    ApproveTable,
+    ViewStatusTable
   },
   computed: {
     selectedCalendarEvents() {
@@ -640,6 +651,31 @@ export default {
           }
         }
       }
+    },
+    //TO CHANGE: check for conflict
+    updateSuggested(calendar){
+      this.suggestibleTable.push({
+        suggestedBy: this.username,
+        calendar: calendar,
+        submittedOn:  moment().format('MMMM D YYYY (dddd) h:mm:ss a'),
+        status: "Pending",
+        locationConflict: false,
+        classConflict: true,
+        professorConflict: false,
+      })
+
+    },
+    updateRequested(calendar){
+      this.requestableTable.push({
+        requestedBy: this.username,
+        calendar: calendar,
+        submittedOn:  moment().format('MMMM D YYYY (dddd) h:mm:ss a'),
+        status: "Pending",
+        locationConflict: true,
+        classConflict: false,
+        professorConflict: false,
+      })
+
     }
   }
 }

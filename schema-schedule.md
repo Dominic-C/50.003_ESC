@@ -14,7 +14,7 @@
 - Locked
 - Suggester
 - Requester
-- Is Selected
+- Readonly
 
 ## Calendar Scheduling Data
 
@@ -36,7 +36,7 @@
 | lecturer              | data.professor        | char[50]          | Y       |                |
 | None -> classEnrolled | data.classEnrolled    | char[4]           | N       |                |
 | isEvent               | data.calendarType     | boolean -> string | Y       | Y              |
-| None                  | data.locked           | boolean           | Y       | Y              |
+| None                  | data.readonly         | boolean           | Y       | Y              |
 | None -> initiatedBy   | data.suggestedBy      | int               | N       | Y              |
 | None -> initiatedBy   | data.requestedBy      | int               | N       | Y              |
 | None -> dayOfWeek     | schedule.dayOfWeek    | int[]             | N       | Y              |

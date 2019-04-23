@@ -67,7 +67,7 @@
     <template slot="text">
       <v-card-text>
           Push the suggestions you have made to database for the course coordinator to review.
-          Suggestions cannot be edited once sent, but a new suggestion can be made.
+          Suggestions cannot be edited once sent, but can be cancelled.
         </v-card-text>
     </template>
     <template slot="noButton">
@@ -137,6 +137,7 @@ export default {
       localStorage.setItem(this.storeKey, json);
       this.dialog = false;
       this.isSuggesting = false;
+      this.$emit('suggested', json) //for testing only
     }
   }  
 }

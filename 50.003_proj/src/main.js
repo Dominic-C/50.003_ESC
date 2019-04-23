@@ -37,8 +37,8 @@ Vue.use(DaySpanVuetify, {
           allowExclude: true,
           allowCancel: true,
           allowUncancel: true,
-          allowMove: true,
-          allowInclude: true,
+          allowMove: false,
+          allowInclude: false,
           allowSetStart: false,
           allowSetEnd: false
         }

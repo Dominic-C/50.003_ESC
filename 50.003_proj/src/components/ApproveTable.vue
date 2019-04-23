@@ -26,12 +26,12 @@
       <!-- table rows -->
       <template v-slot:items="props">
         <tr @click="showCalendar(props)">
-          <td class="text-xs-right">{{ suggesting ? props.item.suggestedBy : props.item.requestedBy }}</td>
-          <td class="text-xs-right">{{ props.item.submittedOn }}</td>
+          <td class="text-xs-center">{{ suggesting ? props.item.suggestedBy : props.item.requestedBy }}</td>
+          <td class="text-xs-center">{{ props.item.submittedOn }}</td>
           <td :class="[props.item.locationConflict ? 'red' : '']"></td>
           <td :class="[props.item.classConflict ? 'red' : '']"></td>
           <td :class="[props.item.professorConflict ? 'red' : '']"></td>
-          <td class="text-xs-right">{{ props.item.status }}</td>
+          <td class="text-xs-center">{{ props.item.status }}</td>
           <td class="justify-center align-center layout px-0">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -128,7 +128,7 @@
       <template slot="pushButton">
         <v-btn 
           color="primary"
-          @click="dialog = true"
+          @click="showDialog"
         >
           Push Edit
         </v-btn>
@@ -198,11 +198,12 @@
 </template>
 
 <script>
+import * as moment from 'moment';
 import { Calendar, Day } from 'dayspan';
 import AppCalendar from "../components/AppCalendar";
 
 export default {
-  name: 'ViewResultsTable',
+  name: 'ApproveTable',
   components: {
     AppCalendar
   },
@@ -218,24 +219,27 @@ export default {
     suggesting: {
       type: Boolean,
       required: true      
-		}
+    },
+    suggestions: {
+      type: Array,
+      required: true
+    }
   },
 	data: () => ({
     dayCalendar: Calendar.days(),
     eventsToShow: [],
     dialog: false,
     isEditing: false,
-    itemChosen: [],
+    itemChosen: {},
     activeComp: {
       table : true,
       calendar : false,
     },
-    suggestions:[
+    mockData:[
       {
         suggestedBy: 'Prof A',
-        "requestedBy": null,
         status: "Pending",
-        submittedOn: new Date('01 Mar 2019 09:30:00'),
+        submittedOn: moment('01 Mar 2019 09:30').format('MMMM D YYYY (dddd) h:mm:ss a'),
         locationConflict: true,
         classConflict: false,
         professorConflict: false,
@@ -253,7 +257,6 @@ export default {
               "calendarType": "Academic",
               "locked": null,
               "suggestedBy": null,
-              "requestedBy": null,
               "isSelected": false
             },
             "schedule": {
@@ -276,7 +279,6 @@ export default {
               "calendarType": "Academic",
               "locked": null,
               "suggestedBy": "Prof A",
-              "requestedBy": null,
               "isSelected": false
             },
             "schedule": {
@@ -292,7 +294,7 @@ export default {
         suggestedBy: 'Prof B',
         "requestedBy": null,
         status: "Pending",
-        submittedOn: new Date('24 Mar 2019 11:34:00'),
+        submittedOn: moment('24 Mar 2019 11:34:00').format('MMMM D YYYY (dddd) h:mm:ss a'),
         locationConflict: false,
         classConflict: true,
         professorConflict: false,
@@ -379,6 +381,10 @@ export default {
       //TO CHANGE: update database
       item.status = "Rejected"
     },
+    showDialog(item){
+      this.itemChosen = item;
+      this.dialog = true;
+    },
     async showCalendar(props){
       props.expanded = !props.expanded;
       if (props.expanded){
@@ -387,7 +393,6 @@ export default {
       }
     },
     async goToCalendar(item){
-      this.itemChosen = item;
       this.toggleVisible('calendar');
       this.$emit("view-conflicts", item); 
       await this.$nextTick(); //waiting for possible conflicting events to be calculated
@@ -413,8 +418,6 @@ export default {
       this.isEditing = false;
       //TO CHANGE: update database and check for conflicts
       this.itemChosen.status = "Edited";
-      console.log("pushing to database...");
-      this.isEditing = false;
     }
   }
 }

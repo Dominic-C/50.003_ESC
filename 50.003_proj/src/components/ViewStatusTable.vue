@@ -4,7 +4,7 @@
 			:headers="headers"
 			:headers-length="6"
 			:items="suggestions"
-			:item-key="suggesting ? suggestedBy : requestedBy"
+			:item-key="suggesting ? 'suggestedBy' : 'requestedBy'"
 			class="elevation-1"
 			v-if="activeComp.table"
 		>
@@ -26,16 +26,15 @@
       <!-- table rows -->
       <template v-slot:items="props">
         <tr @click="showCalendar(props)">
-          <td class="text-xs-right">{{ props.item.suggestedBy }}</td>
-          <td class="text-xs-right">{{ props.item.submittedOn }}</td>
+          <td class="text-xs-center">{{ props.item.submittedOn }}</td>
           <td :class="[props.item.locationConflict ? 'red' : '']"></td>
           <td :class="[props.item.classConflict ? 'red' : '']"></td>
           <td :class="[props.item.professorConflict ? 'red' : '']"></td>
-          <td class="text-xs-right">{{ props.item.status }}</td>
+          <td class="text-xs-center">{{ props.item.status }}</td>
           <td :class="[props.item.status==='Cancelled' ? 'grey' : '', 'justify-center align-center layout px-0']">
             <v-tooltip bottom>
-              <template v-slot:activator="{ on }" v-if="props.item.status==='Cancelled'">
-                <v-icon v-on="on" @click.stop="dialog = true">close</v-icon>
+              <template v-slot:activator="{ on }" v-if="props.item.status!=='Cancelled'">
+                <v-icon color="red" v-on="on" @click.stop="showDialog(props.item)">close</v-icon>
               </template>
               <span>Cancel {{ suggesting ? 'Suggestion' : 'Request'}}</span>
             </v-tooltip>
@@ -54,7 +53,7 @@
         <v-flex class="pa-4" style="height:500px">
           <app-calendar
             :events="props.item.conflict"
-            :calendar="dayCalendar"
+            :calendar="weekCalendar"
             ref="expandedCalendar"
             username="username"
             mode="finalised"   
@@ -98,7 +97,7 @@
       transition="slide-x-reverse-transition" 
       v-if="activeComp.calendar" 
       :events="eventsToShow"
-      :calendar="dayCalendar"
+      :calendar="weekCalendar"
       :username="username"
       :isInMode="isEditing"
       :dialog="dialog"
@@ -150,16 +149,26 @@
 					</v-flex>
         </v-layout>
       </template>
+
+      <template slot="switchModeButton">
+        <v-layout justify-left> 
+          <v-btn 
+            color="grey"
+            @click="toggleVisible('table')"
+          >
+            <v-icon dark left>arrow_back</v-icon>Back
+          </v-btn>
+        </v-layout>
+      </template>
     </app-calendar>
 
     <app-calendar-confirm-dialog :dialog="dialog">
       <template slot="title">
         <v-card-title class="headline">Cancel {{ suggesting ? "suggestion" : "request"}}?</v-card-title>
       </template>
-      <template slot="text"><slot name="text">
+      <template slot="text">
         <v-card-text>
-          Cancel the {{ suggesting ? "suggestion" : "request"}} you have made to course coordintor. 
-          Cancellation cannot be undoed and will be reflected on course coordinator's side. 
+          Cancellation cannot be undone and will be reflected on the course coordinator's side. 
         </v-card-text>
       </template>
       <template slot="noButton">
@@ -187,11 +196,13 @@
 <script>
 import { Calendar, Day } from 'dayspan';
 import AppCalendar from "../components/AppCalendar";
+import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
 
 export default {
-  name: 'ViewResultsTable',
+  name: 'ViewStatusTable',
   components: {
-    AppCalendar
+    AppCalendar,
+    AppCalendarConfirmDialog
   },
   props: {
     username: {
@@ -204,14 +215,19 @@ export default {
 		},
 		suggesting: {
 			type: Boolean
-		}
+    },
+    suggestions: {
+      type: Array,
+      required: true
+    }
   },
 	data: () => ({
-    dayCalendar: Calendar.days(),
+    weekCalendar: Calendar.weeks(),
+    storeKey: 'suggestableCalendar',
     eventsToShow: [],
     dialog: false,
     isEditing: false,
-    itemChosen: [],
+    itemChosen: {},
     activeComp: {
       table : true,
       calendar : false,
@@ -233,22 +249,22 @@ export default {
   methods: {
     cancel(){
       //TO CHANGE: update database
-      itemChosen.status = "Cancelled"
+      this.itemChosen.status = "Cancelled";
+      this.dialog = false;
     },
     async showCalendar(props){
       props.expanded = !props.expanded;
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
-        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+        this.weekCalendar = Calendar.fromInput(JSON.parse(props.item.calendar));
       }
     },
     async goToCalendar(item){
-      this.itemChosen = item;
       this.toggleVisible('calendar');
       this.$emit("view-conflicts", item); 
       await this.$nextTick(); //waiting for possible conflicting events to be calculated
-      this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
-      this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
+      this.weekCalendar = Calendar.fromInput(JSON.parse(item.calendar));
+      this.eventsToShow = this.possibleConflictingEvents.concat(item);
     },
     toggleVisible : function(item) {
       this.activeComp.table = false;
@@ -263,7 +279,13 @@ export default {
     revertState(){
       this.isEditing = false;
       this.$eventHub.$emit('apply-events');
-    }
+    },
+    showDialog(item){
+      //TO CHANGE: update database
+      this.itemChosen = item;
+      this.dialog = true;
+      console.log(this.itemChosen)
+    },
   }
 }
 </script>

@@ -137,6 +137,7 @@ export default {
       localStorage.setItem(this.storeKey, json);
       this.dialog = false;
       this.isRequesting = false;
+      this.$emit('requested', json); //for testing
     }
   }  
 }
