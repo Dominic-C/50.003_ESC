@@ -3,7 +3,7 @@
     <v-app id="dayspan" v-cloak>
       <v-content>
         <search-bar
-          :calendarEventsTable="mapCalendarEventTable"
+          :calendarEventsTable="mappedEventsTable"
           :professorTable="professorTable"
           :courseNameTable="courseNameTable"
           :locationTable="locationTable"
@@ -12,7 +12,7 @@
         ></search-bar>
         <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <finalised-calendar :events="selectedCalendarEvents"></finalised-calendar>
+        <finalised-calendar :events="selectedCalendarEvents" v-if="true"></finalised-calendar>
         <suggestible-calendar
           ref="suggestCalendar"
           :events="modifiableCalendarEvent"
@@ -20,12 +20,13 @@
           @revert-state="revertState"
         ></suggestible-calendar>
         <requestable-calendar
+          v-if="true"
           ref="requestCalendar"
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
         ></requestable-calendar>
-        <view-results-table :username="username"></view-results-table>
+        <view-results-table :username="username" v-if="true"></view-results-table>
       </v-content>
     </v-app>
   </div>
@@ -570,7 +571,8 @@ export default {
           }
         ]
       }
-    ]
+    ],
+    mappedEventsTable: json
   }),
   components: {
     SearchBar,
@@ -584,10 +586,11 @@ export default {
     selectedCalendarEvents() {
       //TO CHANGE: iterating through all events to get those selected-- to do through database method eventually
       var selectedEvents = [];
-      for (var event of this.mapCalendarEventTable) {
+      for (var event of this.mappedEventsTable) {
         if (event.data.isSelected) {
           selectedEvents.push(event);
         }
+        console.log(event.data.isSelected);
       }
       return selectedEvents;
     },
@@ -596,7 +599,7 @@ export default {
     professorTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.mapCalendarEventTable) {
+      for (var event of this.mappedEventsTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({
@@ -614,7 +617,7 @@ export default {
     courseNameTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.mapCalendarEventTable) {
+      for (var event of this.mappedEventsTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({
@@ -631,7 +634,7 @@ export default {
     locationTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.mapCalendarEventTable) {
+      for (var event of this.mappedEventsTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({ searchText: event.data.location })
@@ -645,7 +648,7 @@ export default {
     classTable() {
       var selectionCandidates = [];
       var selectionCandidatesSet = new Set();
-      for (var event of this.mapCalendarEventTable) {
+      for (var event of this.mappedEventsTable) {
         //JSON.stringify so that objects can be compared
         selectionCandidatesSet.add(
           JSON.stringify({
@@ -659,7 +662,7 @@ export default {
       });
       return selectionCandidates;
     },
-    mapCalendarEventTable() {
+    mapCalendarEventsTable() {
       // Mapping the simple Table -> calendar type table
       var json = [];
       for (var i = 0; i < simpleTable.length; i++) {
@@ -679,6 +682,7 @@ export default {
         tempdata["locked"] = false;
         tempdata["suggestedBy"] = simpleTable[i].initiated_By;
         tempdata["requestedBy"] = simpleTable[i].initiated_By;
+        tempdata["isSelected"] = false;
 
         tempschedule["dayOfWeek"] = [simpleTable[i].day_Of_Week];
         tempschedule["times"] = [simpleTable[i].start_Time];
@@ -714,7 +718,7 @@ export default {
     },
     updateCalendar(e) {
       //TO CHANGE: hardcoding change--to change in database
-      for (var lesson of this.mapCalendarEventTable) {
+      for (var lesson of this.mappedEventsTable) {
         if (lesson.data[e.searchCategory] === e.item) {
           lesson.data.isSelected = e.isSelected;
           //updating modifiable calendar
@@ -752,6 +756,7 @@ export default {
           }
         }
       }
+      // console.log(this.selectedCalendarEvents);
     },
     revertState() {
       for (

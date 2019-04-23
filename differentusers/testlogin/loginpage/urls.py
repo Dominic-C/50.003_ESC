@@ -5,6 +5,7 @@ from .views import classroom, students, professors, coordinators, planners, sutd
 urlpatterns = [
     path('', classroom.home, name='home'),
     path('403', classroom.ForbiddenView.as_view(), name='403'),
+    path('icsconvert', classroom.ICSConverterView.as_view(), name="icsconvert"),
 
     path('students/', include(([
         path('', students.StudentMainView.as_view(), name='student_main'),

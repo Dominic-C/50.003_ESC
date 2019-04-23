@@ -1,11 +1,2 @@
-Course Name,Pillar,Event Name,Description,Date,Start Time,Event Duration,Lecturer,Class Enrolled,Location,Initiated By,Day of Week
-50.002 oCmputation Structures,PHD,05.034 Lecture,This is a lectrue,2019-10-23,16:00,90,Ngai aMn,F06,Lecture Theatre,gNai Man,1
-50.003 Elements of Software Construction,EPD,50.003 Letcure,This is a letcure,2019-11-17,13:00,90,Nagi Man,F08,Lecture Theatre,Nga iMan,4
-50.034 Introduction ot Probability and Statistics,ESD,50.004 Lectrue,Tihs is a lecture,2019-01-25,08:00,90,gNai Man,F05,Lecture Theatre,Ngai Mna,6
-50.004 Introdcution to Algorithms,FRESHMORE,5.0002 Lecture,This i sa lecture,2019-08-23,17:00,90,NgaiM an,F01,Lecture Theatre,Nagi Man,6
-50.001 Introduction to Information Systems & Prgoramming,ESD,50.004 Lceture,This isa  lecture,2019-08-12,13:00,90,gNai Man,F03,Lecture Theatre,Ngai Mna,5
-50.003 Elements fo Software Construction,MASTERS,50.001 Lectrue,This is  alecture,2019-06-04,16:00,90,Ngia Man,F03,Lecture Theatre,Ngai Mna,6
-50.005 Computer Sytsem Engineering,ESD,50.002 Lecture,This i sa lecture,2019-04-24,14:00,90,Ngia Man,F09,Lecture Theatre,Nga iMan,5
-50.00 2Computation Structures,EPD,50.002 eLcture,This is a lectuer,2019-08-02,08:00,90,Ngai aMn,F02,Lecture Theatre,Ngai Mna,2
-5.0005 Computer System Engineering,EPD,50.005 Lectrue,Thisi s a lecture,2019-04-05,16:00,90,NgaiM an,F04,Lecture Theatre,gNai Man,4
-50.003 Elements of Software Construction,FRESHMORE,50.001 Lecture,Thi sis a lecture,2019-11-17,18:00,90,Ngia Man,F04,Lecture Theatre,Ngia Man,7
+Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private
+50.001,2019-04-24,08:30,2019-04-24,10:00,FALSE,Describe this,Lecture Theatre,TRUE
