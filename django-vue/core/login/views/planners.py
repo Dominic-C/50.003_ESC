@@ -201,7 +201,7 @@ class AcceptSuggestionsListView(ListView):
 
     def get_queryset(self):
         # returns Preferences submited by the current User
-        return Schedule.objects.filter(is_Approve=True)
+        return Schedule.objects.filter(is_Approved=True)
 
 @method_decorator([login_required, planner_required, drafting_required ], name='dispatch')
 class AcceptSuggestion(UpdateView):
@@ -229,7 +229,7 @@ class AcceptSuggestion(UpdateView):
 
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
-        return Schedule.objects.filter(is_Approve=True)
+        return Schedule.objects.filter(is_Approved=True)
 
 
 @method_decorator([login_required, planner_required, drafting_required], name='dispatch')

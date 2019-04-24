@@ -5,7 +5,7 @@
 {% block content %}
 
 
-	<h3>Event Bookings</h3>
+	<h3>Accept Suggestions</h3>
 	<!-- ['event_Name', 'lecturer', 'description', 'date', 'start_Time', 'event_Duration', 'location'] -->
 
 	<table  class="table table-hover">
@@ -16,6 +16,7 @@
 			    <th scope="col">Date</th>
 			    <th scope="col">Start Time</th>
 			    <th scope="col">Duration</th>
+			    <th scope="col">Accepted</th>
 			    <th scope="col">Accept</th>
 		  	</tr>	
 			
@@ -26,7 +27,8 @@
 			<td>{{ item.date }}</td>
 			<td>{{ item.start_Time }}</td>
 			<td>{{ item.event_Duration }}</td>
-			<td><a class="btn btn-info" href="{% url 'planner:accept' item.id %}" role="button">Accept</a></td>
+			<td>{{ item.is_Approved }}</td>
+			<td><a class="btn btn-info" href="{% url 'planners:accept' item.id %}" role="button">Accept</a></td>
 
 		</tr>
 	   	{% empty %}
