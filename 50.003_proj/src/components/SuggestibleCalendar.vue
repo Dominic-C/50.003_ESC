@@ -116,7 +116,7 @@ export default {
     AppCalendar
   },
   data: () => ({
-    storeKey: 'suggestableCalendar',
+    storeKey: 'suggestibleCalendar',
     isSuggesting: false,
     dialog: false
   }),
@@ -124,6 +124,9 @@ export default {
     currentEvents(){
       return this.events.locked.concat(this.events.modifiable);
     }    
+  },
+  beforeDestroy(){
+    this.$eventHub.$emit('save-state');
   },
   methods: {
     revertState(){
@@ -138,6 +141,7 @@ export default {
       this.dialog = false;
       this.isSuggesting = false;
       this.$emit('suggested', json) //for testing only
+      this.$eventHub.$emit('save-state');
     }
   }  
 }

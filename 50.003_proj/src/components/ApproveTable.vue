@@ -4,7 +4,7 @@
 		:headers="headers"
     :headers-length="7"
 		:items="suggestions"
-    :item-key="suggesting ? 'suggestedBy' : 'requestedBy'"
+    item-key="submittedOn"
 		class="elevation-1"
     v-if="activeComp.table"
 	>
@@ -204,12 +204,12 @@
     <!-- Confirm Accept -->
     <app-calendar-confirm-dialog :dialog="approveDialog">
       <template slot="title">
-        <v-card-title class="headline">Accept {{ suggesting ? "suggestion" : "request"}}?</v-card-title>
+        <v-card-title class="headline">{{user==='Timetable Planner' ? "Accept" : "Approve"}} {{ suggesting ? "suggestion" : "request"}}?</v-card-title>
       </template>
       <template slot="text">
         <v-card-text>
-          Approve of the  {{ suggesting ? "suggested" : "requested" }} change.
-          Approval cannot be rescinded once given.
+          {{user==='Timetable Planner' ? "Accept" : "Approve of"}} the  {{ suggesting ? "suggested" : "requested" }} change.
+          {{user==='Timetable Planner' ? "Acceptance" : "Approval"}} cannot be rescinded once given.
         </v-card-text>
       </template>
       <template slot="noButton">
@@ -492,7 +492,12 @@ export default {
       props.expanded = !props.expanded;
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
-        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
+        if (this.suggesting){
+          console.log(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek).format());
+          this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
+        } else{
+          this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
+        }
       }
     },
     async goToCalendar(item){

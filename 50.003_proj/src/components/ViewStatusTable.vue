@@ -4,7 +4,7 @@
 			:headers="headers"
 			:headers-length="6"
 			:items="suggestions"
-			:item-key="suggesting ? 'suggestedBy' : 'requestedBy'"
+			item-key="submittedOn"
 			class="elevation-1"
 			v-if="activeComp.table"
 		>
@@ -52,7 +52,6 @@
       <template v-slot:expand="props">
         <v-flex class="pa-4" style="height:500px">
           <app-calendar
-            :events="props.item.conflict"
             :calendar="weekCalendar"
             ref="expandedCalendar"
             username="username"
@@ -94,12 +93,10 @@
     </v-data-table>
 
     <app-calendar 
-      transition="slide-x-reverse-transition" 
       v-if="activeComp.calendar" 
-      :events="eventsToShow"
       :calendar="weekCalendar"
       :username="username"
-      :isInMode="isEditing"
+      :isInMode="false"
       mode="editable"
       ref="editCalendar"
 			>
@@ -208,10 +205,6 @@ export default {
       type: String,
       required: true
     },
-    possibleConflictingEvents: {
-      type: Array,
-      required: true
-		},
 		suggesting: {
 			type: Boolean
     },
@@ -222,10 +215,8 @@ export default {
   },
 	data: () => ({
     weekCalendar: Calendar.weeks(),
-    storeKey: 'suggestableCalendar',
     eventsToShow: [],
     dialog: false,
-    isEditing: false,
     itemChosen: {},
     activeComp: {
       table : true,
@@ -245,6 +236,9 @@ export default {
 
     ]
   }),
+  beforeDestroy(){
+    this.$eventHub.$emit('save-state');
+  },
   methods: {
     cancel(){
       //TO CHANGE: update database
@@ -255,15 +249,17 @@ export default {
       props.expanded = !props.expanded;
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
-        this.weekCalendar = Calendar.fromInput(JSON.parse(props.item.calendar));
+        let state = Calendar.fromInput(JSON.parse(props.item.calendar));
+        state.preferToday = false;
+        this.$refs.expandedCalendar.$refs.calendar.setState(state);
       }
     },
     async goToCalendar(item){
       this.toggleVisible('calendar');
-      this.$emit("view-conflicts", item); 
       await this.$nextTick(); //waiting for possible conflicting events to be calculated
-      this.weekCalendar = Calendar.fromInput(JSON.parse(item.calendar));
-      this.eventsToShow = this.possibleConflictingEvents.concat(item);
+      let state = Calendar.fromInput(JSON.parse(item.calendar));
+      state.preferToday = false;
+      this.$refs.editCalendar.$refs.calendar.setState(state);
     },
     toggleVisible : function(item) {
       this.activeComp.table = false;
@@ -275,16 +271,12 @@ export default {
         this.activeComp.calendar = true;
       }
     },
-    revertState(){
-      this.isEditing = false;
-      this.$eventHub.$emit('apply-events');
-    },
     showDialog(item){
       //TO CHANGE: update database
       this.itemChosen = item;
       this.dialog = true;
       console.log(this.itemChosen)
-    },
+    }
   }
 }
 </script>

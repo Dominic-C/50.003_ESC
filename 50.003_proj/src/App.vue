@@ -22,7 +22,7 @@
             </v-select>
           </v-flex>
         </v-layout>
-        
+
         <form-submit 
           v-if="user==='Professor' && 
             phase===1 && 
@@ -71,10 +71,8 @@
             activeComp.viewSuggestions"></approve-table>
         <view-status-table  
           :username="username" 
-          :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="true"
           :suggestions="suggestibleTable"
-          user="Professor"
           @view-conflicts="updateConflicts"
           v-if="phase===2 &&
             user==='Professor' &&
@@ -91,14 +89,32 @@
             activeComp.viewExistingRequests"></approve-table>
         <view-status-table  
           :username="username" 
-          :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="false"
           :suggestions="suggestibleTable"
-          user="Professor"
           @view-conflicts="updateConflicts"
           v-if="phase===3 &&
             user==='Professor' &&
             activeComp.viewExistingRequests"></view-status-table>
+        <approve-table  
+          :username="username" 
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="true"
+          :suggestions="suggestibleTable"
+          user="Timetable Planner"
+          @view-conflicts="updateConflicts"
+          v-if="phase===2 &&
+            user==='Timetable Planner' &&
+            activeComp.viewSuggestions"></approve-table>
+        <approve-table  
+          :username="username" 
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="false"
+          :suggestions="suggestibleTable"
+          user="Timetable Planner"
+          @view-conflicts="updateConflicts"
+          v-if="phase===3 &&
+            user==='Timetable Planner' &&
+            activeComp.viewExistingRequests"></approve-table>
         
 <!-- (user==='Professor' || user==='Admin' || user==='Course Coordinator' || user==='') -->
       </v-content>
@@ -602,9 +618,12 @@ export default {
   },
   created() {
     this.$eventHub.$on('event-update', this.updateModifiable);
+    this.$eventHub.$on('save-state', this.saveState)
+    this.loadState();
   },
   beforeDestroy() {
-      this.$eventHub.$off('event-update');
+    this.$eventHub.$off('event-update');
+    this.$eventHub.$off('save-state');
   },
   methods: {
     toggleVisible : function(item) {
@@ -650,11 +669,11 @@ export default {
     },
     getColour(){
       let colour = Colors[Math.floor(Colors.length * Math.random())].value;
-      if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
+      while (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
         this.getColour();
       }
       //if colour is black or grey
-      else if (colour === "#000000" || colour === '#9E9E9E'){
+      while (colour === "#000000" || colour === '#9E9E9E'){
         this.getColour();
       }
       this.coloursUsed.push(colour);
@@ -771,9 +790,10 @@ export default {
         calendar: calendar,
         submittedOn:  moment().format('MMMM D YYYY (dddd) h:mm:ss a'),
         status: "Pending",
-        locationConflict: false,
-        classConflict: true,
+        locationConflict: true,
+        classConflict: false,
         professorConflict: false,
+        conflicts: []
       })
 
     },
@@ -788,6 +808,35 @@ export default {
         professorConflict: false,
       })
 
+    }
+  },
+  saveState(){
+    let suggestible = this.suggestibleTable;
+    let jsonSuggestible = JSON.stringify(suggestible);
+    localStorage.setItem('suggestibleTable', jsonSuggestible);
+
+    let requestable = this.requestableTable;
+    let jsonRequestable = JSON.stringify(requestable);
+    localStorage.setItem('requestableTable', jsonRequestable);
+  },
+  loadState(){
+    let state = {};
+    try
+    {
+      let savedStateSuggestible = JSON.parse(localStorage.getItem('suggestibleTable'));
+      let savedStateRequestable = JSON.parse(localStorage.getItem('requestableTable'));
+      if (savedStateSuggestible)
+      {
+        this.suggestibleTable.concat(savedStateSuggestible);
+      }
+      if (savedStateRequestable)
+      {
+        this.requestableTable.concat(savedStateRequestable);
+      }
+    }
+    catch (e)
+    {
+      console.log( e );
     }
   }
 }
