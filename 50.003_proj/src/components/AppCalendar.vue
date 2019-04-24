@@ -127,6 +127,7 @@
 
 				</template>
 
+				<!-- Popover On Click -->
 				<template slot="eventPopover" slot-scope="slotData">
 					<ds-calendar-event-popover
 						v-bind="slotData"
@@ -149,6 +150,7 @@
 			</ds-calendar>
     </div>
 
+		<!-- Confirm Dialog On Push -->
 		<div>
 			<app-calendar-confirm-dialog :dialog="dialog">
 				<template slot="title"><slot name="title"></slot></template>
@@ -157,12 +159,14 @@
 				<template slot="yesButton"><slot name="yesButton"></slot></template>
 			</app-calendar-confirm-dialog>
 		</div>
-  </div>
+
+	</div>
 </template>
 
 <script>
 import { Calendar } from 'dayspan';
 import dsCalendar from '../components/DaySpanCalendar.vue';
+import dsCalendarEventPopover from '../components/DaySpanCalendarEventPopover.vue'
 import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
 
 export default {
@@ -198,6 +202,7 @@ export default {
   },
   components: {
 		dsCalendar,
+		dsCalendarEventPopover,
 		AppCalendarConfirmDialog
   },
   data: () => ({
