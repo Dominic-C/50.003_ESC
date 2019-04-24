@@ -22,9 +22,11 @@ LOCATION_CHOICES = [('1', 'any'), ('2', 'Lecture Theatre')]
 """
 
 """
+
+
 class Schedule(models.Model):
     course_Name = models.CharField(max_length=120)
-    pillar_Type = models.CharField(max_length=10, choices=PILLAR_CHOICES)
+    pillar_Type = models.IntegerField(max_length=10, choices=PILLAR_CHOICES)
 
     event_Name = models.CharField(max_length=120, default="None")
     lecturer = models.CharField(max_length=50)
@@ -34,7 +36,7 @@ class Schedule(models.Model):
     date = models.DateField(("Date"), default=datetime.date.today)
     start_Time = models.TimeField()
     event_Duration = models.IntegerField(default=0, choices=DURATION_CHOICES)
-    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)
+    location = models.IntegerField(max_length=50, choices=LOCATION_CHOICES)
     is_Event = models.BooleanField(default=False)
     initiated_By = models.CharField(max_length=50, default="Nobody")
     is_Conflicting = models.BooleanField(default=False)
@@ -44,8 +46,8 @@ class Schedule(models.Model):
 
     def __str__(self):
         return self.pillar_Type + " - " + self.course_Name
-    
+
     def __iter__(self):
-    for field_name in self._meta.get_all_field_names():
-        value = getattr(self, field_name, None)
-        yield (field_name, value)
+        for field_name in self._meta.get_all_field_names():
+            value = getattr(self, field_name, None)
+            yield (field_name, value)

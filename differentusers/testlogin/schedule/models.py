@@ -20,7 +20,7 @@ LOCATION_CHOICES = [('1', 'any'), ('2', 'Lecture Theatre')]
 
 class Schedule(models.Model):
     course_Name = models.CharField(max_length=120)
-    pillar_Type = models.CharField(max_length=10, choices=PILLAR_CHOICES)
+    pillar_Type = models.IntegerField(choices=PILLAR_CHOICES)
     event_Name = models.CharField(max_length=120, default="None")
     description = models.TextField(blank=True, null=True)
     date = models.DateField(("Date"), default=datetime.date.today)
@@ -28,7 +28,9 @@ class Schedule(models.Model):
     event_Duration = models.IntegerField(default=0, choices=DURATION_CHOICES)
     lecturer = models.CharField(max_length=50)
     class_Enrolled = models.CharField(max_length=4, default="")
-    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)
+    # location = models.IntegerField(choices=LOCATION_CHOICES)
+    location = models.IntegerField()
+
     is_Event = models.BooleanField(default=False)
     initiated_By = models.CharField(max_length=50, default="Nobody")
     is_Conflicting = models.BooleanField(default=False)

@@ -7,6 +7,8 @@ from django.core import serializers
 from django.http import HttpResponse, Http404
 from loginpage.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
+from datetime import timedelta
+import datetime as dt
 # Create your views here.
 
 
@@ -42,14 +44,16 @@ def add_schedule(request):
         # check if form is valid
         if form.is_valid():
             print(Schedule.objects.filter(location=2))
-            print(form.cleaned_data['start_time'],
-                  form.cleaned_data['end_time'])
+            print((dt.datetime.combine(dt.date(1,1,1),form.cleaned_data['start_Time']) + timedelta( minutes = form.cleaned_data['event_Duration'] * 15 )).time())
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
-
+                
                 for i in lectureTheaterBookings:
-                    if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
+                    i_start_time = i.start_Time
+                    i_end_time = (dt.datetime.combine(dt.date(1,1,1),i_start_time) + timedelta(minutes = i.event_Duration * 15)).time()
+                    print("event ", i, i_start_time, i_end_time)
+                    if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
                         schedule_item = form.save(commit=False, conflict=1)
                         schedule_item.save()
