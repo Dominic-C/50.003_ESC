@@ -46,6 +46,9 @@ urlpatterns = [
         path('downloadsample', planners.SampleDownloadView.as_view(),
              name="downloadsample"),
         path('revert', planners.RevertToPhase1.as_view(), name="revert"),
+        path('acceptlist', planners.AcceptSuggestionsListView.as_view(), name="acceptlist"),
+        path('accept/<int:pk>', planners.AcceptSuggestion.as_view(), name="accept"),
+        path('finalise', planners.FinaliseView.as_view(), name="finalise"),
     ], 'classroom'), namespace='planners')),
 
     path('sutdadmin/', include(([
