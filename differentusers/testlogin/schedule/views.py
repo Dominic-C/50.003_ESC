@@ -74,6 +74,22 @@ def add_schedule(request):
     return render(request, 'schedule/createSchedule_form.html', context)
 
 
+@professor_required
+@login_required
+@drafting_required
+def deconflict_suggestions(request):
+    # if request.method == "POST":
+
+    return None
+
+@professor_required
+@login_required
+@drafting_required
+def finalize_suggestion(request):
+    # if request.method == "POST":
+
+    return None
+
 # def serialized_schedule(request):
 #     queryset = Schedule.objects.all()
 #     queryset = serializers.serialize('json', queryset)

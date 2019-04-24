@@ -30,14 +30,19 @@ class CreateScheduleForm(forms.ModelForm):
         fields = '__all__'
         widgets = { #'start_time': forms.Select(choices=HOUR_CHOICES),
                    # 'end_time': forms.Select(choices=HOUR_CHOICES),
-                   'location': forms.Select(choices=LOCATION_CHOICES)
+                   'location': forms.Select(choices=LOCATION_CHOICES),
+                   'is_Finalized' : forms.HiddenInput(),
+                   'is_Conflicting' : forms.HiddenInput(),
+                   'is_Suggestion' : forms.HiddenInput()
                    }
+        
 
-    def save(self, commit=True, conflict=0):
+    def save(self, conflict=0, commit=True):
         m = super(CreateScheduleForm, self).save(commit=False)
         # do custom stuff
+        m.is_Suggestion = True
         if conflict == 1:
-            m.isConflicting = True
+            m.is_Conflicting = True
         if commit:
             m.save()
         return m

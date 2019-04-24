@@ -1,9 +1,20 @@
 
 <ul class="navbar-nav mr-auto">
 
-  <li class="nav-item">
-        <a class="nav-link" href="#">Make Booking for External Guests</a>
+	<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Bookings
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="{% url 'sutdadmin:makebooking' %}">Make Booking</a>
+      <a class="dropdown-item" href="{% url 'sutdadmin:bookings' %}">View Bookings</a>
+    </div>
   </li>
-  
+
+
+  <li class="nav-item">
+        <a class="nav-link" href="#">View Events Calendar</a>
+  </li>
+
 </ul>
       
