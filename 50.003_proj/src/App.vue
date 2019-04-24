@@ -58,7 +58,7 @@
           @requested="updateRequested"
           v-if="phase===3 &&
             user==='Professor' &&
-            useractiveComp.requestChangesToCalendar"></requestable-calendar>
+            activeComp.requestChangesToCalendar"></requestable-calendar>
         <approve-table  
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
@@ -81,16 +81,16 @@
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="false"
-          :suggestions="suggestibleTable"
+          :suggestions="requestableTable"
           @view-conflicts="updateConflicts"
           user="Course Coordinator"
-          v-if="phase===2 &&
+          v-if="phase===3 &&
             user==='Course Coordinator' &&
             activeComp.viewExistingRequests"></approve-table>
         <view-status-table  
           :username="username" 
           :suggesting="false"
-          :suggestions="suggestibleTable"
+          :suggestions="requestableTable"
           @view-conflicts="updateConflicts"
           v-if="phase===3 &&
             user==='Professor' &&
@@ -143,6 +143,7 @@ export default {
     coloursMap: new Map(),
     modifiableCalendarEvent: {locked:[], modifiable:[]},
     possibleConflictingEvents: [],
+    conflicts: [],
     username: "username", //TO CHANGE: replace with username
     //TO CHANGE: get from database
     suggestibleTable: [],
@@ -790,12 +791,12 @@ export default {
         calendar: calendar,
         submittedOn:  moment().format('MMMM D YYYY (dddd) h:mm:ss a'),
         status: "Pending",
-        locationConflict: true,
-        classConflict: false,
+        locationConflict: false,
+        classConflict: true,
         professorConflict: false,
-        conflicts: []
+        conflict: this.conflicts
       })
-
+      this.conflicts = [];
     },
     updateRequested(calendar){
       this.requestableTable.push({
@@ -803,14 +804,70 @@ export default {
         calendar: calendar,
         submittedOn:  moment().format('MMMM D YYYY (dddd) h:mm:ss a'),
         status: "Pending",
-        locationConflict: true,
-        classConflict: false,
+        locationConflict: false,
+        classConflict: true,
         professorConflict: false,
+        conflict: this.conflicts
       })
-
+      this.conflicts = [];
     }
   },
+  // hasLocationConflict(calendar){
+  //   let events = JSON.parse(calendar).events;
+  //   for (var event of events){
+  //     for (var lesson of this.calendarEventTable){
+  //       if (lesson.schedule.dayOfWeek[0] === event.schedule.dayOfWeek[0])
+  //         if (lesson.schedule.times[0] === event.schedule.times[0]){
+  //           if (lesson.data.location === event.schedule.location){
+  //             if (this.conflits.length === 0){
+  //               this.conflicts.push(event);
+  //             }
+  //             this.conflicts.push(lesson);
+  //             return true;
+  //           }
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // },
+  // hasClassConflict(calendar){
+  //   let events = JSON.parse(calendar).events;
+  //   for (var event of events){
+  //     for (var lesson of this.calendarEventTable){
+  //       if (lesson.schedule.dayOfWeek[0] === event.schedule.dayOfWeek[0])
+  //         if (lesson.schedule.times[0] === event.schedule.times[0]){
+  //           if (lesson.data.classEnrolled === event.schedule.classEnrolled){
+  //             if (this.conflits.length === 0){
+  //               this.conflicts.push(event);
+  //             }
+  //             this.conflicts.push(lesson);
+  //             return true;
+  //           }
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // },
+  // hasProfessorConflict(calendar){
+  //   let events = JSON.parse(calendar).events;
+  //   for (var event of events){
+  //     for (var lesson of this.calendarEventTable){
+  //       if (lesson.schedule.dayOfWeek[0] === event.schedule.dayOfWeek[0])
+  //         if (lesson.schedule.times[0] === event.schedule.times[0]){
+  //           if (lesson.data.professor === event.schedule.professor){
+  //             if (this.conflits.length === 0){
+  //               this.conflicts.push(event);
+  //             }
+  //             this.conflicts.push(lesson);
+  //             return true;
+  //           }
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // },
   saveState(){
+    console.log("saving...");
     let suggestible = this.suggestibleTable;
     let jsonSuggestible = JSON.stringify(suggestible);
     localStorage.setItem('suggestibleTable', jsonSuggestible);

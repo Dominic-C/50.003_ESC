@@ -3,7 +3,7 @@
     <v-data-table
 		:headers="headers"
     :headers-length="7"
-		:items="suggestions"
+		:items="mockData"
     item-key="submittedOn"
 		class="elevation-1"
     v-if="activeComp.table"
