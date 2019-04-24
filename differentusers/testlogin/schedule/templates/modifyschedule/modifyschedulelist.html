@@ -15,8 +15,7 @@
 				<th scope="col">Is an Event</th> 
 			    <th scope="col">Conflicts with other suggestions</th>
 				<th scope="col">Resolve </th>
-				<td> <a class="btn btn-info" href="{% url 'schedule:modify' item.id %}" role="button">Edit</a>
-					</td>
+				
 			
 		  	</tr>	
 			
@@ -26,7 +25,8 @@
 			<td>{{ item.course_Name }}</td>
 			<td>{{ item.is_Event }}</td>
 			<td>{{ item.is_Conflicting }}</td>
-			<td></td>
+			<td> <a class="btn btn-info" href="{% url 'schedule:modify' item.id %}" role="button">Edit</a>
+			</td>
 			 
 		</tr>
 	   	{% empty %}
