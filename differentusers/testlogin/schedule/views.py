@@ -46,8 +46,8 @@ def add_schedule(request):
         form = CreateScheduleForm(request.POST)
         # check if form is valid
         if form.is_valid():
-            print(Schedule.objects.filter(location=2))
-            print((dt.datetime.combine(dt.date(1,1,1),form.cleaned_data['start_Time']) + timedelta( minutes = form.cleaned_data['event_Duration'] * 15 )).time())
+            # print(Schedule.objects.filter(location=2))
+            # print((dt.datetime.combine(dt.date(1,1,1),form.cleaned_data['start_Time']) + timedelta( minutes = form.cleaned_data['event_Duration'] * 15 )).time())
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
@@ -58,7 +58,7 @@ def add_schedule(request):
                     print("event ", i, i_start_time, i_end_time)
                     if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
-                        schedule_item = form.save(commit=False, conflict=1)
+                        schedule_item = form.save(commit=False, location_conflict=1)
                         schedule_item.save()
                         messages.warning(request, 'Your suggestion clashes with another existing schedule.')
                         return redirect('schedule:addschedule')
@@ -73,23 +73,6 @@ def add_schedule(request):
         'form': form,
     }
     return render(request, 'schedule/createSchedule_form.html', context)
-
-
-@professor_required
-@login_required
-@drafting_required
-def deconflict_suggestions(request):
-    # if request.method == "POST":
-
-    return None
-
-@professor_required
-@login_required
-@drafting_required
-def finalize_suggestion(request):
-    # if request.method == "POST":
-
-    return None
 
 
 

@@ -37,15 +37,19 @@ class CreateScheduleForm(forms.ModelForm):
                    }
         
 
-    def save(self, conflict=0, commit=True):
+    def save(self, location_conflict=0, class_conflict=0, prof_conflict=0, commit=True):
         m = super(CreateScheduleForm, self).save(commit=False)
         # do custom stuff
         day = m.date.weekday() + 1
         m.day_Of_Week = day
         print("automatic day of week is: ", day)
         m.is_Suggestion = True
-        if conflict == 1:
+        if location_conflict == 1:
             m.is_Conflicting = True
+        if prof_conflict == 1:
+            m.is_profconflict = True
+        if class_conflict == 1:
+            m.is_classconflict = True
         if commit:
             m.save()
         return m
