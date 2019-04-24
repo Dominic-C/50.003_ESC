@@ -1,7 +1,7 @@
 <template>
   <div>
 		<v-layout justify-end pb-3>	
-		<template v-if="!isInMode">
+			<template v-if="!isInMode">
 				<slot name="switchModeButton"/>
 			</template>
 			<template v-else>
@@ -10,17 +10,17 @@
 			</template>
 		</v-layout>
 	<div style="height: 500px">
-			<ds-calendar 
-				:events="events" 
-				:calendar="calendar" 
-				:suggestible="isSuggestible" 
-				:requestable="isRequestable"
-				:editable="isEditable"
-				:read-only="!isInMode"
-				:username="username"
-				@event-update="updateCalendar"
-				ref='calendar'
-				>
+		<ds-calendar 
+			:events="events" 
+			:calendar="calendar" 
+			:suggestible="isSuggestible" 
+			:requestable="isRequestable"
+			:editable="isEditable"
+			:read-only="!isInMode"
+			:username="username"
+			@event-update="updateCalendar"
+			ref='calendar'
+			>
 				<template slot="eventDetailsLocation" slot-scope="{ details }">
 					<!-- Location -->
 					<template v-if="mode==='finalised' || details.readonly === true">
@@ -148,7 +148,7 @@
 					<div class="ds-ev-description">{{ getCalendarTime( calendarEvent ) }}</div>
 				</template>
 			</ds-calendar>
-	</div>
+		</div>
 
 		<!-- Confirm Dialog On Push -->
 		<div>

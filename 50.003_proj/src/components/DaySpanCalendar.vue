@@ -433,13 +433,13 @@ export default {
       {
         //fill in suggestedBy and readonly status by default for suggestible mode
         if (this.suggestible){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, readonly: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, readonly: false, color: "#1976d2"});
         } 
         else if (this.requestable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {requestedBy: this.username, readonly: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {requestedBy: this.username, readonly: false, color: "#1976d2"});
         }
         else if (this.editable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {editedBy: this.username, readonly: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {editedBy: this.username, readonly: false, color: "#1976d2"});
         }
         else {
           eventDialog.add(day);
@@ -463,13 +463,13 @@ export default {
       {
         //fill in suggestedBy and readonly status by default for suggestible mode
         if (this.suggestible){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy: this.username, readonly: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {suggestedBy: this.username, readonly: false, color: "#1976d2"});
         } 
         else if (this.requestable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, readonly: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, readonly: false, color: "#1976d2"});
         }
         else if (this.editable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false, color: "#1976d2"});
         }  
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
@@ -501,13 +501,13 @@ export default {
       {
         //fill in suggestedBy and readonly status by default for suggestible mode
         if (this.suggestible){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, readonly: false});
+          eventDialog.addSchedule(day, Schedule.forDay(day), {suggestedBy: this.username, readonly: false, color: "#1976d2"});
         } 
         else if (this.requestable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, readonly: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {requestedBy: this.username, readonly: false, color: "#1976d2"});
         } 
         else if (this.editable){
-          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false, color: "#1976d2"});
         } 
         else {
           eventDialog.add( day );
