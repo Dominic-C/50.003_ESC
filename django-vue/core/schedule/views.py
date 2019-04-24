@@ -7,6 +7,7 @@ from django.core import serializers
 from django.http import HttpResponse, Http404
 from login.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
 
 # from django.ical.views import ICalFeed
 
@@ -28,8 +29,16 @@ from django.contrib.auth.decorators import login_required
 #         return item.
 
 def save_ical(request):
-    if request.method == "GET":
-        queryset =
+    template_name = "schedule/schedule_list.html"
+    records = Schedule.objects.all()
+    entries = []
+    count = 0
+    decompressed = model_to_dict(
+        Schedule, fields=[field.name for field in Schedule._meta.fields])
+    for row in decompressed:
+        with entry as decompressed[row]:
+
+    return render(request, template_name)
 
 
 # @method_decorator([login_required], name='dispatch')
@@ -43,7 +52,7 @@ class ScheduleCreateView(CreateView):
         return redirect('schedule:list')
 
 
-@method_decorator([login_required], name='dispatch')
+# @method_decorator([login_required], name='dispatch')
 class ScheduleListView(ListView):
     model = Schedule
     template_name = "schedule/schedule_list.html"
