@@ -4,11 +4,12 @@ from .models import Schedule
 from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect 
 from loginpage.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
 import datetime as dt
+from django.contrib import messages
 # Create your views here.
 
 
@@ -57,18 +58,18 @@ def add_schedule(request):
                         conflict = True
                         schedule_item = form.save(commit=False, conflict=1)
                         schedule_item.save()
-                        raise Http404('time conflict')
+                        messages.warning(request, 'Your suggestion clashes with another existing schedule.')
+                        # return render(request, 'schedule/createSchedule_form.html')
+                        return redirect('schedule:addschedule')
 
+            messages.success(request, 'Your suggestion was saved successfully.')
             schedule_item = form.save(commit=False)
             schedule_item.save()
     else:  # no post data, resulting in empty form.
         form = CreateScheduleForm()
-
-    queryset = Schedule.objects.all()
-    jsonset = serializers.serialize('json', queryset)
+    
     context = {
         'form': form,
-        'jsonset': queryset
     }
     return render(request, 'schedule/createSchedule_form.html', context)
 
