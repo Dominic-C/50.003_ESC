@@ -9,6 +9,12 @@
 
 	<h2>Suggest Changes</h2>
 
+	{% if messages %}
+	<ul class="messages">
+		
+	</ul>
+	{% endif %}
+
 	<form method="POST" action="">
 	    {% csrf_token %}
 
