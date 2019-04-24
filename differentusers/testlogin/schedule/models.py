@@ -35,12 +35,14 @@ class Schedule(models.Model):
     is_Event = models.BooleanField(default=False)
     initiated_By = models.CharField(max_length=50, default="Nobody")
     is_Conflicting = models.BooleanField(default=False)
+    is_classconflict = models.BooleanField(default=False)
+    is_profconflict = models.BooleanField(default=False)
     day_Of_Week = models.IntegerField(
         default=1, validators=[MaxValueValidator(7), MinValueValidator(1)])
 
     def __str__(self):
-        return "{} for {}".format(self.course_Name, self.class_Enrolled) 
-    
+        return "{} for {}".format(self.course_Name, self.class_Enrolled)
+
 # class NewSchedule(models.Model):
     # title = models.CharField(max_length=120)
     # pillarType = models.CharField(max_length=10)

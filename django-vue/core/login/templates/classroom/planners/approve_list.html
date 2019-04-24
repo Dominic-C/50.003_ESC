@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} - Accept Suggestions{% endblock %}
+
+{% block content %}
+
+
+	<h3>Accept Suggestions</h3>
+	<!-- ['event_Name', 'lecturer', 'description', 'date', 'start_Time', 'event_Duration', 'location'] -->
+
+	<table  class="table table-hover">
+		<thead class="thead-dark">
+			<tr>
+			    <th scope="col">Course Name & Class Enrolled</th>
+			    <th scope="col">Lecturer</th> 
+			    <th scope="col">Date</th>
+			    <th scope="col">Start Time</th>
+			    <th scope="col">Duration</th>
+			    <th scope="col">Accepted</th>
+			    <th scope="col">Accept</th>
+		  	</tr>	
+			
+		{% for item in object_list %}    	 
+		<tr>
+			<td>{{ item.course_Name }} - {{ item.class_Enrolled }}</td>
+			<td>{{ item.lecturer }}</td>
+			<td>{{ item.date }}</td>
+			<td>{{ item.start_Time }}</td>
+			<td>{{ item.event_Duration }}</td>
+			<td>{{ item.is_Approved }}</td>
+			<td><a class="btn btn-info" href="{% url 'planners:accept' item.id %}" role="button">Accept</a></td>
+
+		</tr>
+	   	{% empty %}
+		   <tr> 
+		   <td>No events yet </td>
+		   <td></td>
+		   <td></td>
+	    	</tr>
+
+		{% endfor %}
+
+{% endblock %}

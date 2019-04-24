@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 
 from ..serializers import PreferencesSerializer
-from ..decorators import planner_required, finalisation_required
+from ..decorators import planner_required, finalisation_required, drafting_required
 from ..forms import PlannerSignUpForm
 from ..models import User, Preferences, Lesson
 from schedule.models import Schedule
@@ -195,3 +195,46 @@ def csv_upload(request):
         messages.error(request, "Unable to upload file! Check your format and for empty rows!")
         return HttpResponseRedirect(reverse("planners:uploaddata"))
 
+@method_decorator([login_required, planner_required, drafting_required ], name='dispatch')
+class AcceptSuggestionsListView(ListView):
+    template_name = "classroom/planners/approve_list.html"
+
+    def get_queryset(self):
+        # returns Preferences submited by the current User
+        return Schedule.objects.filter(is_Approved=True)
+
+@method_decorator([login_required, planner_required, drafting_required ], name='dispatch')
+class AcceptSuggestion(UpdateView):
+    model = Schedule
+    template_name = "classroom/planners/approve_update.html"
+    fields = ['is_Suggestion']
+
+    def form_valid(self, form):
+        details = form.save(commit=False)
+        details.course_Name = self.object.course_Name
+        details.pillar_Type = self.object.pillar_Type
+        details.event_Name = self.object.event_Name
+        details.lecturer = self.object.lecturer
+        details.class_Enrolled = self.object.class_Enrolled
+        details.description = self.object.description
+        details.date = self.object.date
+        details.start_Time = self.object.start_Time
+        details.location = self.object.location
+        details.event_Duration = self.object.event_Duration
+        details.is_Event = self.object.is_Event
+        details.initiated_By = self.object.initiated_By
+        details.day_Of_Week = self.object.day_Of_Week
+        details.save()
+        return redirect('planners:acceptlist')
+
+    def get_queryset(self):
+        # only allow current User to edit the details he has submitted
+        return Schedule.objects.filter(is_Approved=True)
+
+
+@method_decorator([login_required, planner_required, drafting_required], name='dispatch')
+class FinaliseView(View):
+
+    def get(self, request, *args, **kwargs):
+        Schedule.objects.filter(is_Suggestion=True).update(is_Finalised=True)
+        return redirect('planners:home')

@@ -44,5 +44,11 @@ class Schedule(models.Model):
     day_Of_Week = models.IntegerField(
         default=1, validators=[MaxValueValidator(7), MinValueValidator(1)])
 
+    is_classconflict = models.BooleanField(default=False)
+    is_profconflict = models.BooleanField(default=False)
+    is_Suggestion = models.BooleanField(default=False)
+    is_Approved = models.BooleanField(default=False)
+    is_Finalized = models.BooleanField(default=False)
+
     def __str__(self):
         return self.pillar_Type + " - " + self.course_Name
