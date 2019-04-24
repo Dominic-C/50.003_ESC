@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %} - Confirm Delete{% endblock %}
+
+
+{% block content %}
+
+	<form method="post">{% csrf_token %}
+	    <p>Are you sure you want to approve <b>{{ object }}</b>?</p>
+	     <a class="btn btn-secondary" href="{% url 'professors:details'  %}" role="button">Cancel</a>
+	    <input type="submit" class="btn btn-danger" value="Confirm">
+	</form>
+
+{% endblock %}
