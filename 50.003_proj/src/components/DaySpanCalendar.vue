@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op, Schedule } from 'dayspan';
+import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op, Schedule, Parse, ScheduleModifier } from 'dayspan';
 import Vuetify from 'vuetify';
 import DaySpanVuetify from 'dayspan-vuetify';
 	
@@ -547,6 +547,10 @@ export default {
       let sourceStart = calendarEvent.time.start;
       let schedule = calendarEvent.schedule;
       let options = [];
+      console.log('target: ', target);
+      console.log('targetStart: ', targetStart);
+      console.log('sourceStart', sourceStart);
+      console.log('Schedule: ', schedule);
       moveEvent.handled = true;
       let callbacks = {
         cancel: () => {
@@ -572,6 +576,22 @@ export default {
         },
         all: () => {
           schedule.moveTime( sourceStart.asTime(), targetStart.asTime() );
+          //let index = -1;
+          //for (var timings of schedule.times){
+          //  index ++;
+          // if (timings.matches(new Time (sourceStart.hour, sourceStart.minute))) break;
+          //}
+          //if (index !== -1){
+          //  schedule.times.splice(index, 1);
+          //}
+          //schedule.times.push(new Time(targetStart.hour, targetStart.minute));
+          //schedule.dayOfWeek = Parse.frequency([targetStart.dayOfWeek], "dayOfWeek");
+          //schedule.move(targetStart, sourceStart, schedule.meta);
+          //console.log(new ScheduleModifier().map);
+          
+          //schedule = new Schedule( {dayOfWeek: [0], times: schedule.times, duration: schedule.duration, durationUnit: schedule.durationUnit }, schedule.meta );
+          //console.log(schedule.describe())
+
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
           this.$emit('event-update', calendarEvent.event);
@@ -612,8 +632,7 @@ export default {
           });
         }
         if (this.$dayspan.features.moveAll &&
-            !schedule.isFullDay() &&
-            targetStart.sameDay(sourceStart))
+            !schedule.isFullDay())
         {
           options.push({
             text: this.labels.moveAll,

@@ -59,7 +59,8 @@ Vue.prototype.$locations = [
   "Lecture Theatre 4",
   "Lecture Theatre 5"
 ];
-Vue.prototype.$termStartDate = moment([2019, 8, 16]);
+Vue.prototype.$termStartDate = moment("2019-9-16", "YYYY-MM-DD");
+Vue.prototype.$termEndDate = moment("2019-12-20", "YYYY-MM-DD");
 Vue.prototype.$eventHub = new Vue(); // Global event bus
 
 new Vue({

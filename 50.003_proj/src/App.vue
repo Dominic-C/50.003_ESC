@@ -50,6 +50,7 @@
 
 <script>
 import * as moment from 'moment';
+import { Day } from 'dayspan';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
@@ -68,332 +69,6 @@ export default {
     modifiableCalendarEvent: {locked:[], modifiable:[]},
     possibleConflictingEvents: [],
     username: "username", //TO CHANGE: replace with username
-    //TO CHANGE: get from database (main table)
-    //main database table
-    calendarEventTable: [
-      {
-        "data": {
-          "courseName": "50.003 Elements of Software Constructions",
-          "pillar": "ISTD",
-          "id": "001",
-          "title": "50.003 Tutorial",
-          "color": null,
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["09:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.003 Elements of Software Constructions",
-          "pillar": "ISTD",
-          "id": "002",
-          "title": "50.003 Lecture",
-          "color": null,
-          "location": "1.203",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [2],
-          "times": ["10:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.005 Computer Systems Engineering",
-          "pillar": "ESD",
-          "id": "003",
-          "title": "50.005 Lab",
-          "color": "#9C27B0",
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["14:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.005 Computer Systems Engineering",
-          "pillar": "ESD",
-          "id": "004",
-          "title": "50.005 Lecture",
-          "color": "#9C27B0",
-          "location": "1.203",
-          "professor": "Sudipta",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [4],
-          "times": ["11:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.034 Probability and Statistics",
-          "pillar": "EPD",
-          "id": "005",
-          "title": "50.034 Tutorial",
-          "color": "#3F51B5",
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["09:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.034 Probability and Statistics",
-          "pillar": "EPD",
-          "id": "006",
-          "title": "50.034 Lecture",
-          "color": "#3F51B5",
-          "location": "1.203",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [2],
-          "times": ["10:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.004 Algorithms",
-          "pillar": "ASD",
-          "id": "007",
-          "title": "50.004 Tutorial",
-          "color": "#E91E63",
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["09:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.004 Algorithms",
-          "pillar": "ASD",
-          "id": "008",
-          "title": "50.004 Lecture",
-          "color": "#E91E63",
-          "location": "1.203",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [2],
-          "times": ["10:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "01.112 Machine Learning",
-          "pillar": "FRESHMORE",
-          "id": "009",
-          "title": "01.112 Tutorial",
-          "color": "#FFEB3B",
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["09:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "01.112 Machine Learning",
-          "pillar": "FRESHMORE",
-          "id": "010",
-          "title": "01.112 Lecture",
-          "color": "#FFEB3B",
-          "location": "1.203",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [2],
-          "times": ["10:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.040 Natural Language Processing",
-          "pillar": "HASS",
-          "id": "011",
-          "title": "50.040 Tutorial",
-          "color": "#2196F3",
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["09:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.040 Natural Language Processing",
-          "pillar": "HASS",
-          "id": "012",
-          "title": "50.040 Lecture",
-          "color": "#2196F3",
-          "location": "1.203",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [2],
-          "times": ["10:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.006 User Interface",
-          "pillar": "ISTD",
-          "id": "013",
-          "title": "50.006 Tutorial",
-          "color": "#2196F3",
-          "location": "2.501",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [1],
-          "times": ["09:00"],
-          "duration": 60,
-          "durationUnit": "minutes"
-        }
-      },
-      {
-        "data": {
-          "courseName": "50.006 User Interface",
-          "pillar": "ISTD",
-          "id": "014",
-          "title": "50.006 Lecture",
-          "color": "#2196F3",
-          "location": "1.203",
-          "professor": "Sun Jun",
-          "classEnrolled": "F01",
-          "calendarType": "Academic",
-          "readonly": null,
-          "suggestedBy": null,
-          "requestedBy": null,
-          "isSelected": false
-        },
-        "schedule": {
-          "dayOfWeek": [2],
-          "times": ["10:00"],
-          "duration": 90,
-          "durationUnit": "minutes"
-        }
-      }
-    ],
     //TO CHANGE: get from database
     suggestibleTable: [],
     requestableTable: [],
@@ -425,6 +100,379 @@ export default {
     ViewStatusTable
   },
   computed: {
+    //TO CHANGE: get from database (main table)
+    //main database table
+    calendarEventTable(){
+
+      // console.log(new Day(this.$termStartDate.clone().day("Monday").add(6, 'weeks')).date);
+      // console.log(this.$termStartDate.clone().day("Monday").add(6, 'weeks').format());
+      // console.log(this.$termStartDate.format());
+      return [
+        {
+        "data": {
+          "courseName": "50.003 Elements of Software Constructions",
+          "pillar": "ISTD",
+          "id": "001",
+          "title": "50.003 Tutorial",
+          "color": null,
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["09:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.003 Elements of Software Constructions",
+          "pillar": "ISTD",
+          "id": "002",
+          "title": "50.003 Lecture",
+          "color": null,
+          "location": "1.203",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [2],
+          "times": ["10:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.005 Computer Systems Engineering",
+          "pillar": "ESD",
+          "id": "003",
+          "title": "50.005 Lab",
+          "color": "#9C26B0",
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["14:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.005 Computer Systems Engineering",
+          "pillar": "ESD",
+          "id": "004",
+          "title": "50.005 Lecture",
+          "color": "#9C26B0",
+          "location": "1.203",
+          "professor": "Sudipta",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [4],
+          "times": ["11:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(4)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.034 Probability and Statistics",
+          "pillar": "EPD",
+          "id": "005",
+          "title": "50.034 Tutorial",
+          "color": "#3F51B5",
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["09:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.034 Probability and Statistics",
+          "pillar": "EPD",
+          "id": "006",
+          "title": "50.034 Lecture",
+          "color": "#3F51B5",
+          "location": "1.203",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [2],
+          "times": ["10:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.004 Algorithms",
+          "pillar": "ASD",
+          "id": "006",
+          "title": "50.004 Tutorial",
+          "color": "#E91E63",
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["09:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.004 Algorithms",
+          "pillar": "ASD",
+          "id": "008",
+          "title": "50.004 Lecture",
+          "color": "#E91E63",
+          "location": "1.203",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [2],
+          "times": ["10:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "01.112 Machine Learning",
+          "pillar": "FRESHMORE",
+          "id": "009",
+          "title": "01.112 Tutorial",
+          "color": "#FFEB3B",
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["09:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "01.112 Machine Learning",
+          "pillar": "FRESHMORE",
+          "id": "010",
+          "title": "01.112 Lecture",
+          "color": "#FFEB3B",
+          "location": "1.203",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [2],
+          "times": ["10:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.040 Natural Language Processing",
+          "pillar": "HASS",
+          "id": "011",
+          "title": "50.040 Tutorial",
+          "color": "#2196F3",
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["09:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.040 Natural Language Processing",
+          "pillar": "HASS",
+          "id": "012",
+          "title": "50.040 Lecture",
+          "color": "#2196F3",
+          "location": "1.203",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [2],
+          "times": ["10:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.006 User Interface",
+          "pillar": "ISTD",
+          "id": "013",
+          "title": "50.006 Tutorial",
+          "color": "#2196F3",
+          "location": "2.501",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [1],
+          "times": ["09:00"],
+          "duration": 60,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      },
+      {
+        "data": {
+          "courseName": "50.006 User Interface",
+          "pillar": "ISTD",
+          "id": "014",
+          "title": "50.006 Lecture",
+          "color": "#2196F3",
+          "location": "1.203",
+          "professor": "Sun Jun",
+          "classEnrolled": "F01",
+          "calendarType": "Academic",
+          "readonly": null,
+          "suggestedBy": null,
+          "requestedBy": null,
+          "isSelected": false
+        },
+        "schedule": {
+          "dayOfWeek": [2],
+          "times": ["10:00"],
+          "duration": 90,
+          "durationUnit": "minutes",
+          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "start": this.$termStartDate,
+          "end": this.$termEndDate
+        }
+      }
+    ]},
     selectedCalendarEvents() {
       //TO CHANGE: iterating through all events to get those selected-- to do through database method eventually
       var selectedEvents = []

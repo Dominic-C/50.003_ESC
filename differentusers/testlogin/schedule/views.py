@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import timedelta
 import datetime as dt
 from django.contrib import messages
+from django.urls import reverse
 # Create your views here.
 
 
@@ -45,8 +46,8 @@ def add_schedule(request):
         form = CreateScheduleForm(request.POST)
         # check if form is valid
         if form.is_valid():
-            print(Schedule.objects.filter(location=2))
-            print((dt.datetime.combine(dt.date(1,1,1),form.cleaned_data['start_Time']) + timedelta( minutes = form.cleaned_data['event_Duration'] * 15 )).time())
+            # print(Schedule.objects.filter(location=2))
+            # print((dt.datetime.combine(dt.date(1,1,1),form.cleaned_data['start_Time']) + timedelta( minutes = form.cleaned_data['event_Duration'] * 15 )).time())
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
@@ -57,7 +58,7 @@ def add_schedule(request):
                     print("event ", i, i_start_time, i_end_time)
                     if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
-                        schedule_item = form.save(commit=False, conflict=1)
+                        schedule_item = form.save(commit=False, location_conflict=1)
                         schedule_item.save()
                         messages.warning(request, 'Your suggestion clashes with another existing schedule.')
                         return redirect('schedule:addschedule')
@@ -72,23 +73,6 @@ def add_schedule(request):
         'form': form,
     }
     return render(request, 'schedule/createSchedule_form.html', context)
-
-
-@professor_required
-@login_required
-@drafting_required
-def deconflict_suggestions(request):
-    # if request.method == "POST":
-
-    return None
-
-@professor_required
-@login_required
-@drafting_required
-def finalize_suggestion(request):
-    # if request.method == "POST":
-
-    return None
 
 
 
@@ -111,23 +95,36 @@ class ModifyScheduleEditView(UpdateView):
     # form_class = SubmitCourseDetails
     fields = '__all__'
 
-    # def form_valid(self, form):
-    #     details = form.save(commit=False)
-    #     details.first_name = self.request.user.first_name
-    #     details.last_name = self.request.user.last_name
-    #     details.user_type = self.request.user.user_type
-    #     details.created_by = self.request.user
-    #     details.save()
-    #     return redirect('schedule:allschedules')
+    def form_valid(self, form):
+        modify = form.save(commit=False)
+        print(type(self))
+        modify.course_Name = form.cleaned_data['course_Name']
+        modify.pillar_Type = form.cleaned_data['pillar_Type']
+        modify.event_Name = form.cleaned_data['event_Name']
+        modify.description = form.cleaned_data['description']
+        modify.date= form.cleaned_data['date']
+        modify.start_Time = form.cleaned_data['start_Time']
+        modify.event_Duration = form.cleaned_data['event_Duration']
+        modify.lecturer = form.cleaned_data['lecturer']
+        modify.class_Enrolled = form.cleaned_data['class_Enrolled']
+        modify.location = form.cleaned_data['location']
+        modify.is_Event = form.cleaned_data['is_Event']
+        modify.initiated_By = form.cleaned_data['initiated_By']
+        modify.is_Conflicting = form.cleaned_data['is_Conflicting']
+        modify.day_Of_Week = form.cleaned_data['day_Of_Week']
+        modify.is_Suggestion = False
+        modify.is_Finalized = True
+        modify.save()
+        return redirect('schedule:allschedules')
 
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
         return Schedule.objects.all()
 
 
-# class DetailsDeleteView(DeleteView):
-#     model = Schedule
-#     template_name = 'coursedetails/preferences_confirm_delete.html'
+class ModifyScheduleDeleteView(DeleteView):
+    model = Schedule
+    template_name = 'modifyschedule/modifyschedule_delete.html'
 
-#     def get_success_url(self):
-#         return reverse('professors:details')
+    def get_success_url(self):
+        return reverse('schedule:allschedules')

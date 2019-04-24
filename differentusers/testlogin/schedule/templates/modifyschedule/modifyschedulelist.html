@@ -12,25 +12,26 @@
 			<tr>
 			    <th scope="col">Initiated By</th>
 				<th scope="col">Course Name</th>
-				<th scope="col">Is an Event</th> 
-			    <th scope="col">Conflicts with other suggestions</th>
+				<th scope="col">Date</th> 
+				<th scope="col">Time</th>
+				<th scope="col">Class Enrolled</th>
 				<th scope="col">Resolve </th>
-				
-			
 		  	</tr>	
 			
 		{% for item in object_list %}    	 
 		<tr>
 			<td>{{ item.initiated_By }}</td>
 			<td>{{ item.course_Name }}</td>
-			<td>{{ item.is_Event }}</td>
-			<td>{{ item.is_Conflicting }}</td>
+			<td>{{ item.date }}</td>
+			<td>{{ item.start_Time }}</td>
+			<td>{{ item.class_Enrolled }}</td>
 			<td> <a class="btn btn-info" href="{% url 'schedule:modify' item.id %}" role="button">Edit</a>
+				<a class="btn btn-danger" href="{% url 'schedule:delete' item.id %}" role="button">Delete</a></td>
 			</td>
 			 
 		</tr>
 	   	{% empty %}
-		   <tr> 
+		   <tr>
 		   <td>No course details yet </td>
 		   <td></td>
 		   <td></td>

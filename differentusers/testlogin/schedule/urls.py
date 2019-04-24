@@ -8,5 +8,6 @@ app_name = 'schedule'
 urlpatterns = [
     path('testingdropdown', views.add_schedule, name = 'addschedule'),
     path('allschedules', views.ModifyScheduleListView.as_view() , name= 'allschedules'),
-    path('modify/<int:pk>', views.ModifyScheduleEditView.as_view() , name= 'modify')
+    path('modify/<int:pk>', views.ModifyScheduleEditView.as_view() , name= 'modify'),
+    path('delete/<int:pk>', views.ModifyScheduleDeleteView.as_view() , name= 'delete')
 ]
