@@ -15,6 +15,7 @@
                 <th scope='col'>Location</th>
 			    <th scope="col">Date</th>
                 <th scope='col'>Time</th>
+				<th scope='col'>Conflict Type</th>
 			    <th scope="col">Edit/Approve </th>
 		  	</tr>	
 			
@@ -25,6 +26,16 @@
             <td>{{ item.location }}</td>
 			<td>{{ item.date }}</td>
             <td>{{ item.start_Time }}</td>
+			<td>{% if item.is_Conflicting %} 
+			Location
+			{% endif %}
+			{% if item.is_profconflict %}
+			Professor
+			{% endif %}
+			{% if item.is_classconflict %}
+			Cohort
+			{% endif %}
+			</td>
 			<td> 
             <a class="btn btn-info" href="{% url 'coordinators:suggestedits' item.id %}" role="button">Edit</a>
             <a class="btn btn-primary" href="{% url 'coordinators:approvesuggestion' item.id %}" role="button">Approve</a></td>

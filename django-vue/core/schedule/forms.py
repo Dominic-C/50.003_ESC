@@ -22,31 +22,71 @@ LOCATION_CHOICES = [('1', 'any'),
                     ('2', 'Lecture Theatre')]
 
 
+# class CreateScheduleForm(forms.ModelForm):
+#     # if location is LT, then check if time clashes in queryset
+#     queryset = Schedule.objects.all()
+
+#     lecturer = forms.ModelChoiceField(queryset=User.objects.filter(
+#         user_type=usertypes['professor']))  # TODO: change to Professor model in future
+#     initiated_By = forms.ModelChoiceField(queryset=User.objects.all())
+
+#     class Meta:
+#         model = Schedule
+#         fields = '__all__'
+#         exclude = ('initiated_By',)
+#         widgets = {'start_Time': forms.Select(choices=HOUR_CHOICES),
+#                    'event_Duration': forms.Select(choices=DURATION_CHOICES),
+#                    'day_Of_Week': forms.Select(choices=DAY_CHOICES),
+#                    'location': forms.Select(choices=LOCATION_CHOICES)
+#                    }
+
+#     def save(self, commit=True, conflict=0):
+#         m = super(CreateScheduleForm, self).save(commit=False)
+#         # do custom stuff
+#         if conflict == 1:
+#             m.is_Conflicting = True
+#         if commit:
+#             m.save()
+#         return m
+
+#         # iff lecturer wants to book lt, then check if available.
+
+
 class CreateScheduleForm(forms.ModelForm):
     # if location is LT, then check if time clashes in queryset
     queryset = Schedule.objects.all()
 
     lecturer = forms.ModelChoiceField(queryset=User.objects.filter(
-        user_type=usertypes['professor']))  # TODO: change to Professor model in future
-    initiated_By = forms.ModelChoiceField(queryset=User.objects.all())
+        user_type=usertypes['professor']))
 
     class Meta:
         model = Schedule
         fields = '__all__'
-        exclude = ('initiated_By',)
-        widgets = {'start_Time': forms.Select(choices=HOUR_CHOICES),
+        widgets = {'location': forms.Select(choices=LOCATION_CHOICES),
+                   'start_Time': forms.Select(choices=HOUR_CHOICES),
                    'event_Duration': forms.Select(choices=DURATION_CHOICES),
-                   'day_Of_Week': forms.Select(choices=DAY_CHOICES),
-                   'location': forms.Select(choices=LOCATION_CHOICES)
+                   'is_Finalized': forms.HiddenInput(),
+                   'is_Conflicting': forms.HiddenInput(),
+                   'is_Suggestion': forms.HiddenInput(),
+                   'initiated_By': forms.HiddenInput(),
+                   'day_Of_Week': forms.HiddenInput(),
+                   'is_classconflict': forms.HiddenInput(),
+                   'is_profconflict': forms.HiddenInput()
                    }
 
-    def save(self, commit=True, conflict=0):
+    def save(self, location_conflict=0, class_conflict=0, prof_conflict=0, commit=True):
         m = super(CreateScheduleForm, self).save(commit=False)
         # do custom stuff
-        if conflict == 1:
+        day = m.date.weekday() + 1
+        m.day_Of_Week = day
+        print("automatic day of week is: ", day)
+        m.is_Suggestion = True
+        if location_conflict == 1:
             m.is_Conflicting = True
+        if prof_conflict == 1:
+            m.is_profconflict = True
+        if class_conflict == 1:
+            m.is_classconflict = True
         if commit:
             m.save()
         return m
-
-        # iff lecturer wants to book lt, then check if available.

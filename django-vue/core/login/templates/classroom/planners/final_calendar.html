@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+{% block title %} - tempschedule List{% endblock %}
+
+{% block content %}
+<script>
+	var tables = {{ jsonset|safe }};
+	var simpleTable = [];
+    var pillars = ['ASD', 'ISTD', 'EPD', 'ESD', 'FRESHMORE', 'MASTERS', 'PHD', 'NONE']
+    var colours = {}
+    var finalized = true //TODO DETERMINE STATE
+	for (item in tables){
+		simpleTable[item] = tables[item].fields;
+	}
+	var json = [];
+      for (var i = 0; i < simpleTable.length; i++) {
+        var tempdata = {};
+        var tempschedule = {};
+        tempdata["courseName"] = simpleTable[i].course_Name;
+        tempdata["pillar"] = simpleTable[i].pillar_Type;
+        tempdata["id"] = i;
+        tempdata["eventName"] = simpleTable[i].event_Name;
+        tempdata["color"] = "#1976d2";
+        tempdata["location"] = simpleTable[i].location;
+        tempdata["professor"] = simpleTable[i].lecturer;
+        tempdata["classEnrolled"] = simpleTable[i].class_Enrolled;
+        tempdata["calendarType"] = simpleTable[i].is_Event
+          ? "Event"
+          : "Academic";
+        tempdata["locked"] = false;
+        tempdata["suggestedBy"] = simpleTable[i].initiated_By;
+        tempdata["requestedBy"] = simpleTable[i].initiated_By;
+        tempdata["isSelected"] = false;
+
+        tempschedule["dayOfWeek"] = [simpleTable[i].day_Of_Week];
+        tempschedule["times"] = [simpleTable[i].start_Time];
+        tempschedule["duration"] = simpleTable[i].event_Duration;
+        tempschedule["durationUnit"] = "minutes";
+
+        var pair = {
+          data: tempdata,
+          schedule: tempschedule
+        };
+        json[i] = pair;
+      }
+
+</script>
+<div id="app">
+</div>
+{% endblock %}

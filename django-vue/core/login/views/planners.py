@@ -1,4 +1,5 @@
-import csv, io
+import csv
+import io
 
 from django.contrib import messages
 from django.contrib.auth import login
@@ -17,13 +18,13 @@ from ..forms import PlannerSignUpForm
 from ..models import User, Preferences, Lesson
 from schedule.models import Schedule
 
-usertypes = { 
-    'professor': 1, 
-    'sutdadmin': 2, 
-    'coursecoordinators': 3, 
-    'timetableplanner': 4, 
-    'student' : 5
-    }
+usertypes = {
+    'professor': 1,
+    'sutdadmin': 2,
+    'coursecoordinators': 3,
+    'timetableplanner': 4,
+    'student': 5
+}
 
 
 class PlannerSignUpView(CreateView):
@@ -38,7 +39,8 @@ class PlannerSignUpView(CreateView):
     def form_valid(self, form):
         userdetail = form.save(commit=False)
         try:
-            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+            userdetail.phase = User.objects.filter(
+                user_type=usertypes['professor'])[0].phase
         except:
             userdetail.phase = 1
         userdetail = form.save()
@@ -49,6 +51,7 @@ class PlannerSignUpView(CreateView):
 @method_decorator([login_required, planner_required], name='dispatch')
 class PlannerMainView(TemplateView):
     template_name = 'classroom/planners/planner_main.html'
+
 
 @method_decorator([login_required, planner_required], name='dispatch')
 class PreferencesCSVExportView(View):
@@ -63,24 +66,26 @@ class PreferencesCSVExportView(View):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="export.csv"'
-        
+
         serializer = self.get_serializer(
             Preferences.objects.all(),
             many=True
         )
         header = PreferencesSerializer.Meta.fields
-        
+
         writer = csv.DictWriter(response, fieldnames=header)
 
         # csv.DictWriter requires the input to .writerow to be a dictionary
-        fieldnames = ['First Name', 'Last Name', 'Subject Code', 'Subject Name', 'Cohort Size', 'Number of Cohorts']
+        fieldnames = ['First Name', 'Last Name', 'Subject Code',
+                      'Subject Name', 'Cohort Size', 'Number of Cohorts']
         # create a dictionary with header as keys and modified headernames as the values
         writer.writerow(dict(zip(header, fieldnames)))
         # writer.writeheader()
         for row in serializer.data:
             writer.writerow(row)
-        
+
         return response
+
 
 @method_decorator([login_required, planner_required], name='dispatch')
 class SampleDownloadView(View):
@@ -88,7 +93,8 @@ class SampleDownloadView(View):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="sample.csv"'
         writer = csv.writer(response, delimiter=',')
-        writer.writerow(['Course Name', "Pillar", "Event Name", "Description", "Date", "Start Time", "Event Duration", "Lecturer", "Class Enrolled", "Location", "Initiated By", 'Day of Week'])
+        writer.writerow(['Course Name', "Pillar", "Event Name", "Description", "Date", "Start Time",
+                         "Event Duration", "Lecturer", "Class Enrolled", "Location", "Initiated By", 'Day of Week'])
         return response
 
 
@@ -109,17 +115,19 @@ class NextPhase(View):
         # User.objects.all().update(phase=1)
         return redirect('planners:currentphase')
 
+
 @method_decorator([login_required, planner_required], name='dispatch')
 class PreviousPhase(View):
 
     def get(self, request, *args, **kwargs):
         current_phase = self.request.user.phase
         # change phase to previous phase
-        if (current_phase > 1 ):
+        if (current_phase > 1):
             User.objects.all().update(phase=current_phase-1)
         # to reset
         # User.objects.all().update(phase=1)
         return redirect('planners:currentphase')
+
 
 @method_decorator([login_required, planner_required, finalisation_required], name='dispatch')
 class RevertToPhase1(View):
@@ -132,10 +140,9 @@ class RevertToPhase1(View):
 
         current_phase = self.request.user.phase
         # rever phase to phase 1
-        if (current_phase == 3 ):
+        if (current_phase == 3):
             User.objects.all().update(phase=1)
         return redirect('planners:currentphase')
-
 
 
 @login_required
@@ -143,11 +150,11 @@ class RevertToPhase1(View):
 def csv_upload(request):
     template = "classroom/planners/phaser_upload.html"
 
-# course_Name, pillar_Type, event_Name, description, date, start_Time, event_Duration, lecturer, 
-# class_enrolled, location, is_event, initiated_by, 
+# course_Name, pillar_Type, event_Name, description, date, start_Time, event_Duration, lecturer,
+# class_enrolled, location, is_event, initiated_by,
 # is_conflicting, day_of_week
 
-# 'Course Name', "Pillar", "Event Name", "Description", "Date", "Start Time", "Event Duration", 
+# 'Course Name', "Pillar", "Event Name", "Description", "Date", "Start Time", "Event Duration",
 # "Lecturer", "Class Enrolled", "Location", "Initiated By", 'Day of Week'
 
     if request.method == "GET":
@@ -160,9 +167,10 @@ def csv_upload(request):
             messages.error(request, "This file is not a .csv file")
             raise Exception('not a csv file')
 
-        #if file is too large
+        # if file is too large
         if csv_file.multiple_chunks():
-            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            messages.error(request, "Uploaded file is too big (%.2f MB)." % (
+                csv_file.size/(1000*1000),))
             raise Exception('File too big')
 
         data_set = csv_file.read().decode('utf-8')
@@ -184,26 +192,29 @@ def csv_upload(request):
                 initiated_By=column[10],
                 is_Conflicting=False,
                 day_Of_Week=column[11],
-                )
+            )
 
         context = {}
         messages.success(request, 'File upload successful')
         return render(request, template, context)
 
     except Exception as e:
-        messages.error(request,"Unable to upload file. " + repr(e))
-        messages.error(request, "Unable to upload file! Check your format and for empty rows!")
+        messages.error(request, "Unable to upload file. " + repr(e))
+        messages.error(
+            request, "Unable to upload file! Check your format and for empty rows!")
         return HttpResponseRedirect(reverse("planners:uploaddata"))
 
-@method_decorator([login_required, planner_required, drafting_required ], name='dispatch')
+
+@method_decorator([login_required, planner_required, drafting_required], name='dispatch')
 class AcceptSuggestionsListView(ListView):
     template_name = "classroom/planners/approve_list.html"
 
     def get_queryset(self):
         # returns Preferences submited by the current User
-        return Schedule.objects.filter(is_Approve=True)
+        return Schedule.objects.filter(is_Approved=True)
 
-@method_decorator([login_required, planner_required, drafting_required ], name='dispatch')
+
+@method_decorator([login_required, planner_required, drafting_required], name='dispatch')
 class AcceptSuggestion(UpdateView):
     model = Schedule
     template_name = "classroom/planners/approve_update.html"
@@ -229,7 +240,7 @@ class AcceptSuggestion(UpdateView):
 
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
-        return Schedule.objects.filter(is_Approve=True)
+        return Schedule.objects.filter(is_Approved=True)
 
 
 @method_decorator([login_required, planner_required, drafting_required], name='dispatch')
@@ -238,3 +249,21 @@ class FinaliseView(View):
     def get(self, request, *args, **kwargs):
         Schedule.objects.filter(is_Suggestion=True).update(is_Finalised=True)
         return redirect('planners:home')
+
+
+@method_decorator([login_required, planner_required, finalisation_required], name='dispatch')
+class FinalisedCalendarView(View):
+    model = Schedule
+    template_name = 'classroom/planners/final_calendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ViewDraftCalendar, self).get_context_data(**kwargs)
+        objects = Schedule.objects.all()
+        user = self.request.user
+        phase = self.request.user.phase
+        context['jsonset'] = serializers.serialize("json", objects)
+        # context['phase'] = phase
+        # context['user'] = user
+        # context['userdata'] = serializers.serialize("json", user)
+        # context['jsonphase'] = serializers.serialize("json", phase)
+        return context
