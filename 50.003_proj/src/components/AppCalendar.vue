@@ -23,13 +23,13 @@
 				>
 				<template slot="eventDetailsLocation" slot-scope="{ details }">
 					<!-- Location -->
-					<template v-if="mode==='finalised' || (mode==='requestable' && details.locked === true)">
+					<template v-if="mode==='finalised' || details.readonly === true">
 						<v-text-field 
 							single-line hide-details solo flat
 							prepend-icon="location_on"
 							label="Add Location"
 							:items="$locations"
-							:readonly="!isInMode || details.locked"
+							:readonly="!isInMode || details.readonly"
 							v-model="details.location">
 						</v-text-field>
 					</template>
@@ -39,7 +39,7 @@
 							prepend-icon="location_on"
 							label="Add Location"
 							:items="$locations"
-							:readonly="!isInMode || details.locked"
+							:readonly="!isInMode || details.readonly"
 							v-model="details.location">
 							<template slot="item" slot-scope="{ item }">
 								<v-list-tile-content>
@@ -56,7 +56,7 @@
 						hide-details single-line solo flat
 						prepend-icon="subject"
 						label="Add Description"
-						:readonly="!isInMode || details.locked"
+						:readonly="!isInMode || details.readonly"
 						v-model="details.description"
 					></v-textarea>
 				</template>
@@ -68,7 +68,7 @@
 						prepend-icon="event"
 						:items="$calendarTypes"
 						label="Event Type"
-						:readonly="!isInMode || details.locked"
+						:readonly="!isInMode || details.readonly"
 						v-model="details.calendarType">
 						<template slot="item" slot-scope="{ item }">
 							<v-list-tile-content>
@@ -83,7 +83,7 @@
 						prepend-icon="view_column"
 						:items="$pillars"
 						label="Pillar"
-						:readonly="!isInMode || details.locked"
+						:readonly="!isInMode || details.readonly"
 						v-model="details.pillar">
 						<template slot="item" slot-scope="{ item }">
 							<v-list-tile-content>
@@ -97,7 +97,7 @@
 						single-line hide-details solo flat
 						prepend-icon="school"
 						label="Professor/Organiser"
-						:readonly="!isInMode || details.locked"
+						:readonly="!isInMode || details.readonly"
 						v-model="details.professor"
 					></v-text-field>
 
@@ -106,7 +106,7 @@
 						single-line hide-details solo flat
 						prepend-icon="group"
 						label="Participants"
-						:readonly="!isInMode || details.locked"
+						:readonly="!isInMode || details.readonly"
 						v-model="details.classEnrolled"
 					></v-text-field>
 
@@ -115,7 +115,7 @@
 						hide-details single-line solo flat
 						prepend-icon="comment"
 						label="Add Comments"
-						:readonly="!isInMode || details.locked"
+						:readonly="!isInMode || details.readonly"
 						v-model="details.comments"
 					></v-textarea>
 

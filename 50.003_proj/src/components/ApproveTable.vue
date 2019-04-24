@@ -32,7 +32,7 @@
           <td :class="[props.item.classConflict ? 'red' : '']"></td>
           <td :class="[props.item.professorConflict ? 'red' : '']"></td>
           <td class="text-xs-center">{{ props.item.status }}</td>
-          <td class="justify-center align-center layout px-0">
+          <td :class="[props.item.status!=='Pending' ? 'grey' : '', 'justify-center align-center layout px-0']">
             <v-tooltip bottom v-if="props.item.status === 'Pending'">
               <template v-slot:activator="{ on }">
                 <v-icon color="green" v-on="on" @click.stop="showApproveDialog(props.item)">check</v-icon>
