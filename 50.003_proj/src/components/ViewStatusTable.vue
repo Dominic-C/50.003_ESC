@@ -31,9 +31,9 @@
           <td :class="[props.item.classConflict ? 'red' : '']"></td>
           <td :class="[props.item.professorConflict ? 'red' : '']"></td>
           <td class="text-xs-center">{{ props.item.status }}</td>
-          <td :class="[props.item.status==='Cancelled' ? 'grey' : '', 'justify-center align-center layout px-0']">
+          <td :class="[props.item.status!=='Pending' ? 'grey' : '', 'justify-center align-center layout px-0']">
             <v-tooltip bottom>
-              <template v-slot:activator="{ on }" v-if="props.item.status!=='Cancelled'">
+              <template v-slot:activator="{ on }" v-if="props.item.status==='Pending'">
                 <v-icon color="red" v-on="on" @click.stop="showDialog(props.item)">close</v-icon>
               </template>
               <span>Cancel {{ suggesting ? 'Suggestion' : 'Request'}}</span>
