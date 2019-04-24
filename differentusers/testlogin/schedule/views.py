@@ -9,6 +9,7 @@ from loginpage.decorators import professor_required, drafting_required, beforefi
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
 import datetime as dt
+from django.contrib import messages
 # Create your views here.
 
 
@@ -57,7 +58,9 @@ def add_schedule(request):
                         conflict = True
                         schedule_item = form.save(commit=False, conflict=1)
                         schedule_item.save()
-                        raise Http404('time conflict')
+                        messages.warning(request, 'Your suggestion clashes with another existing schedule.')
+                        # return render(request, 'schedule/createSchedule_form.html')
+                        return redirect('schedule:addschedule')
 
             schedule_item = form.save(commit=False)
             schedule_item.save()

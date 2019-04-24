@@ -2,6 +2,7 @@ from django import forms
 from schedule.models import Schedule
 from loginpage.models import User
 import datetime as dt
+from django.contrib import messages
 
 usertypes = {
     'professor': 1,
