@@ -28,17 +28,17 @@ from django.forms.models import model_to_dict
 #     def item_title(self, item):
 #         return item.
 
-def save_ical(request):
-    template_name = "schedule/schedule_list.html"
-    records = Schedule.objects.all()
-    entries = []
-    count = 0
-    decompressed = model_to_dict(
-        Schedule, fields=[field.name for field in Schedule._meta.fields])
-    for row in decompressed:
-        with entry as decompressed[row]:
+# def save_ical(request):
+#     template_name = "schedule/schedule_list.html"
+#     records = Schedule.objects.all()
+#     entries = []
+#     count = 0
+#     decompressed = model_to_dict(
+#         Schedule, fields=[field.name for field in Schedule._meta.fields])
+#     for row in decompressed:
+#         with entry as decompressed[row]:
 
-    return render(request, template_name)
+#     return render(request, template_name)
 
 
 # @method_decorator([login_required], name='dispatch')

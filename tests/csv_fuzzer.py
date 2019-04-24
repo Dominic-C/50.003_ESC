@@ -21,7 +21,7 @@ def csv_fuzzer(n):
 		for i in range(n):
 			row = []
 			row.append(string_fuzz(random.choice(COURSENAMES)))
-			row.append(random.choice(PILLARS))
+			row.append(random.randint(0,len(PILLARS)-1))
 			row.append(string_fuzz(random.choice(COURSENUMBER) + " Lecture"))
 			row.append(string_fuzz("This is a lecture"))
 			row.append(date_fuzz())
@@ -29,7 +29,7 @@ def csv_fuzzer(n):
 			row.append("90")
 			row.append(string_fuzz("Ngai Man"))
 			row.append("F" + "0" + str(random.randint(1,9)))
-			row.append("Lecture Theatre")
+			row.append("2")
 			row.append(string_fuzz("Ngai Man"))
 			row.append(str(random.randint(1,7)))
 			print(row)
