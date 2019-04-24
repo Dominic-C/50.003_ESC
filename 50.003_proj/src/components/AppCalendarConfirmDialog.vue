@@ -17,7 +17,7 @@
 
 <script>
   export default {
-		name: 'AppCalendarEventDialog',
+		name: 'AppCalendarConfirmDialog',
 		props: {
 			dialog: {
 				type: Boolean

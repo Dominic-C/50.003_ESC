@@ -424,6 +424,7 @@ export default {
       {
         return;
       }
+      this.eventLocked = false;
       let eventDialog = this.$refs.eventDialog;
       let calendar = this.$refs.calendar;
       let useDialog = !this.hasCreatePopover;
@@ -452,6 +453,7 @@ export default {
       {
         return;
       }
+      this.eventLocked = false;
       let eventDialog = this.$refs.eventDialog;
       let calendar = this.$refs.calendar;
       let useDialog = !this.hasCreatePopover;
@@ -481,6 +483,7 @@ export default {
       {
         return;
       }
+      this.eventLocked = false;
       let eventDialog = this.$refs.eventDialog;
       let calendar = this.$refs.calendar;
       let useDialog = !this.hasCreatePopover || !calendar;
@@ -547,10 +550,12 @@ export default {
       let sourceStart = calendarEvent.time.start;
       let schedule = calendarEvent.schedule;
       let options = [];
+      /*
       console.log('target: ', target);
       console.log('targetStart: ', targetStart);
       console.log('sourceStart', sourceStart);
       console.log('Schedule: ', schedule);
+      */
       moveEvent.handled = true;
       let callbacks = {
         cancel: () => {
@@ -579,19 +584,18 @@ export default {
           //let index = -1;
           //for (var timings of schedule.times){
           //  index ++;
-          // if (timings.matches(new Time (sourceStart.hour, sourceStart.minute))) break;
+          //  if (timings.matches(new Time (sourceStart.hour, sourceStart.minute))) break;
           //}
           //if (index !== -1){
           //  schedule.times.splice(index, 1);
           //}
           //schedule.times.push(new Time(targetStart.hour, targetStart.minute));
-          //schedule.dayOfWeek = Parse.frequency([targetStart.dayOfWeek], "dayOfWeek");
+          //schedule.dayOfWeek = [targetStart.date.weekday()];
+          //Parse.frequency([targetStart.dayOfWeek], "dayOfWeek");
           //schedule.move(targetStart, sourceStart, schedule.meta);
-          //console.log(new ScheduleModifier().map);
           
           //schedule = new Schedule( {dayOfWeek: [0], times: schedule.times, duration: schedule.duration, durationUnit: schedule.durationUnit }, schedule.meta );
-          //console.log(schedule.describe())
-
+          //console.log(schedule.describe());
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
           this.$emit('event-update', calendarEvent.event);
@@ -631,8 +635,9 @@ export default {
             callback: callbacks.duplicate
           });
         }
-        if (this.$dayspan.features.moveAll &&
-            !schedule.isFullDay())
+         if (this.$dayspan.features.moveAll &&
+            !schedule.isFullDay() &&
+            targetStart.sameDay(sourceStart))
         {
           options.push({
             text: this.labels.moveAll,

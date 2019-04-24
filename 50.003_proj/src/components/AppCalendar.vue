@@ -1,7 +1,7 @@
 <template>
   <div>
 		<v-layout justify-end pb-3>	
-    	<template v-if="!isInMode">
+		<template v-if="!isInMode">
 				<slot name="switchModeButton"/>
 			</template>
 			<template v-else>
@@ -9,7 +9,7 @@
 				<slot name="pushButton"/>
 			</template>
 		</v-layout>
-    <div style="height: 500px">
+	<div style="height: 500px">
 			<ds-calendar 
 				:events="events" 
 				:calendar="calendar" 
@@ -148,7 +148,7 @@
 					<div class="ds-ev-description">{{ getCalendarTime( calendarEvent ) }}</div>
 				</template>
 			</ds-calendar>
-    </div>
+	</div>
 
 		<!-- Confirm Dialog On Push -->
 		<div>
@@ -172,19 +172,19 @@ import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
 export default {
   name: 'AppCalendar',
   props: {
-    events: {
-      type: Array
-    },
-    username: {
-      type: String,
-      required: true
-    },
-    mode: {
-      type: String,
-      validator: function (value) {
-        //check that it is in either suggestible or requestable mode
-        return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
-      }
+	events: {
+	  type: Array
+	},
+	username: {
+	  type: String,
+	  required: true
+	},
+	mode: {
+	  type: String,
+	  validator: function (value) {
+		//check that it is in either suggestible or requestable mode
+		return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
+	  }
 		},
 		isInMode: {
 			type: Boolean,
@@ -222,24 +222,24 @@ export default {
 		this.$refs.calendar.rebuild (new Day(this.$termStartDate), false, Units.WEEK);
 	},
   methods: {
-    updateCalendar(event){
-      this.$eventHub.$emit('event-update', event);
-    },
+	updateCalendar(event){
+	  this.$eventHub.$emit('event-update', event);
+	},
 		getCalendarTime(calendarEvent){
-      let sa = calendarEvent.start.format('a');
-      let ea = calendarEvent.end.format('a');
-      let sh = calendarEvent.start.format('h');
-      let eh = calendarEvent.end.format('h');
-      if (calendarEvent.start.minute !== 0)
-      {
-        sh += calendarEvent.start.format(':mm');
-      }
-      if (calendarEvent.end.minute !== 0)
-      {
-        eh += calendarEvent.end.format(':mm');
-      }
-      return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
-    }
+	  let sa = calendarEvent.start.format('a');
+	  let ea = calendarEvent.end.format('a');
+	  let sh = calendarEvent.start.format('h');
+	  let eh = calendarEvent.end.format('h');
+	  if (calendarEvent.start.minute !== 0)
+	  {
+		sh += calendarEvent.start.format(':mm');
+	  }
+	  if (calendarEvent.end.minute !== 0)
+	  {
+		eh += calendarEvent.end.format(':mm');
+	  }
+	  return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
+	}
   }  
 }
 </script>
