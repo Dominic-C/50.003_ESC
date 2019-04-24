@@ -26,13 +26,7 @@
       <h2>Edit Course Details</h2>
       <form method="post" novalidate>
         {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-        {{ form.lecturer|as_crispy_field }}
-        {{ form.class_Enrolled|as_crispy_field }}
-        {{ form.date|as_crispy_field }}
-        {{ form.start_Time|as_crispy_field }}
-        {{ form.event_Duration|as_crispy_field }}
-        {{ form.location|as_crispy_field }}
+        <table> {{form.as_table}} </table>
         <button type="submit" class="btn btn-primary">Edit</button>
       </form>
     </div>

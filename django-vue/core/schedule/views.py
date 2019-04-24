@@ -55,7 +55,6 @@ def add_schedule(request):
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
-
                 for i in lectureTheaterBookings:
                     if (form.cleaned_data['start_Time'] >= i.start_Time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
@@ -104,41 +103,4 @@ class ScheduleListView(ListView):
         context = super(ScheduleListView, self).get_context_data(**kwargs)
         queryset = Schedule.objects.all()
         context['jsonset'] = serializers.serialize("json", queryset)
-        return context
-
-
-class ScheduleEditView(UpdateView):
-    model = Schedule
-    template_name = "schedule/editsggestiondetails.html"
-    fields = ['lecturer', 'class_Enrolled', 'date',
-              'start_Time', 'event_Duration', 'location']
-
-    def form_valid(self, form):
-        details = form.save(commit=False)
-        details.course_Name = self.object.course_Name
-        details.pillar_Type = self.object.pillar_Type
-        details.event_Name = self.object.event_Name
-        details.description = self.object.description
-        details.is_Event = self.object.is_Event
-        details.initiated_By = self.object.intiated_By
-        details.day_Of_Week = self.object.day_Of_Week
-
-        details.save()
-        return redirect('schedule:list')
-
-    def get_queryset(self):
-        return Schedule.objects.filter(created_by=self.request.user)
-
-
-class ScheduleConflictView(ListView):
-    model = Schedule
-    template_name = "schedule/conflictview.html"
-
-    def get_queryset(self):
-        return Schedule.objects.filter(is_Conflicting=True)
-
-    def get_context_data(self, **kwargs):
-        context = super(ScheduleConflictView, self).get_context_data(**kwargs)
-        queryset = Schedule.objects.filter(ic_Conflicting=True)
-        context['conflicts'] = serializers.serialize("json", queryset)
         return context

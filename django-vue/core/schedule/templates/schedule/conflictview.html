@@ -10,19 +10,24 @@
 	<table  class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
-			    <th scope="col">Name</th>
-			    <th scope="col">Subject</th> 
-			    <th scope="col">Cohort Size x No. of Cohorts</th>
-			    <th scope="col">Edit </th>
+			    <th scope="col">Event</th>
+			    <th scope="col">Cohort and Lecturer</th> 
+                <th scope='col'>Location</th>
+			    <th scope="col">Date</th>
+                <th scope='col'>Time</th>
+			    <th scope="col">Edit/Approve </th>
 		  	</tr>	
 			
 		{% for item in object_list %}    	 
 		<tr>
-			<td>{{ item.first_name }} {{ item.last_name }} </td>
-			<td>{{ item.subject_code }} {{ item.subject_name }}</td>
-			<td>{{ item.cohort_size }} x {{ item.cohort_num }}</td>
-			<td> <a class="btn btn-info" href="{% url 'professors:editdetails' item.id %}" role="button">Edit</a>
-				<a class="btn btn-danger" href="{% url 'professors:deletedetails' item.id %}" role="button">Delete</a></td>
+			<td>{{ item.course_Name }} - {{ item.event_Name }} </td>
+			<td>{{ item.class_Enrolled }} - {{ item.lecturer }}</td>
+            <td>{{ item.location }}</td>
+			<td>{{ item.date }}</td>
+            <td>{{ item.start_Time }}</td>
+			<td> 
+            <a class="btn btn-info" href="{% url 'coordinators:suggestedits' item.id %}" role="button">Edit</a>
+            <a class="btn btn-primary" href="{% url 'coordinators:approvesuggestion' item.id %}" role="button">Approve</a></td>
 		</tr>
 	   	{% empty %}
 		   <tr> 
