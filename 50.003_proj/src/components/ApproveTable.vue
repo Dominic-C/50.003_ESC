@@ -169,10 +169,16 @@
       <template slot="title">
         <v-card-title class="headline">Modify suggestions?</v-card-title>
       </template>
-      <template slot="text">
+      <template slot="text" v-if="user==='Course Coordinator'">
         <v-card-text>
           Push the modifications you have made to database for you to send to the timetable planner eventually. 
           Modifications cannot be reverted or re-edited again.
+          </v-card-text>
+      </template>
+      <template slot="text" v-if="user==='Timetable Planner'">
+        <v-card-text>
+          Push the modifications you have made to database.
+          Modifications cannot be reverted.
           </v-card-text>
       </template>
       <template slot="noButton">
@@ -215,7 +221,16 @@
           Cancel
         </v-btn>
       </template>
-      <template slot="yesButton">
+      <template slot="yesButton" v-if="user==='Course Coordinator'">
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="accept()"
+        >
+          OK
+        </v-btn>
+      </template>
+      <template slot="yesButton" v-if="user==='Timetable Planner'">
         <v-btn
           color="green darken-1"
           flat="flat"
@@ -286,6 +301,14 @@ export default {
     suggestions: {
       type: Array,
       required: true
+    },
+    user: {
+      type: String,
+      required: true,
+      validator: function (value) {
+				//check that it is in either suggestible or requestable mode
+				return ['Course Coordinator', 'Timetable Planner'].indexOf(value) !== -1
+				}
     }
   },
 	data: () => ({
@@ -438,9 +461,14 @@ export default {
     }
   },
   methods: {
-    approve(){
+    accept(){
       //TO CHANGE: update database
       this.itemChosen.status = "Accepted";
+      this.approveDialog = false;
+    },
+    approve(){
+      //TO CHANGE: update database
+      this.itemChosen.status = "Approved";
       this.approveDialog = false;
     },
     reject(item){

@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<app-header @changeComp="toggleVisible"></app-header>
+		<app-header @changeComp="update"></app-header>
 		<v-content>
 			<form-submit></form-submit>
 		</v-content>
@@ -13,9 +13,14 @@ import FormSubmit from '../components/FormSubmit.vue';
 
 export default {
 	components: {
-			AppHeader,
-			FormSubmit
+		AppHeader,
+		FormSubmit
+	},
+	methods: {
+		update(item){
+			this.$emit('changeComp', item);
+		}
 	}
-    
+		
 }
 </script>

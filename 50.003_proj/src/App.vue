@@ -3,7 +3,30 @@
     <v-app id="dayspan" v-cloak>
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
-        <form-submit v-if="activeComp.formSubmitNewCourse"></form-submit>
+        <v-layout row wrap>
+          <v-flex xs4 pa-4>
+            <v-select
+              single-line solo flat
+              label="Phase"
+              :items="[{text:'1', value: 1}, {text:'2', value: 2}, {text:'3', value: 3}]"
+              v-model="phase">
+            </v-select>
+          </v-flex>
+          
+          <v-flex xs4 pa-4>
+            <v-select
+              single-line solo flat
+              label="User"
+              :items="['Professor', 'Admin', 'Course Coordinator', 'Student', 'Timetable Planner']"
+              v-model="user">
+            </v-select>
+          </v-flex>
+        </v-layout>
+        
+        <form-submit 
+          v-if="user==='Professor' && 
+            phase===1 && 
+            activeComp.formSubmitNewCourse"></form-submit>
         <search-bar 
           :calendarEventsTable="calendarEventTable"
           :professorTable="professorTable"
@@ -11,38 +34,73 @@
           :locationTable="locationTable"
           :classTable="classTable"
           @selected-search-item="updateCalendar"
-          v-if="activeComp.courseListingForViewer || activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable || activeComp.requestChangesToCalendar">
+          v-if="(phase===2 || phase===3) && 
+            (activeComp.viewTimetableToSuggest || activeComp.viewFinalTimetable || activeComp.requestChangesToCalendar)">
         </search-bar>
         <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <finalised-calendar :events="selectedCalendarEvents" v-if="activeComp.viewFinalTimetable">></finalised-calendar>
+        <finalised-calendar 
+          :events="selectedCalendarEvents" 
+          v-if="phase===3 && 
+            activeComp.viewFinalTimetable">></finalised-calendar>
         <suggestible-calendar 
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
           @suggested="updateSuggested"
-          v-if="activeComp.viewTimetableToSuggest"></suggestible-calendar>
+          v-if="phase===2 &&
+            user==='Professor' &&
+            activeComp.viewTimetableToSuggest"></suggestible-calendar>
         <requestable-calendar
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
           @requested="updateRequested"
-          v-if="activeComp.requestChangesToCalendar"></requestable-calendar>
+          v-if="phase===3 &&
+            user==='Professor' &&
+            useractiveComp.requestChangesToCalendar"></requestable-calendar>
         <approve-table  
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="true"
           :suggestions="suggestibleTable"
+          user="Course Coordinator"
           @view-conflicts="updateConflicts"
-          v-if="activeComp.viewSuggestions"></approve-table>
+          v-if="phase===2 &&
+            user==='Course Coordinator' &&
+            activeComp.viewSuggestions"></approve-table>
         <view-status-table  
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="true"
           :suggestions="suggestibleTable"
+          user="Professor"
           @view-conflicts="updateConflicts"
-          v-if="activeComp.viewSuggestions"></view-status-table>
-
+          v-if="phase===2 &&
+            user==='Professor' &&
+            activeComp.viewSuggestions"></view-status-table>
+        <approve-table  
+          :username="username" 
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="false"
+          :suggestions="suggestibleTable"
+          @view-conflicts="updateConflicts"
+          user="Course Coordinator"
+          v-if="phase===2 &&
+            user==='Course Coordinator' &&
+            activeComp.viewExistingRequests"></approve-table>
+        <view-status-table  
+          :username="username" 
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="false"
+          :suggestions="suggestibleTable"
+          user="Professor"
+          @view-conflicts="updateConflicts"
+          v-if="phase===3 &&
+            user==='Professor' &&
+            activeComp.viewExistingRequests"></view-status-table>
+        
+<!-- (user==='Professor' || user==='Admin' || user==='Course Coordinator' || user==='') -->
       </v-content>
     </v-app>
   </div>
@@ -50,7 +108,6 @@
 
 <script>
 import * as moment from 'moment';
-import { Day } from 'dayspan';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
@@ -64,6 +121,8 @@ import FormSubmit from './components/FormSubmit.vue';
 export default {
   name: 'app',
   data: () => ({
+    phase: null,
+    user: null,
     coloursUsed: [],
     coloursMap: new Map(),
     modifiableCalendarEvent: {locked:[], modifiable:[]},
@@ -79,11 +138,11 @@ export default {
       exportCoursesForPlanner : false,
       // Suggest new timings for course
       viewTimetableToSuggest : false,
-      viewExistingRequests : false,
       viewSuggestions: false,
       // After Finalization activities:
+      viewExistingRequests : false,
       requestChangesToCalendar : false,
-      courseListingForViewer : false,
+      //courseListingForViewer : false,
       viewFinalTimetable : false
     }
   }),
@@ -129,7 +188,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -155,7 +214,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -181,7 +240,7 @@ export default {
           "times": ["14:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("1400")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -207,7 +266,7 @@ export default {
           "times": ["11:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(4)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(4).add(6, 'weeks').format('YYYYMMDD').concat("1100")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -233,7 +292,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -259,7 +318,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -285,7 +344,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -311,7 +370,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -337,7 +396,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -363,7 +422,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -389,7 +448,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -415,7 +474,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -441,7 +500,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -467,7 +526,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -556,7 +615,7 @@ export default {
       this.activeComp.viewFinalTimetable = false;
       this.activeComp.viewExistingRequests = false;
       this.activeComp.requestChangesToCalendar = false;
-      this.activeComp.courseListingForViewer = false;
+      //this.activeComp.courseListingForViewer = false;
       this.activeComp.viewSuggestions = false;
 
       if(item == "formSubmitNewCourse"){
@@ -579,9 +638,9 @@ export default {
         // this.modifiableCalendarEvent = {locked:[], modifiable: []};
         this.activeComp.requestChangesToCalendar = true;
       }
-      if(item == "courseListingForViewer"){
-        this.activeComp.courseListingForViewer = true;
-      }
+      // if(item == "courseListingForViewer"){
+      //   this.activeComp.courseListingForViewer = true;
+      // }
       if(item == "viewFinalTimetable"){
         this.activeComp.viewFinalTimetable = true;
       }
@@ -592,6 +651,10 @@ export default {
     getColour(){
       let colour = Colors[Math.floor(Colors.length * Math.random())].value;
       if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
+        this.getColour();
+      }
+      //if colour is black or grey
+      else if (colour === "#000000" || colour === '#9E9E9E'){
         this.getColour();
       }
       this.coloursUsed.push(colour);

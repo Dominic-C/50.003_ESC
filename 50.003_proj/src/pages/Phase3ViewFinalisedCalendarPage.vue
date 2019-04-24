@@ -3,7 +3,7 @@
       <app-header @changeComp="toggleVisible"></app-header>
       <v-content>
         <search-bar></search-bar>
-        <weekly-calendar-finalised></weekly-calendar-finalised>
+        <finalised-calendar></finalised-calendar>
       </v-content>
     </v-app>
 </template>
@@ -11,14 +11,18 @@
 <script>
 import AppHeader from "../components/AppHeader.vue"
 import SearchBar from '../components/SearchBarVue'
-import WeeklyCalendarFinalised from '../components/WeeklyCalendarFinalised.vue';
-import AppHeaderVue from '../components/AppHeader.vue';
+import FinalisedCalendar from '../components/FinalisedCalendar.vue';
 
 export default {
-    components: {
-        AppHeader,
-        SearchBar, 
-        WeeklyCalendarFinalised
+  components: {
+      AppHeader,
+      SearchBar, 
+      FinalisedCalendar
+  },
+  methods: {
+    update(item){
+      this.$emit('changeComp', item);
     }
+  }
 }
 </script>
