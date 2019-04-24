@@ -81,7 +81,7 @@
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="false"
-          :suggestions="requestableTable"
+          :suggestions="mockData"
           @view-conflicts="updateConflicts"
           user="Course Coordinator"
           v-if="phase===3 &&
@@ -90,7 +90,7 @@
         <view-status-table  
           :username="username" 
           :suggesting="false"
-          :suggestions="requestableTable"
+          :suggestions="mockData"
           @view-conflicts="updateConflicts"
           v-if="phase===3 &&
             user==='Professor' &&
@@ -109,7 +109,7 @@
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
           :suggesting="false"
-          :suggestions="suggestibleTable"
+          :suggestions="mockData"
           user="Timetable Planner"
           @view-conflicts="updateConflicts"
           v-if="phase===3 &&
@@ -161,7 +161,120 @@ export default {
       requestChangesToCalendar : false,
       //courseListingForViewer : false,
       viewFinalTimetable : false
-    }
+    },
+    mockData:[
+      {
+        suggestedBy: 'Prof A',
+        status: "Pending",
+        submittedOn: moment('01 Mar 2019 09:30').format('MMMM D YYYY (dddd) h:mm:ss a'),
+        locationConflict: true,
+        classConflict: false,
+        professorConflict: false,
+        conflict: [
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "001",
+              "title": "50.003 Tutorial",
+              "color": "#9C27B0",
+              "location": "2.501",
+              "professor": "Sun Jun",
+              "classEnrolled": "F01",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [1],
+              "times": ["09:00"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          },
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "002",
+              "title": "50.003 Tutorial",
+              "color": "#1976d2",
+              "location": "2.501",
+              "professor": "Sudipta",
+              "classEnrolled": "F02",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": "Prof A",
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [1],
+              "times": ["09:30"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          }
+        ]
+      },
+      {
+        suggestedBy: 'Prof B',
+        "requestedBy": null,
+        status: "Pending",
+        submittedOn: moment('24 Mar 2019 11:34:00').format('MMMM D YYYY (dddd) h:mm:ss a'),
+        locationConflict: false,
+        classConflict: true,
+        professorConflict: false,
+        conflict: [
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "001",
+              "title": "50.003 Tutorial",
+              "color": "#9C27B0",
+              "location": "2.501",
+              "professor": "Sun Jun",
+              "classEnrolled": "F01",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": null,
+              "requestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [2],
+              "times": ["10:00"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          },
+          {
+            "data": {
+              "courseName": "50.003 Elements of Software Constructions",
+              "pillar": "ISTD",
+              "id": "002",
+              "title": "50.005 Tutorial",
+              "color": "#1976d2",
+              "location": "2.507",
+              "professor": "Gemma Roig",
+              "classEnrolled": "F01",
+              "calendarType": "Academic",
+              "locked": null,
+              "suggestedBy": "Prof B",
+              "requestedBy": null,
+              "isSelected": false
+            },
+            "schedule": {
+              "dayOfWeek": [2],
+              "times": ["10:30"],
+              "duration": 60,
+              "durationUnit": "minutes"
+            }
+          }
+        ]
+      }
+    ]
   }),
   components: {
     AppHeader,

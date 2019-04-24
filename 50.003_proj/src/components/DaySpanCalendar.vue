@@ -398,7 +398,6 @@ export default {
     },
     viewDay(day)
     {
-      console.log(day);
       this.rebuild( day, false, this.types[ 0 ] );
     },
     edit(calendarEvent)

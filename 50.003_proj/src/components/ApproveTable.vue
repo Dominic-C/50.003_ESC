@@ -3,7 +3,7 @@
     <v-data-table
 		:headers="headers"
     :headers-length="7"
-		:items="mockData"
+		:items="suggestions"
     item-key="submittedOn"
 		class="elevation-1"
     v-if="activeComp.table"
@@ -275,7 +275,7 @@
 
 <script>
 import * as moment from 'moment';
-import { Calendar, Day } from 'dayspan';
+import { Calendar, Day, Units } from 'dayspan';
 import AppCalendar from "../components/AppCalendar";
 import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog"
 
@@ -322,120 +322,7 @@ export default {
     activeComp: {
       table : true,
       calendar : false,
-    },
-    mockData:[
-      {
-        suggestedBy: 'Prof A',
-        status: "Pending",
-        submittedOn: moment('01 Mar 2019 09:30').format('MMMM D YYYY (dddd) h:mm:ss a'),
-        locationConflict: true,
-        classConflict: false,
-        professorConflict: false,
-        conflict: [
-          {
-            "data": {
-              "courseName": "50.003 Elements of Software Constructions",
-              "pillar": "ISTD",
-              "id": "001",
-              "title": "50.003 Tutorial",
-              "color": "#9C27B0",
-              "location": "2.501",
-              "professor": "Sun Jun",
-              "classEnrolled": "F01",
-              "calendarType": "Academic",
-              "locked": null,
-              "suggestedBy": null,
-              "isSelected": false
-            },
-            "schedule": {
-              "dayOfWeek": [1],
-              "times": ["09:00"],
-              "duration": 60,
-              "durationUnit": "minutes"
-            }
-          },
-          {
-            "data": {
-              "courseName": "50.003 Elements of Software Constructions",
-              "pillar": "ISTD",
-              "id": "002",
-              "title": "50.003 Tutorial",
-              "color": "#1976d2",
-              "location": "2.501",
-              "professor": "Sudipta",
-              "classEnrolled": "F02",
-              "calendarType": "Academic",
-              "locked": null,
-              "suggestedBy": "Prof A",
-              "isSelected": false
-            },
-            "schedule": {
-              "dayOfWeek": [1],
-              "times": ["09:30"],
-              "duration": 60,
-              "durationUnit": "minutes"
-            }
-          }
-        ]
-      },
-      {
-        suggestedBy: 'Prof B',
-        "requestedBy": null,
-        status: "Pending",
-        submittedOn: moment('24 Mar 2019 11:34:00').format('MMMM D YYYY (dddd) h:mm:ss a'),
-        locationConflict: false,
-        classConflict: true,
-        professorConflict: false,
-        conflict: [
-          {
-            "data": {
-              "courseName": "50.003 Elements of Software Constructions",
-              "pillar": "ISTD",
-              "id": "001",
-              "title": "50.003 Tutorial",
-              "color": "#9C27B0",
-              "location": "2.501",
-              "professor": "Sun Jun",
-              "classEnrolled": "F01",
-              "calendarType": "Academic",
-              "locked": null,
-              "suggestedBy": null,
-              "requestedBy": null,
-              "isSelected": false
-            },
-            "schedule": {
-              "dayOfWeek": [2],
-              "times": ["10:00"],
-              "duration": 60,
-              "durationUnit": "minutes"
-            }
-          },
-          {
-            "data": {
-              "courseName": "50.003 Elements of Software Constructions",
-              "pillar": "ISTD",
-              "id": "002",
-              "title": "50.005 Tutorial",
-              "color": "#1976d2",
-              "location": "2.507",
-              "professor": "Gemma Roig",
-              "classEnrolled": "F01",
-              "calendarType": "Academic",
-              "locked": null,
-              "suggestedBy": "Prof B",
-              "requestedBy": null,
-              "isSelected": false
-            },
-            "schedule": {
-              "dayOfWeek": [2],
-              "times": ["10:30"],
-              "duration": 60,
-              "durationUnit": "minutes"
-            }
-          }
-        ]
-      }
-    ]
+    }
   }),
   computed: {
     headers(){
@@ -493,8 +380,11 @@ export default {
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
         if (this.suggesting){
-          console.log(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek).format());
-          this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
+          //console.log(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek).format());
+          // this.$refs.expandedCalendar.$refs.calendar.rebuild(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)), false, Units.WEEK);
+          let state = Calendar.fromInput(JSON.parse(props.item.calendar));
+          state.preferToday = false;
+          this.$refs.editCalendar.$refs.calendar.setState(state);
         } else{
           this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
         }
@@ -504,8 +394,14 @@ export default {
       this.toggleVisible('calendar');
       this.$emit("view-conflicts", item); 
       await this.$nextTick(); //waiting for possible conflicting events to be calculated
-      this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
-      this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(item.conflict[0].schedule.dayOfWeek)));
+      if (this.suggesting){
+        let state = Calendar.fromInput(JSON.parse(item.calendar));
+        state.preferToday = false;
+        this.$refs.editCalendar.$refs.calendar.setState(state);
+      } else{
+        this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
+        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(item.conflict[0].schedule.dayOfWeek)));
+      }
     },
     toggleVisible : function(item) {
       this.activeComp.table = false;
