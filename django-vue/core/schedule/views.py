@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
 from .models import Schedule
 from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
@@ -36,34 +36,9 @@ def save_ical(request):
     decompressed = model_to_dict(
         Schedule, fields=[field.name for field in Schedule._meta.fields])
     for row in decompressed:
-        with entry as decompressed[row]:
-
+        entry = decompressed[row]
+        entries.append(entry)
     return render(request, template_name)
-
-
-# @method_decorator([login_required], name='dispatch')
-class ScheduleCreateView(CreateView):
-    model = Schedule
-    template_name = "schedule/schedule_create.html"
-    fields = '__all__'
-
-    def form_valid(self, form):
-        form.save()
-        return redirect('schedule:list')
-
-
-# @method_decorator([login_required], name='dispatch')
-class ScheduleListView(ListView):
-    model = Schedule
-    template_name = "schedule/schedule_list.html"
-    queryset = Schedule.objects.all()
-    ser_data = serializers.serialize("json", queryset)
-
-    def get_context_data(self, **kwargs):
-        context = super(ScheduleListView, self).get_context_data(**kwargs)
-        queryset = Schedule.objects.all()
-        context['jsonset'] = serializers.serialize("json", queryset)
-        return context
 
 
 @professor_required
@@ -80,7 +55,6 @@ def add_schedule(request):
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
-
                 for i in lectureTheaterBookings:
                     if (form.cleaned_data['start_Time'] >= i.start_Time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
                         conflict = True
@@ -94,14 +68,39 @@ def add_schedule(request):
         form = CreateScheduleForm()
 
     queryset = Schedule.objects.all()
-    jsonset = serializers.serialize('json', queryset)
     context = {
-        'form': form,
-        'jsonset': queryset
+        'form': form
     }
     return render(request, 'schedule/createSchedule_form.html', context)
 
-# def serialized_schedule(request):
-#     queryset = Schedule.objects.all()
-#     queryset = serializers.serialize('json', queryset)
-#     return HttpResponse(queryset, content_type="application/json")
+    # def serialized_schedule(request):
+    #     queryset = Schedule.objects.all()
+    #     queryset = serializers.serialize('json', queryset)
+    #     return HttpResponse(queryset, content_type="application/json")
+
+
+# @method_decorator([login_required], name='dispatch')
+class ScheduleCreateView(CreateView):
+    model = Schedule
+    template_name = "schedule/schedule_create.html"
+    fields = '__all__'
+
+    def form_valid(self, form):
+        details = form.save(commit=False)
+        details.initiated_By = self.request.user
+        details.save()
+        return redirect('schedule:list')
+
+
+# @method_decorator([login_required], name='dispatch')
+class ScheduleListView(ListView):
+    model = Schedule
+    template_name = "schedule/schedule_list.html"
+    queryset = Schedule.objects.all()
+    ser_data = serializers.serialize("json", queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ScheduleListView, self).get_context_data(**kwargs)
+        queryset = Schedule.objects.all()
+        context['jsonset'] = serializers.serialize("json", queryset)
+        return context

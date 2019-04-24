@@ -6,12 +6,7 @@ from loginpage.views.classroom import home
 app_name = 'schedule'
 
 urlpatterns = [
-    # path('', ScheduleListView.as_view(), name='list'),
-    # path('create', ScheduleCreateView.as_view(), name='create'),
     path('testingdropdown', views.add_schedule, name = 'addschedule'),
-    # path('serialized', views.serialized_schedule, name = 'serialize')
+    path('allschedules', views.ModifyScheduleListView.as_view() , name= 'allschedules'),
+    path('modify/<int:pk>', views.ModifyScheduleEditView.as_view() , name= 'modify')
 ]
-
-# urlpatterns = [
-# 	path('', home, name='addschedule'),
-# 	]

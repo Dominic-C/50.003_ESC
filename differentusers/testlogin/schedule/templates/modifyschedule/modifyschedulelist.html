@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} - Course Details{% endblock %}
+
+{% block content %}
+
+
+	<h3>Course Details</h3>
+		
+	<table  class="table table-hover">
+		<thead class="thead-dark">
+			<tr>
+			    <th scope="col">Initiated By</th>
+				<th scope="col">Course Name</th>
+				<th scope="col">Is an Event</th> 
+			    <th scope="col">Conflicts with other suggestions</th>
+				<th scope="col">Resolve </th>
+				
+			
+		  	</tr>	
+			
+		{% for item in object_list %}    	 
+		<tr>
+			<td>{{ item.initiated_By }}</td>
+			<td>{{ item.course_Name }}</td>
+			<td>{{ item.is_Event }}</td>
+			<td>{{ item.is_Conflicting }}</td>
+			<td> <a class="btn btn-info" href="{% url 'schedule:modify' item.id %}" role="button">Edit</a>
+			</td>
+			 
+		</tr>
+	   	{% empty %}
+		   <tr> 
+		   <td>No course details yet </td>
+		   <td></td>
+		   <td></td>
+	    	</tr>
+
+		{% endfor %}
+
+{% endblock %}

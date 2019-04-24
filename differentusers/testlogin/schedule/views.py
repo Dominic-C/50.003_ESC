@@ -1,14 +1,16 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView, TemplateView, View)
 from .models import Schedule
 from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect 
 from loginpage.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
 import datetime as dt
+from django.contrib import messages
 # Create your views here.
 
 
@@ -57,23 +59,75 @@ def add_schedule(request):
                         conflict = True
                         schedule_item = form.save(commit=False, conflict=1)
                         schedule_item.save()
-                        raise Http404('time conflict')
+                        messages.warning(request, 'Your suggestion clashes with another existing schedule.')
+                        return redirect('schedule:addschedule')
 
+            messages.success(request, 'Your suggestion was saved successfully.')
             schedule_item = form.save(commit=False)
             schedule_item.save()
     else:  # no post data, resulting in empty form.
         form = CreateScheduleForm()
-
-    queryset = Schedule.objects.all()
-    jsonset = serializers.serialize('json', queryset)
+    
     context = {
         'form': form,
-        'jsonset': queryset
     }
     return render(request, 'schedule/createSchedule_form.html', context)
+
+
+@professor_required
+@login_required
+@drafting_required
+def deconflict_suggestions(request):
+    # if request.method == "POST":
+
+    return None
+
+@professor_required
+@login_required
+@drafting_required
+def finalize_suggestion(request):
+    # if request.method == "POST":
+
+    return None
+
 
 
 # def serialized_schedule(request):
 #     queryset = Schedule.objects.all()
 #     queryset = serializers.serialize('json', queryset)
 #     return HttpResponse(queryset, content_type="application/json")
+class ModifyScheduleListView(ListView):
+    template_name = 'modifyschedule/modifyschedulelist.html'
+    all_obj = Schedule.objects.all()
+    for i in all_obj:
+        print(i.pk)
+
+    def get_queryset(self):
+        return Schedule.objects.filter(is_Event=False)
+
+class ModifyScheduleEditView(UpdateView):
+    model = Schedule
+    template_name = 'modifyschedule/modifyscheduleeditview.html'
+    # form_class = SubmitCourseDetails
+    fields = '__all__'
+
+    # def form_valid(self, form):
+    #     details = form.save(commit=False)
+    #     details.first_name = self.request.user.first_name
+    #     details.last_name = self.request.user.last_name
+    #     details.user_type = self.request.user.user_type
+    #     details.created_by = self.request.user
+    #     details.save()
+    #     return redirect('schedule:allschedules')
+
+    def get_queryset(self):
+        # only allow current User to edit the details he has submitted
+        return Schedule.objects.all()
+
+
+# class DetailsDeleteView(DeleteView):
+#     model = Schedule
+#     template_name = 'coursedetails/preferences_confirm_delete.html'
+
+#     def get_success_url(self):
+#         return reverse('professors:details')

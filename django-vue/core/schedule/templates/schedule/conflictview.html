@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} - Course Details{% endblock %}
+
+{% block content %}
+
+
+	<h3>Course Details</h3>
+		
+	<table  class="table table-hover">
+		<thead class="thead-dark">
+			<tr>
+			    <th scope="col">Event</th>
+			    <th scope="col">Cohort and Lecturer</th> 
+                <th scope='col'>Location</th>
+			    <th scope="col">Date</th>
+                <th scope='col'>Time</th>
+			    <th scope="col">Edit/Approve </th>
+		  	</tr>	
+			
+		{% for item in object_list %}    	 
+		<tr>
+			<td>{{ item.course_Name }} - {{ item.event_Name }} </td>
+			<td>{{ item.class_Enrolled }} - {{ item.lecturer }}</td>
+            <td>{{ item.location }}</td>
+			<td>{{ item.date }}</td>
+            <td>{{ item.start_Time }}</td>
+			<td> 
+            <a class="btn btn-info" href="{% url 'coordinators:suggestedits' item.id %}" role="button">Edit</a>
+            <a class="btn btn-primary" href="{% url 'coordinators:approvesuggestion' item.id %}" role="button">Approve</a></td>
+		</tr>
+	   	{% empty %}
+		   <tr> 
+		   <td>No course details yet </td>
+		   <td></td>
+		   <td></td>
+	    	</tr>
+
+		{% endfor %}
+
+{% endblock %}
