@@ -464,7 +464,7 @@ export default {
       props.expanded = !props.expanded;
       if (props.expanded){
         await this.$nextTick(); //waiting for calendar to be rendered
-        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(props.item.conflict[0].schedule.dayOfWeek)));
+        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
       }
     },
     async goToCalendar(item){
@@ -472,7 +472,7 @@ export default {
       this.$emit("view-conflicts", item); 
       await this.$nextTick(); //waiting for possible conflicting events to be calculated
       this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
-      this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.day(item.conflict[0].schedule.dayOfWeek)));
+      this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(item.conflict[0].schedule.dayOfWeek)));
     },
     toggleVisible : function(item) {
       this.activeComp.table = false;

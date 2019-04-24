@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import { Calendar } from 'dayspan';
+import { Day, Calendar, Units } from 'dayspan';
 import dsCalendar from '../components/DaySpanCalendar.vue';
 import dsCalendarEventPopover from '../components/DaySpanCalendarEventPopover.vue'
 import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
@@ -217,7 +217,10 @@ export default {
 		isEditable(){
 			return this.mode==="editable";
 		}
-  },
+	},
+	mounted(){
+		this.$refs.calendar.rebuild (new Day(this.$termStartDate), false, Units.WEEK);
+	},
   methods: {
     updateCalendar(event){
       this.$eventHub.$emit('event-update', event);
