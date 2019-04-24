@@ -11,7 +11,3 @@ urlpatterns = [
     path('testingdropdown', views.add_schedule, name = 'addschedule'),
     # path('serialized', views.serialized_schedule, name = 'serialize')
 ]
-
-# urlpatterns = [
-# 	path('', home, name='addschedule'),
-# 	]
