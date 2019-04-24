@@ -129,7 +129,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -155,7 +155,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -181,7 +181,7 @@ export default {
           "times": ["14:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("1400")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -207,7 +207,7 @@ export default {
           "times": ["11:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(4)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(4).add(6, 'weeks').format('YYYYMMDD').concat("1100")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -233,7 +233,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -259,7 +259,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -285,7 +285,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -311,7 +311,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -337,7 +337,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -363,7 +363,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -389,7 +389,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -415,7 +415,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -441,7 +441,7 @@ export default {
           "times": ["09:00"],
           "duration": 60,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(1)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(1).add(6, 'weeks').format('YYYYMMDD').concat("0900")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
@@ -467,7 +467,7 @@ export default {
           "times": ["10:00"],
           "duration": 90,
           "durationUnit": "minutes",
-          "exclude": [new Day(this.$termStartDate.clone().day(2)).add(6, 'weeks')],
+          "exclude": [this.$termStartDate.clone().day(2).add(6, 'weeks').format('YYYYMMDD').concat("1000")],
           "start": this.$termStartDate,
           "end": this.$termEndDate
         }
