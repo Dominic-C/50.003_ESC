@@ -16,7 +16,7 @@ HOUR_CHOICES = [
 DURATION_CHOICES = [(x*15, '{:02d}'.format(x*15)) for x in range(1, 13)]
 DAY_CHOICES = [(x, x) for x in range(1, 8)]
 PILLARS = ['ASD', 'ISTD', 'EPD', 'ESD', 'FRESHMORE', 'MASTERS', 'PHD']
-PILLAR_CHOICES = [(PILLARS[x], PILLARS[x]) for x in range(len(PILLARS))]
+PILLAR_CHOICES = [(x, PILLARS[x]) for x in range(len(PILLARS))]
 LOCATION_CHOICES = [('1', 'any'), ('2', 'Lecture Theatre')]
 
 """
