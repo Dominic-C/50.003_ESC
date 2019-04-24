@@ -30,6 +30,8 @@ class Schedule(models.Model):
     class_Enrolled = models.CharField(max_length=4, default="")
     # location = models.IntegerField(choices=LOCATION_CHOICES)
     location = models.IntegerField()
+    is_Suggestion = models.BooleanField(default=False)
+    is_Finalized = models.BooleanField(default=False)
 
     is_Event = models.BooleanField(default=False)
     initiated_By = models.CharField(max_length=50, default="Nobody")
