@@ -132,7 +132,41 @@
 					<ds-calendar-event-popover
 						v-bind="slotData"
 						:read-only="!isInMode"
-					></ds-calendar-event-popover>
+					>
+						<template slot="eventPopoverBodyBottom" slot-scope="{ details }">
+								<v-list>
+									<!-- Pillar -->
+									<v-list-tile v-if="details.pillar">
+										<v-list-tile-avatar>
+											<v-icon>view_column</v-icon>
+										</v-list-tile-avatar>
+										<v-list-tile-content>
+											<v-list-tile-title>{{ details.pillar }}</v-list-tile-title>
+										</v-list-tile-content>
+									</v-list-tile>
+
+									<!-- Professor -->
+									<v-list-tile v-if="details.professor">
+										<v-list-tile-avatar>
+											<v-icon>school</v-icon>
+										</v-list-tile-avatar>
+										<v-list-tile-content>
+											<v-list-tile-title>{{ details.professor }}</v-list-tile-title>
+										</v-list-tile-content>
+									</v-list-tile>
+
+									<!-- class -->
+									<v-list-tile v-if="details.classEnrolled">
+										<v-list-tile-avatar>
+											<v-icon>group</v-icon>
+										</v-list-tile-avatar>
+										<v-list-tile-content>
+											<v-list-tile-title>{{ details.classEnrolled }}</v-list-tile-title>
+										</v-list-tile-content>
+									</v-list-tile>
+								</v-list>
+						</template>
+					</ds-calendar-event-popover>
 				</template>
 
 				<template slot="eventTimeTitle" slot-scope="{calendarEvent, details}">
@@ -172,19 +206,19 @@ import AppCalendarConfirmDialog from "../components/AppCalendarConfirmDialog";
 export default {
   name: 'AppCalendar',
   props: {
-	events: {
-	  type: Array
-	},
-	username: {
-	  type: String,
-	  required: true
-	},
-	mode: {
-	  type: String,
-	  validator: function (value) {
-		//check that it is in either suggestible or requestable mode
-		return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
-	  }
+		events: {
+			type: Array
+		},
+		username: {
+			type: String,
+			required: true
+		},
+		mode: {
+			type: String,
+			validator: function (value) {
+				//check that it is in either suggestible or requestable mode
+				return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
+				}
 		},
 		isInMode: {
 			type: Boolean,
@@ -196,8 +230,7 @@ export default {
 			type: Calendar
 		},
 		dialog: {
-			type: Boolean,
-
+			type: Boolean
 		}
   },
   components: {
@@ -222,24 +255,24 @@ export default {
 		this.$refs.calendar.rebuild (new Day(this.$termStartDate), false, Units.WEEK);
 	},
   methods: {
-	updateCalendar(event){
-	  this.$eventHub.$emit('event-update', event);
-	},
+		updateCalendar(event){
+			this.$eventHub.$emit('event-update', event);
+		},
 		getCalendarTime(calendarEvent){
-	  let sa = calendarEvent.start.format('a');
-	  let ea = calendarEvent.end.format('a');
-	  let sh = calendarEvent.start.format('h');
-	  let eh = calendarEvent.end.format('h');
-	  if (calendarEvent.start.minute !== 0)
-	  {
-		sh += calendarEvent.start.format(':mm');
-	  }
-	  if (calendarEvent.end.minute !== 0)
-	  {
-		eh += calendarEvent.end.format(':mm');
-	  }
-	  return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
-	}
+			let sa = calendarEvent.start.format('a');
+			let ea = calendarEvent.end.format('a');
+			let sh = calendarEvent.start.format('h');
+			let eh = calendarEvent.end.format('h');
+			if (calendarEvent.start.minute !== 0)
+			{
+				sh += calendarEvent.start.format(':mm');
+			}
+			if (calendarEvent.end.minute !== 0)
+			{
+				eh += calendarEvent.end.format(':mm');
+			}
+			return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
+		}
   }  
 }
 </script>

@@ -50,7 +50,6 @@
 
 <script>
 import * as moment from 'moment';
-import { Day } from 'dayspan';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
