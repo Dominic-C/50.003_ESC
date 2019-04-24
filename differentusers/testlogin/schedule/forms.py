@@ -33,7 +33,9 @@ class CreateScheduleForm(forms.ModelForm):
                    'is_Conflicting' : forms.HiddenInput(),
                    'is_Suggestion' : forms.HiddenInput(),
                    'initiated_By' : forms.HiddenInput(),
-                   'day_Of_Week' : forms.HiddenInput()
+                   'day_Of_Week' : forms.HiddenInput(),
+                   'is_classconflict' : forms.HiddenInput(),
+                   'is_profconflict' : forms.HiddenInput()
                    }
         
 

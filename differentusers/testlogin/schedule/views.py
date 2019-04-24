@@ -48,20 +48,50 @@ def add_schedule(request):
         if form.is_valid():
             # print(Schedule.objects.filter(location=2))
             # print((dt.datetime.combine(dt.date(1,1,1),form.cleaned_data['start_Time']) + timedelta( minutes = form.cleaned_data['event_Duration'] * 15 )).time())
-            if(Schedule.objects.filter(location=2)):
-                lectureTheaterBookings = Schedule.objects.filter(location=2)
-                conflict = False
+            lectureTheaterBookings = Schedule.objects.filter(location=2)
+            if(form.cleaned_data['location'] == 2): # If Lecture Theatre
+                
                 
                 for i in lectureTheaterBookings:
                     i_start_time = i.start_Time
                     i_end_time = (dt.datetime.combine(dt.date(1,1,1),i_start_time) + timedelta(minutes = i.event_Duration * 15)).time()
                     print("event ", i, i_start_time, i_end_time)
+                    ## If start time is inside
                     if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date:
-                        conflict = True
+
                         schedule_item = form.save(commit=False, location_conflict=1)
                         schedule_item.save()
+                        # break
                         messages.warning(request, 'Your suggestion clashes with another existing schedule.')
-                        return redirect('schedule:addschedule')
+                        # return redirect('schedule:addschedule')
+            
+            lecturer = str(form.cleaned_data['lecturer'])
+            for i in Schedule.objects.all(): # check against all schedule objects
+                    i_start_time = i.start_Time
+                    i_end_time = (dt.datetime.combine(dt.date(1,1,1),i_start_time) + timedelta(minutes = i.event_Duration * 15)).time()
+                    
+                    ## If start time is inside
+                    if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date and lecturer == i.lecturer:
+                        schedule_item = form.save(commit=False, prof_conflict=1)
+                        schedule_item.save()
+                        # break
+                        messages.warning(request, 'Your suggestion clashes with another existing schedule.')
+                        # return redirect('schedule:addschedule')
+            
+            class_enrolled = str(form.cleaned_data['class_Enrolled'])
+            for i in Schedule.objects.all(): # check against all schedule objects
+                    i_start_time = i.start_Time
+                    i_end_time = (dt.datetime.combine(dt.date(1,1,1),i_start_time) + timedelta(minutes = i.event_Duration * 15)).time()
+                    
+                    ## If start time is inside
+                    if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date and class_enrolled == i.class_Enrolled:
+                        schedule_item = form.save(commit=False, class_conflict=1)
+                        schedule_item.save()
+                        # break
+                        messages.warning(request, 'Your suggestion clashes with another existing schedule.')
+                        # return redirect('schedule:addschedule')
+
+                
 
             messages.success(request, 'Your suggestion was saved successfully.')
             schedule_item = form.save(commit=False)
