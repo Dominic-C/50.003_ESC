@@ -1,21 +1,17 @@
 {% extends 'base.html' %}
 {% load render_bundle from webpack_loader %}
-{% block title %} - Final Calendar{% endblock %}
+{% block title %} - tempschedule List{% endblock %}
 
 {% block content %}
 <script>
 	var tables = {{ jsonset|safe }};
 	var simpleTable = [];
-  var pillars = ['ASD', 'ISTD', 'EPD', 'ESD', 'FRESHMORE', 'MASTERS', 'P;HD', 'NONE'];
-  var colours = {};
-  var planningPhase = {{ phase|safe }};
+  var pillars = ['ASD', 'ISTD', 'EPD', 'ESD', 'FRESHMORE', 'MASTERS', 'PHD', 'NONE'];
+  var planningPhase = {{ phase|safe }}; //TODO
   var ulogged = "{{ user|safe }}";
-  if (ulogged === "professor"){
-    var userlogged = "Professor"
-  } else if (ulogged === "planner"){
-    var userlogged = "Course Coordinator"
+  if (ulogged === "sutdadmin"){
+    var userlogged = "SutdAdmin";
   }
-  var finalized = true; //TODO DETERMINE STATE
 	for (item in tables){
 		simpleTable[item] = tables[item].fields;
 	}

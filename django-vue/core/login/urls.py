@@ -62,6 +62,8 @@ urlpatterns = [
              sutdadmin.EditBookingView.as_view(), name='editbooking'),
         path('bookings/delete/<int:pk>',
              sutdadmin.DeleteBookingView.as_view(), name='deletebooking'),
+        path('bookings/viewcalendar',
+             sutdadmin.AdminCalendarView.as_view(), name='viewcalendar'),
     ], 'classroom'), namespace='sutdadmin')),
 
 ]

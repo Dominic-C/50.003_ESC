@@ -19,13 +19,13 @@ from datetime import timedelta
 import datetime as dt
 
 
-usertypes = {
-    'professor': 1,
-    'sutdadmin': 2,
-    'coursecoordinators': 3,
-    'timetableplanner': 4,
-    'student': 5
-}
+# usertypes = {
+#     'professor': 1,
+#     'sutdadmin': 2,
+#     'coursecoordinators': 3,
+#     'timetableplanner': 4,
+#     'student': 5
+# }
 
 
 class CoordinatorSignUpView(CreateView):
@@ -79,10 +79,11 @@ class ScheduleEditView(UpdateView):
         details.is_Event = self.object.is_Event
         details.initiated_By = self.object.initiated_By
         details.day_Of_Week = self.object.day_Of_Week
-        details.is_classconflict = self.object.is_classconflict
-        details.is_profconflict = self.object.is_profconflict
+        details.is_Conflicting = False
+        details.is_classconflict = False
+        details.is_profconflict = False
         details.is_Suggestion = self.object.is_Suggestion
-        details.is_Finalized = self.object.is_Finalized
+        details.is_finalised = self.object.is_finalised
         details.is_Approved = self.object.is_Approved
 
         # Check class enrolled
@@ -94,7 +95,6 @@ class ScheduleEditView(UpdateView):
             # If start time is inside
             if (form.cleaned_data['start_Time'] >= i_start_time and form.cleaned_data['start_Time'] <= i_end_time) and form.cleaned_data['date'] == i.date and class_enrolled == i.class_Enrolled:
                 details.is_classconflict = True
-                break
 
         # check LT
         lectureTheaterBookings = Schedule.objects.filter(location=2)
@@ -174,7 +174,7 @@ class ScheduleApproveView(UpdateView):
         details.is_classconflict = self.object.is_classconflict
         details.is_profconflict = self.object.is_profconflict
         details.is_Suggestion = self.object.is_Suggestion
-        details.is_Finalized = self.object.is_Finalized
+        details.is_finalised = self.object.is_finalised
 
         return redirect('coordinators:conflicts')
 

@@ -7,8 +7,11 @@
 	var tables = {{ jsonset|safe }};
 	var simpleTable = [];
   var pillars = ['ASD', 'ISTD', 'EPD', 'ESD', 'FRESHMORE', 'MASTERS', 'PHD', 'NONE'];
-  var colours = {};
   var planningPhase = {{ phase|safe }}; //TODO
+  var ulogged = "{{ user|safe }}";
+  if (ulogged === "professor"){
+    var userlogged = "Professor";
+  }
 	for (item in tables){
 		simpleTable[item] = tables[item].fields;
 	}
