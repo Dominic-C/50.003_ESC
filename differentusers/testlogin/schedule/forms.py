@@ -28,23 +28,24 @@ class CreateScheduleForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = '__all__'
-        widgets = { #'start_time': forms.Select(choices=HOUR_CHOICES),
-                   # 'end_time': forms.Select(choices=HOUR_CHOICES),
-                   'location': forms.Select(choices=LOCATION_CHOICES),
+        widgets = {'location': forms.Select(choices=LOCATION_CHOICES),
                    'is_Finalized' : forms.HiddenInput(),
                    'is_Conflicting' : forms.HiddenInput(),
-                   'is_Suggestion' : forms.HiddenInput()
+                   'is_Suggestion' : forms.HiddenInput(),
+                   'initiated_By' : forms.HiddenInput(),
+                   'day_Of_Week' : forms.HiddenInput()
                    }
         
 
     def save(self, conflict=0, commit=True):
         m = super(CreateScheduleForm, self).save(commit=False)
         # do custom stuff
+        day = m.date.weekday() + 1
+        m.day_Of_Week = day
+        print("automatic day of week is: ", day)
         m.is_Suggestion = True
         if conflict == 1:
             m.is_Conflicting = True
         if commit:
             m.save()
         return m
-
-        # iff lecturer wants to book lt, then check if available.

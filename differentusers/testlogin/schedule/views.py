@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView, TemplateView, View)
 from .models import Schedule
 from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
@@ -59,7 +60,6 @@ def add_schedule(request):
                         schedule_item = form.save(commit=False, conflict=1)
                         schedule_item.save()
                         messages.warning(request, 'Your suggestion clashes with another existing schedule.')
-                        # return render(request, 'schedule/createSchedule_form.html')
                         return redirect('schedule:addschedule')
 
             messages.success(request, 'Your suggestion was saved successfully.')
@@ -90,7 +90,44 @@ def finalize_suggestion(request):
 
     return None
 
+
+
 # def serialized_schedule(request):
 #     queryset = Schedule.objects.all()
 #     queryset = serializers.serialize('json', queryset)
 #     return HttpResponse(queryset, content_type="application/json")
+class ModifyScheduleListView(ListView):
+    template_name = 'modifyschedule/modifyschedulelist.html'
+    all_obj = Schedule.objects.all()
+    for i in all_obj:
+        print(i.pk)
+
+    def get_queryset(self):
+        return Schedule.objects.filter(is_Event=False)
+
+class ModifyScheduleEditView(UpdateView):
+    model = Schedule
+    template_name = 'modifyschedule/modifyscheduleeditview.html'
+    # form_class = SubmitCourseDetails
+    fields = '__all__'
+
+    # def form_valid(self, form):
+    #     details = form.save(commit=False)
+    #     details.first_name = self.request.user.first_name
+    #     details.last_name = self.request.user.last_name
+    #     details.user_type = self.request.user.user_type
+    #     details.created_by = self.request.user
+    #     details.save()
+    #     return redirect('schedule:allschedules')
+
+    def get_queryset(self):
+        # only allow current User to edit the details he has submitted
+        return Schedule.objects.all()
+
+
+# class DetailsDeleteView(DeleteView):
+#     model = Schedule
+#     template_name = 'coursedetails/preferences_confirm_delete.html'
+
+#     def get_success_url(self):
+#         return reverse('professors:details')
