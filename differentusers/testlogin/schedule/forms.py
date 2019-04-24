@@ -23,13 +23,12 @@ class CreateScheduleForm(forms.ModelForm):
     queryset = Schedule.objects.all()
 
     lecturer = forms.ModelChoiceField(queryset=User.objects.filter(
-        user_type=usertypes['professor']))  # TODO: change to Professor model in future
-
+        user_type=usertypes['professor']))
     class Meta:
         model = Schedule
         fields = '__all__'
-        widgets = {'start_time': forms.Select(choices=HOUR_CHOICES),
-                   'end_time': forms.Select(choices=HOUR_CHOICES),
+        widgets = { #'start_time': forms.Select(choices=HOUR_CHOICES),
+                   # 'end_time': forms.Select(choices=HOUR_CHOICES),
                    'location': forms.Select(choices=LOCATION_CHOICES)
                    }
 
