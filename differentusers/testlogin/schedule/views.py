@@ -4,7 +4,7 @@ from .models import Schedule
 from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect 
 from loginpage.decorators import professor_required, drafting_required, beforefirstdraft_required
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
@@ -62,16 +62,14 @@ def add_schedule(request):
                         # return render(request, 'schedule/createSchedule_form.html')
                         return redirect('schedule:addschedule')
 
+            messages.success(request, 'Your suggestion was saved successfully.')
             schedule_item = form.save(commit=False)
             schedule_item.save()
     else:  # no post data, resulting in empty form.
         form = CreateScheduleForm()
-
-    queryset = Schedule.objects.all()
-    jsonset = serializers.serialize('json', queryset)
+    
     context = {
         'form': form,
-        'jsonset': queryset
     }
     return render(request, 'schedule/createSchedule_form.html', context)
 
