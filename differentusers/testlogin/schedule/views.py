@@ -42,18 +42,18 @@ def add_schedule(request):
         # check if form is valid
         if form.is_valid():
             print(Schedule.objects.filter(location=2))
-            print(form.cleaned_data['start_time'],
-                  form.cleaned_data['end_time'])
+            # print(form.cleaned_data['start_Time'],
+            #       form.cleaned_data['event_Duration'])
             if(Schedule.objects.filter(location=2)):
                 lectureTheaterBookings = Schedule.objects.filter(location=2)
                 conflict = False
 
-                for i in lectureTheaterBookings:
-                    if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
-                        conflict = True
-                        schedule_item = form.save(commit=False, conflict=1)
-                        schedule_item.save()
-                        raise Http404('time conflict')
+                # for i in lectureTheaterBookings:
+                #     if (form.cleaned_data['start_time'] >= i.start_time or form.cleaned_data['end_time'] <= i.end_time) and form.cleaned_data['date'] == i.date:
+                #         conflict = True
+                #         schedule_item = form.save(commit=False, conflict=1)
+                #         schedule_item.save()
+                #         raise Http404('time conflict')
 
             schedule_item = form.save(commit=False)
             schedule_item.save()
