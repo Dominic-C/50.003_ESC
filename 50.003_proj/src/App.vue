@@ -594,6 +594,10 @@ export default {
       if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
         this.getColour();
       }
+      //if colour is black or grey
+      else if (colour === "#000000" || colour === '#9E9E9E'){
+        this.getColour();
+      }
       this.coloursUsed.push(colour);
       return colour;
     },
