@@ -7,9 +7,9 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
       <a class="dropdown-item" href="#">Deconflict Suggestions</a>
-      <a class="dropdown-item" href="#">Empty</a>
+<!--       <a class="dropdown-item" href="#">Empty</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Something else here</a>
+      <a class="dropdown-item" href="#">Something else here</a> -->
     </div>
   </li>
 
@@ -18,9 +18,9 @@
       Finalisation
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <a class="dropdown-item" href="#">View Calendar</a>
-      <a class="dropdown-item" href="#">Empty</a>
-      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{% url 'schedule:list' %}">View Calendar</a>
+      <a class="dropdown-item" href="{% url 'icsconvert' %}">Export Calendar</a>
+<!--       <div class="dropdown-divider"></div> -->
     </div>
   </li>
 </ul>
