@@ -8,9 +8,10 @@
 {% block content %}
 
 	<form method="post">{% csrf_token %}
-	    <p>Are you sure you want to approve <b>{{ object }}</b>?</p>
-	     <a class="btn btn-secondary" href="{% url 'professors:details'  %}" role="button">Cancel</a>
-	    <input type="submit" class="btn btn-danger" value="Confirm">
+	    <p>Are you sure you want to approve <b>{{ object }}</b> on {{ object.data }} at {{ object.start_Time }} running for {{ object.event_Duration }} minutes?</p>
+		<input type="hidden" name="is_Approved" value="True"/>
+	     <a class="btn btn-secondary" href="{% url 'coordinators:conflicts'  %}" role="button">Cancel</a>
+	    <input type="submit" class="btn btn-primary" value="Confirm">
 	</form>
 
 {% endblock %}
