@@ -225,7 +225,7 @@ class AcceptSuggestion(UpdateView):
         details.initiated_By = self.object.initiated_By
         details.day_Of_Week = self.object.day_Of_Week
         details.save()
-        return redirect('professors:details')
+        return redirect('planners:acceptlist')
 
     def get_queryset(self):
         # only allow current User to edit the details he has submitted
@@ -236,5 +236,5 @@ class AcceptSuggestion(UpdateView):
 class FinaliseView(View):
 
     def get(self, request, *args, **kwargs):
-        Schedule.objects.filter(is_Suggestion=False).update(is_Finalised=True)
+        Schedule.objects.filter(is_Suggestion=True).update(is_Finalised=True)
         return redirect('planners:home')
