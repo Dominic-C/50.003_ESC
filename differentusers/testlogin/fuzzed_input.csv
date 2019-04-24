@@ -1,2 +1,11 @@
-Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private
-50.001,2019-04-24,08:30,2019-04-24,10:00,FALSE,Describe this,Lecture Theatre,TRUE
+Course Name,Pillar,Event Name,Description,Date,Start Time,Event Duration,Lecturer,Class Enrolled,Location,Initiated By,Day of Week
+50.002 Computation Srtuctures,FRESHMORE,50.003 Lecture,hTis is a lecture,2019-04-07,16:00,90,Nga iMan,F09,Lecture Theatre,Ngai Mna,4
+50.034 Introduction to Porbability and Statistics,EPD,05.002 Lecture,This is a letcure,2019-12-26,12:00,90,Nagi Man,F05,Lecture Theatre,Ngia Man,7
+5.0034 Introduction to Probability and Statistics,ASD,50.005 Lectuer,This isa  lecture,2019-05-05,08:00,90,Ngai Mna,F04,Lecture Theatre,Ngia Man,2
+50.003 Elements of Sofwtare Construction,MASTERS,50.001 eLcture,This is a lectuer,2019-07-20,14:00,90,Nga iMan,F03,Lecture Theatre,Ngia Man,1
+50.004 Introduction toA lgorithms,ISTD,5.0002 Lecture,This is a lceture,2019-03-20,16:00,90,Ngai aMn,F07,Lecture Theatre,Ngia Man,6
+50.002 Computation Structrues,MASTERS,50.043 Lecture,Thi sis a lecture,2019-12-18,15:00,90,Ngai aMn,F08,Lecture Theatre,NgaiM an,3
+50.004 Introudction to Algorithms,ESD,5.0034 Lecture,This is al ecture,2019-01-01,09:00,90,Nga iMan,F05,Lecture Theatre,Nagi Man,2
+50.001 Introduction to Information Ssytems & Programming,ISTD,50.002L ecture,This is a elcture,2019-03-07,13:00,90,Ngai aMn,F08,Lecture Theatre,Ngia Man,3
+05.005 Computer System Engineering,EPD,50.050 Lecture,hTis is a lecture,2019-02-09,12:00,90,Nagi Man,F01,Lecture Theatre,Ngai Mna,2
+50.003 Elements of Software Cnostruction,ISTD,50.034 Lecutre,This is  alecture,2019-06-25,10:00,90,Nga iMan,F06,Lecture Theatre,Nga iMan,5

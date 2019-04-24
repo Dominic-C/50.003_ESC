@@ -46,14 +46,19 @@ urlpatterns = [
         path('downloadsample', planners.SampleDownloadView.as_view(),
              name="downloadsample"),
         path('revert', planners.RevertToPhase1.as_view(), name="revert"),
+        path('acceptlist', planners.AcceptSuggestionsListView.as_view(), name="acceptlist"),
+        path('accept/<int:pk>', planners.AcceptSuggestion.as_view(), name="accept"),
+        path('finalise', planners.FinaliseView.as_view(), name="finalise"),
     ], 'classroom'), namespace='planners')),
 
     path('sutdadmin/', include(([
         path('', sutdadmin.SutdAdminMainView.as_view(), name='sutdadmin_main'),
         path('makebooking', sutdadmin.MakeBookingView.as_view(), name='makebooking'),
         path('bookings', sutdadmin.BookingList.as_view(), name='bookings'),
-        path('bookings/edit/<int:pk>', sutdadmin.EditBookingView.as_view(), name='editbooking'),
-        path('bookings/delete/<int:pk>', sutdadmin.DeleteBookingView.as_view(), name='deletebooking'),
+        path('bookings/edit/<int:pk>',
+             sutdadmin.EditBookingView.as_view(), name='editbooking'),
+        path('bookings/delete/<int:pk>',
+             sutdadmin.DeleteBookingView.as_view(), name='deletebooking'),
     ], 'classroom'), namespace='sutdadmin')),
 
 ]

@@ -41,8 +41,8 @@ class Schedule(models.Model):
         default=1, validators=[MaxValueValidator(7), MinValueValidator(1)])
 
     def __str__(self):
-        return "{} for {}".format(self.course_Name, self.class_Enrolled) 
-    
+        return "{} for {}".format(self.course_Name, self.class_Enrolled)
+
 # class NewSchedule(models.Model):
     # title = models.CharField(max_length=120)
     # pillarType = models.CharField(max_length=10)
