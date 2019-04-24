@@ -38,6 +38,10 @@ urlpatterns = [
 
     path('sutdadmin/', include(([
         path('', sutdadmin.SutdAdminMainView.as_view(), name='sutdadmin_main'),
+        path('makebooking', sutdadmin.MakeBookingView.as_view(), name='makebooking'),
+        path('bookings', sutdadmin.BookingList.as_view(), name='bookings'),
+        path('bookings/edit/<int:pk>', sutdadmin.EditBookingView.as_view(), name='editbooking'),
+        path('bookings/delete/<int:pk>', sutdadmin.DeleteBookingView.as_view(), name='deletebooking'),
     ], 'classroom'), namespace='sutdadmin')),
 
 ]
