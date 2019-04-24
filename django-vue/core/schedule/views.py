@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
 from .models import Schedule
 from .forms import CreateScheduleForm
 from django.shortcuts import get_object_or_404, redirect, render
@@ -36,34 +36,9 @@ def save_ical(request):
     decompressed = model_to_dict(
         Schedule, fields=[field.name for field in Schedule._meta.fields])
     for row in decompressed:
-        with entry as decompressed[row]:
-
+        entry = decompressed[row]
+        entries.append(entry)
     return render(request, template_name)
-
-
-# @method_decorator([login_required], name='dispatch')
-class ScheduleCreateView(CreateView):
-    model = Schedule
-    template_name = "schedule/schedule_create.html"
-    fields = '__all__'
-
-    def form_valid(self, form):
-        form.save()
-        return redirect('schedule:list')
-
-
-# @method_decorator([login_required], name='dispatch')
-class ScheduleListView(ListView):
-    model = Schedule
-    template_name = "schedule/schedule_list.html"
-    queryset = Schedule.objects.all()
-    ser_data = serializers.serialize("json", queryset)
-
-    def get_context_data(self, **kwargs):
-        context = super(ScheduleListView, self).get_context_data(**kwargs)
-        queryset = Schedule.objects.all()
-        context['jsonset'] = serializers.serialize("json", queryset)
-        return context
 
 
 @professor_required
@@ -94,14 +69,76 @@ def add_schedule(request):
         form = CreateScheduleForm()
 
     queryset = Schedule.objects.all()
-    jsonset = serializers.serialize('json', queryset)
     context = {
-        'form': form,
-        'jsonset': queryset
+        'form': form
     }
     return render(request, 'schedule/createSchedule_form.html', context)
 
-# def serialized_schedule(request):
-#     queryset = Schedule.objects.all()
-#     queryset = serializers.serialize('json', queryset)
-#     return HttpResponse(queryset, content_type="application/json")
+    # def serialized_schedule(request):
+    #     queryset = Schedule.objects.all()
+    #     queryset = serializers.serialize('json', queryset)
+    #     return HttpResponse(queryset, content_type="application/json")
+
+
+# @method_decorator([login_required], name='dispatch')
+class ScheduleCreateView(CreateView):
+    model = Schedule
+    template_name = "schedule/schedule_create.html"
+    fields = '__all__'
+
+    def form_valid(self, form):
+        details = form.save(commit=False)
+        details.initiated_By = self.request.user
+        details.save()
+        return redirect('schedule:list')
+
+
+# @method_decorator([login_required], name='dispatch')
+class ScheduleListView(ListView):
+    model = Schedule
+    template_name = "schedule/schedule_list.html"
+    queryset = Schedule.objects.all()
+    ser_data = serializers.serialize("json", queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ScheduleListView, self).get_context_data(**kwargs)
+        queryset = Schedule.objects.all()
+        context['jsonset'] = serializers.serialize("json", queryset)
+        return context
+
+
+class ScheduleEditView(UpdateView):
+    model = Schedule
+    template_name = "schedule/editsggestiondetails.html"
+    fields = ['lecturer', 'class_Enrolled', 'date',
+              'start_Time', 'event_Duration', 'location']
+
+    def form_valid(self, form):
+        details = form.save(commit=False)
+        details.course_Name = self.object.course_Name
+        details.pillar_Type = self.object.pillar_Type
+        details.event_Name = self.object.event_Name
+        details.description = self.object.description
+        details.is_Event = self.object.is_Event
+        details.initiated_By = self.object.intiated_By
+        details.day_Of_Week = self.object.day_Of_Week
+
+        details.save()
+        return redirect('schedule:list')
+
+    def get_queryset(self):
+        return Schedule.objects.filter(created_by=self.request.user)
+
+
+class ScheduleConflictView(ListView):
+    model = Schedule
+    template_name = "schedule/conflictview.html"
+
+    def get_queryset(self):
+        return Schedule.objects.filter(is_Conflicting=True)
+
+    def get_context_data(self, **kwargs):
+        context = super(ScheduleConflictView, self).get_context_data(**kwargs)
+        queryset = Schedule.objects.filter(ic_Conflicting=True)
+        context['conflicts'] = serializers.serialize("json", queryset)
+        return context
