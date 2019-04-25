@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.db import transaction
 from django.db.models import Count
 from django.urls import reverse, reverse_lazy
@@ -15,14 +16,16 @@ from ..decorators import sutdadmin_required
 from ..forms import SutdAdminSignUpForm
 from ..models import User
 from schedule.models import Schedule
+from datetime import timedelta
+import datetime as dt
 
-usertypes = { 
-    'professor': 1, 
-    'sutdadmin': 2, 
-    'coursecoordinators': 3, 
-    'timetableplanner': 4, 
-    'student' : 5
-    }
+usertypes = {
+    'professor': 1,
+    'sutdadmin': 2,
+    'coursecoordinators': 3,
+    'timetableplanner': 4,
+    'student': 5
+}
 
 
 class SutdAdminSignUpView(CreateView):
@@ -37,7 +40,8 @@ class SutdAdminSignUpView(CreateView):
     def form_valid(self, form):
         userdetail = form.save(commit=False)
         try:
-            userdetail.phase = User.objects.filter(user_type=usertypes['professor'])[0].phase
+            userdetail.phase = User.objects.filter(
+                user_type=usertypes['professor'])[0].phase
         except:
             userdetail.phase = 1
         userdetail = form.save()
@@ -54,7 +58,8 @@ class SutdAdminMainView(TemplateView):
 class MakeBookingView(CreateView):
     model = Schedule
     template_name = 'classroom/sutdadmin/makebooking.html'
-    fields = ['event_Name', 'lecturer', 'description', 'date', 'start_Time', 'event_Duration', 'location']
+    fields = ['event_Name', 'lecturer', 'description',
+              'date', 'start_Time', 'event_Duration', 'location']
 
     def form_valid(self, form):
         details = form.save(commit=False)
@@ -64,10 +69,12 @@ class MakeBookingView(CreateView):
         details.is_Event = True
         details.initiated_By = "Nobody"
         details.is_Conflicting = False
-        day = form.cleaned_data['date'].weekday() + 1      # cause weekday() returns from 0 to 6, not 1 to 7
+        # cause weekday() returns from 0 to 6, not 1 to 7
+        day = form.cleaned_data['date'].weekday() + 1
         details.day_Of_Week = day
         details.save()
         return redirect('sutdadmin:bookings')
+
 
 @method_decorator([login_required, sutdadmin_required], name='dispatch')
 class BookingList(ListView):
@@ -77,11 +84,13 @@ class BookingList(ListView):
         # returns Events submited by the current User
         return Schedule.objects.filter(is_Event=True).order_by('date')
 
+
 @method_decorator([login_required, sutdadmin_required], name='dispatch')
 class EditBookingView(UpdateView):
     model = Schedule
     template_name = 'classroom/sutdadmin/editbooking.html'
-    fields = ['event_Name', 'lecturer', 'description', 'date', 'start_Time', 'event_Duration', 'location']
+    fields = ['event_Name', 'lecturer', 'description',
+              'date', 'start_Time', 'event_Duration', 'location']
 
     def form_valid(self, form):
         details = form.save(commit=False)
@@ -91,7 +100,8 @@ class EditBookingView(UpdateView):
         details.is_Event = True
         details.initiated_By = "Nobody"
         details.is_Conflicting = False
-        day = form.cleaned_data['date'].weekday() + 1      # cause weekday() returns from 0 to 6, not 1 to 7
+        # cause weekday() returns from 0 to 6, not 1 to 7
+        day = form.cleaned_data['date'].weekday() + 1
         details.day_Of_Week = day
         details.save()
         return redirect('sutdadmin:bookings')
@@ -110,3 +120,18 @@ class DeleteBookingView(DeleteView):
         return reverse('sutdadmin:bookings')
 
 
+@method_decorator([login_required, sutdadmin_required], name='dispatch')
+class AdminCalendarView(ListView):
+    model = Schedule
+    template_name = 'classroom/sutdadmin/admincalendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminCalendarView, self).get_context_data(**kwargs)
+        objects = Schedule.objects.filter(is_Event=True)
+        phase = self.request.user.phase
+        user = self.request.user.user_type
+        context['jsonset'] = serializers.serialize("json", objects)
+        context['phase'] = int(phase)
+        # context['userdata'] = serializers.serialize("json", user)
+        # context['jsonphase'] = serializers.serialize("json", phase)
+        return context

@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.core import serializers
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, TemplateView, View)
@@ -17,6 +18,8 @@ from ..decorators import planner_required, finalisation_required, drafting_requi
 from ..forms import PlannerSignUpForm
 from ..models import User, Preferences, Lesson
 from schedule.models import Schedule
+from datetime import timedelta
+import datetime as dt
 
 usertypes = {
     'professor': 1,
@@ -248,21 +251,21 @@ class FinaliseView(View):
 
     def get(self, request, *args, **kwargs):
         Schedule.objects.filter(is_Suggestion=True).update(is_Finalised=True)
-        return redirect('planners:home')
+        return redirect('planners:nextphase')
 
 
-@method_decorator([login_required, planner_required, finalisation_required], name='dispatch')
-class FinalisedCalendarView(View):
+@method_decorator([login_required], name='dispatch')
+class FinalisedCalendarView(ListView):
     model = Schedule
     template_name = 'classroom/planners/final_calendar.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ViewDraftCalendar, self).get_context_data(**kwargs)
+        context = super(FinalisedCalendarView, self).get_context_data(**kwargs)
         objects = Schedule.objects.all()
         user = self.request.user
         phase = self.request.user.phase
         context['jsonset'] = serializers.serialize("json", objects)
-        # context['phase'] = phase
+        context['phase'] = int(phase)
         # context['user'] = user
         # context['userdata'] = serializers.serialize("json", user)
         # context['jsonphase'] = serializers.serialize("json", phase)

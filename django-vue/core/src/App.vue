@@ -2,31 +2,98 @@
   <div id="app">
     <v-app id="dayspan" v-cloak>
       <v-content>
+        <v-layout row wrap>
+          <v-flex xs4 pa-4>
+            <v-select
+              single-line
+              solo
+              flat
+              label="Phase"
+              :items="[{text:'1', value: 1}, {text:'2', value: 2}, {text:'3', value: 3}]"
+              v-model="phase"
+            ></v-select>
+          </v-flex>
+
+          <v-flex xs4 pa-4>
+            <v-select
+              single-line
+              solo
+              flat
+              label="User"
+              :items="['Professor', 'Admin', 'Course Coordinator', 'Student', 'Timetable Planner']"
+              v-model="user"
+            ></v-select>
+          </v-flex>
+        </v-layout>
+
         <search-bar
-          :calendarEventsTable="mappedEventsTable"
+          :calendarEventsTable="calendarEventTable"
           :professorTable="professorTable"
           :courseNameTable="courseNameTable"
           :locationTable="locationTable"
           :classTable="classTable"
           @selected-search-item="updateCalendar"
+          v-if="(phase === 2 || phase === 3)"
         ></search-bar>
         <!-- <list-selection :courseList="courseTable" v-if="activeComp.courseListingForViewer"></list-selection> -->
         <!-- <weekly-calendar :courseList="courseList" v-if="false"></weekly-calendar> -->
-        <finalised-calendar :events="selectedCalendarEvents" v-if="true"></finalised-calendar>
+        <finalised-calendar :events="selectedCalendarEvents" v-if="phase===3"></finalised-calendar>
         <suggestible-calendar
-          ref="suggestCalendar"
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
+          @suggested="updateSuggested"
+          v-if="phase===2 &&
+            user==='Professor'"
         ></suggestible-calendar>
         <requestable-calendar
-          v-if="true"
-          ref="requestCalendar"
           :events="modifiableCalendarEvent"
           :username="username"
           @revert-state="revertState"
+          @requested="updateRequested"
+          v-if="phase===3 &&
+            user==='Professor'"
         ></requestable-calendar>
-        <view-results-table :username="username" v-if="true"></view-results-table>
+        <approve-table
+          :username="username"
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="true"
+          :suggestions="suggestibleTable"
+          user="Course Coordinator"
+          @view-conflicts="updateConflicts"
+          v-if="phase===2 &&
+            user==='Course Coordinator'"
+        ></approve-table>
+        <view-status-table
+          :username="username"
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="true"
+          :suggestions="suggestibleTable"
+          user="Professor"
+          @view-conflicts="updateConflicts"
+          v-if="phase===2 &&
+            user==='Professor'"
+        ></view-status-table>
+        <approve-table
+          :username="username"
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="false"
+          :suggestions="suggestibleTable"
+          @view-conflicts="updateConflicts"
+          user="Course Coordinator"
+          v-if="phase===2 &&
+            user==='Course Coordinator'"
+        ></approve-table>
+        <view-status-table
+          :username="username"
+          :possibleConflictingEvents="possibleConflictingEvents"
+          :suggesting="false"
+          :suggestions="suggestibleTable"
+          user="Professor"
+          @view-conflicts="updateConflicts"
+          v-if="phase===3 &&
+            user==='Professor'"
+        ></view-status-table>
       </v-content>
     </v-app>
   </div>
@@ -34,555 +101,49 @@
 
 <script>
 import { Weekday } from "dayspan";
+import * as moment from "moment";
 import Colors from "dayspan-vuetify/src/colors.js";
 
 import SearchBar from "./components/SearchBar.vue";
 import ListSelection from "./components/ListSelection.vue";
 
-import RequestableCalendar from "./components/RequestableCalendar.vue";
 import FinalisedCalendar from "./components/FinalisedCalendar.vue";
+import RequestableCalendar from "./components/RequestableCalendar.vue";
 import SuggestibleCalendar from "./components/SuggestibleCalendar.vue";
-import ViewResultsTable from "./components/ViewResultsTable";
+// import ViewResultsTable from "./components/ViewResultsTable";
+
+import ApproveTable from "./components/ApproveTable";
+import ViewStatusTable from "./components/ViewStatusTable";
+import FormSubmit from "./components/FormSubmit.vue";
 
 export default {
   name: "app",
   data: () => ({
     coloursUsed: [],
+    coloursMap: new Map(),
     modifiableCalendarEvent: { locked: [], modifiable: [] },
+    possibleConflictingEvents: [],
+    suggestibleTable: [],
+    requestableTable: [],
     username: "user",
-    calendarEventTable: [
-      {
-        data: {
-          courseName: "50.003 Elements of Software Constructions",
-          pillar: "ISTD",
-          id: "001",
-          title: "50.003 Tutorial",
-          color: "#1976d2",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["09:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.003 Elements of Software Constructions",
-          pillar: "ISTD",
-          id: "002",
-          title: "50.003 Lecture",
-          color: "#1976d2",
-          location: "1.203",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [2],
-          times: ["10:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.005 Computer Systems Engineering",
-          pillar: "ESD",
-          id: "003",
-          title: "50.005 Lab",
-          color: "#9C27B0",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["14:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.005 Computer Systems Engineering",
-          pillar: "ESD",
-          id: "004",
-          title: "50.005 Lecture",
-          color: "#9C27B0",
-          location: "1.203",
-          professor: "Sudipta",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [4],
-          times: ["11:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.034 Probability and Statistics",
-          pillar: "EPD",
-          id: "005",
-          title: "50.034 Tutorial",
-          color: "#3F51B5",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["09:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.034 Probability and Statistics",
-          pillar: "EPD",
-          id: "006",
-          title: "50.034 Lecture",
-          color: "#3F51B5",
-          location: "1.203",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [2],
-          times: ["10:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.004 Algorithms",
-          pillar: "ASD",
-          id: "007",
-          title: "50.004 Tutorial",
-          color: "#E91E63",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["09:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.004 Algorithms",
-          pillar: "ASD",
-          id: "008",
-          title: "50.004 Lecture",
-          color: "#E91E63",
-          location: "1.203",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [2],
-          times: ["10:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "01.112 Machine Learning",
-          pillar: "FRESHMORE",
-          id: "009",
-          title: "01.112 Tutorial",
-          color: "#FFEB3B",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["09:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "01.112 Machine Learning",
-          pillar: "FRESHMORE",
-          id: "010",
-          title: "01.112 Lecture",
-          color: "#FFEB3B",
-          location: "1.203",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [2],
-          times: ["10:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.040 Natural Language Processing",
-          pillar: "HASS",
-          id: "011",
-          title: "50.040 Tutorial",
-          color: "#2196F3",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["09:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.040 Natural Language Processing",
-          pillar: "HASS",
-          id: "012",
-          title: "50.040 Lecture",
-          color: "#2196F3",
-          location: "1.203",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [2],
-          times: ["10:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.006 User Interface",
-          pillar: "ISTD",
-          id: "013",
-          title: "50.006 Tutorial",
-          color: "#2196F3",
-          location: "2.501",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [1],
-          times: ["09:00"],
-          duration: 60,
-          durationUnit: "minutes"
-        }
-      },
-      {
-        data: {
-          courseName: "50.006 User Interface",
-          pillar: "ISTD",
-          id: "014",
-          title: "50.006 Lecture",
-          color: "#2196F3",
-          location: "1.203",
-          professor: "Sun Jun",
-          classEnrolled: "F01",
-          calendarType: "Academic",
-          locked: null,
-          suggestedBy: null,
-          requestedBy: null,
-          isSelected: false
-        },
-        schedule: {
-          dayOfWeek: [2],
-          times: ["10:00"],
-          duration: 90,
-          durationUnit: "minutes"
-        }
-      }
-    ],
-    courseTable: [
-      {
-        courseName: "50.003 Elements of Software Constructions",
-        id: "50.003",
-        pillar: "ISTD",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "50.003 Tutorial",
-            day: Weekday.MONDAY,
-            time: "09:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "50.003 Lecture",
-            day: Weekday.TUESDAY,
-            time: "10:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          }
-        ]
-      },
-      {
-        courseName: "50.005 Computer Systems Engineering",
-        id: "50.005",
-        pillar: "ESD",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "50.005 Lab",
-            day: Weekday.MONDAY,
-            time: "14:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "50.005 Lecture",
-            day: Weekday.THURSDAY,
-            time: "11:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sudipta",
-            isSelected: false
-          }
-        ]
-      },
-      {
-        courseName: "50.034 Probability and Statistics",
-        id: "50.034",
-        pillar: "EPD",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "50.034 Tutorial",
-            day: Weekday.MONDAY,
-            time: "09:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "50.034 Lecture",
-            day: Weekday.TUESDAY,
-            time: "10:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          }
-        ]
-      },
-      {
-        courseName: "50.004 Algorithms",
-        id: "50.004",
-        pillar: "ASD",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "50.004 Tutorial",
-            day: Weekday.MONDAY,
-            time: "09:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "50.004 Lecture",
-            day: Weekday.TUESDAY,
-            time: "10:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          }
-        ]
-      },
-      {
-        courseName: "01.112 Machine Learning",
-        id: "01.112",
-        pillar: "FRESHMORE",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "01.112 Tutorial",
-            day: Weekday.MONDAY,
-            time: "09:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "01.112 Lecture",
-            day: Weekday.TUESDAY,
-            time: "10:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          }
-        ]
-      },
-      {
-        courseName: "50.040 Natural Language Processing",
-        id: "50.040",
-        pillar: "HASS",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "50.040 Tutorial",
-            day: Weekday.MONDAY,
-            time: "09:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "50.040 Lecture",
-            day: Weekday.TUESDAY,
-            time: "10:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          }
-        ]
-      },
-      {
-        courseName: "50.006 User Interface",
-        id: "50.006",
-        pillar: "ISTD",
-        colour: "",
-        lessonTimes: [
-          {
-            title: "50.006 Tutorial",
-            day: Weekday.MONDAY,
-            time: "09:00",
-            duration: 60,
-            location: "2.501",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          },
-          {
-            title: "50.006 Lecture",
-            day: Weekday.TUESDAY,
-            time: "10:00",
-            duration: 90,
-            location: "1.203",
-            classEnrolled: "F01",
-            professor: "Sun Jun",
-            isSelected: false
-          }
-        ]
-      }
-    ],
-    mappedEventsTable: json
+    mappedEventsTable: json,
+    phase: planningPhase,
+    user: userlogged
   }),
   components: {
     SearchBar,
+    FormSubmit,
     ListSelection,
     FinalisedCalendar,
     SuggestibleCalendar,
     RequestableCalendar,
-    ViewResultsTable
+    ApproveTable,
+    ViewStatusTable
   },
   computed: {
+    calendarEventTable() {
+      return [{}];
+    },
     selectedCalendarEvents() {
       //TO CHANGE: iterating through all events to get those selected-- to do through database method eventually
       var selectedEvents = [];
@@ -688,6 +249,9 @@ export default {
         tempschedule["times"] = [simpleTable[i].start_Time];
         tempschedule["duration"] = simpleTable[i].event_Duration;
         tempschedule["durationUnit"] = "minutes";
+        tempschedule["exclude"] = [];
+        tempschedule["start"] = [];
+        tempschedule["end"] = [];
 
         var pair = {
           data: tempdata,
@@ -767,7 +331,7 @@ export default {
         var event = JSON.parse(
           JSON.stringify(this.modifiableCalendarEvent.locked[index])
         );
-        event.data.locked = false;
+        event.data.readonly = false;
         event.data.color = this.modifiableCalendarEvent.modifiable[
           index
         ].data.color;
@@ -794,6 +358,108 @@ export default {
             schedule: event.schedule
           };
         }
+      }
+    },
+    updateConflicts(item) {
+      this.possibleConflictingEvents = [];
+      if (item.locationConflict) {
+        for (var lessonLocation of this.mappedEventsTable) {
+          //TO CHANGE: hardcoding change--to change in database
+          const location = item.conflict[0].data.location;
+          outer_block: {
+            if (lessonLocation.data.location === location) {
+              for (var conflictLessonLocation of item.conflict) {
+                if (conflictLessonLocation.data.id === lessonLocation.data.id) {
+                  break outer_block; //continue checking other lessons
+                }
+              }
+              this.possibleConflictingEvents.push(lessonLocation);
+            }
+          }
+        }
+      }
+      if (item.classConflict) {
+        //TO CHANGE: hardcoding change--to change in database
+        for (var lessonClass of this.mappedEventsTable) {
+          const classEnrolled = item.conflict[0].data.classEnrolled;
+          outer_block: {
+            if (lessonClass.data.classEnrolled === classEnrolled) {
+              for (var conflictLessonClass of item.conflict) {
+                if (conflictLessonClass.data.id === lessonClass.data.id) {
+                  break outer_block; //continue checking other lessons
+                }
+              }
+              this.possibleConflictingEvents.push(lessonClass);
+            }
+          }
+        }
+      }
+      if (this.professorConflict) {
+        //TO CHANGE: hardcoding change--to change in database
+        for (var lessonProf of this.mappedEventsTable) {
+          const professor = item.conflict[0].data.professor;
+          outer_block: {
+            if (lessonProf.data.professor === professor) {
+              for (var conflictLessonProf of item.conflict) {
+                if (conflictLessonProf.data.id === lessonProf.data.id) {
+                  break outer_block; //continue checking other lessons
+                }
+              }
+              this.possibleConflictingEvents.push(lessonProf);
+            }
+          }
+        }
+      }
+    },
+    //TO CHANGE: check for conflict and update database
+    updateSuggested(calendar) {
+      this.suggestibleTable.push({
+        suggestedBy: this.username,
+        calendar: calendar,
+        submittedOn: moment().format("MMMM D YYYY (dddd) h:mm:ss a"),
+        status: "Pending",
+        locationConflict: false,
+        classConflict: true,
+        professorConflict: false
+      });
+    },
+    updateRequested(calendar) {
+      this.requestableTable.push({
+        requestedBy: this.username,
+        calendar: calendar,
+        submittedOn: moment().format("MMMM D YYYY (dddd) h:mm:ss a"),
+        status: "Pending",
+        locationConflict: true,
+        classConflict: false,
+        professorConflict: false
+      });
+    },
+    saveState() {
+      let suggestible = this.suggestibleTable;
+      let jsonSuggestible = JSON.stringify(suggestible);
+      localStorage.setItem("suggestibleTable", jsonSuggestible);
+
+      let requestable = this.requestableTable;
+      let jsonRequestable = JSON.stringify(requestable);
+      localStorage.setItem("requestableTable", jsonRequestable);
+    },
+    loadState() {
+      let state = {};
+      try {
+        let savedStateSuggestible = JSON.parse(
+          localStorage.getItem("suggestibleTable")
+        );
+        let savedStateRequestable = JSON.parse(
+          localStorage.getItem("requestableTable")
+        );
+        if (savedStateSuggestible) {
+          this.suggestibleTable.concat(savedStateSuggestible);
+        }
+        if (savedStateRequestable) {
+          this.requestableTable.concat(savedStateRequestable);
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
   }

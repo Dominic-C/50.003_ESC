@@ -48,7 +48,7 @@ class Schedule(models.Model):
     is_profconflict = models.BooleanField(default=False)
     is_Suggestion = models.BooleanField(default=False)
     is_Approved = models.BooleanField(default=False)
-    is_Finalized = models.BooleanField(default=False)
+    is_Finalised = models.BooleanField(default=False)
 
     def __str__(self):
         return self.pillar_Type + " - " + self.course_Name

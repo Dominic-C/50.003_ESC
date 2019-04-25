@@ -192,7 +192,7 @@ class ModifyScheduleEditView(UpdateView):
         modify.is_Conflicting = form.cleaned_data['is_Conflicting']
         modify.day_Of_Week = form.cleaned_data['day_Of_Week']
         modify.is_Suggestion = False
-        modify.is_Finalized = True
+        modify.is_finalised = True
         modify.save()
         return redirect('schedule:allschedules')
 
@@ -218,8 +218,9 @@ class ViewDraftCalendar(ListView):
         context = super(ViewDraftCalendar, self).get_context_data(**kwargs)
         objects = Schedule.objects.all()
         phase = self.request.user.phase
+        user = self.request.user.user_type
         context['jsonset'] = serializers.serialize("json", objects)
-        context['phase'] = serializers.serialize("json", phase)
+        context['phase'] = 2
         # context['userdata'] = serializers.serialize("json", user)
         # context['jsonphase'] = serializers.serialize("json", phase)
         return context

@@ -81,7 +81,11 @@
               {% endblock %}
 
             <!-- PLEASE NOTE: THIS IS 'HARD CODED'-->
-              {% if request.path == "/schedule/" %}
+              {% if "/schedule/view" in request.path %}
+                {% render_bundle 'app' %}
+              {% elif "calendar" in request.path %}
+                {% render_bundle 'app' %}
+              {% elif request.path == "/schedule/"%}
                 {% render_bundle 'app' %}
               {% endif %}
             </div>
