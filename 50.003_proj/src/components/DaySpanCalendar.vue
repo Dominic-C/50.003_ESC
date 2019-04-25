@@ -478,7 +478,7 @@ export default {
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false, color: "#1976d2"});
         }  
         else if (this.bookable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {bookedBy: this.username, readonly: false, color: "#1976d2"});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {bookedBy: this.username, readonly: false, color: "#1976d2"});
         }
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
@@ -519,7 +519,7 @@ export default {
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false, color: "#1976d2"});
         } 
         else if (this.bookable){
-          eventDialog.addSchedule(day, Schedule.forDay(day), {bookedBy: this.username, readonly: false, color: "#1976d2"});
+          eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {bookedBy: this.username, readonly: false, color: "#1976d2"});
         }
         else {
           eventDialog.add( day );

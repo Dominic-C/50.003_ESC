@@ -89,7 +89,7 @@ export default {
   name: 'BookableCalendar',
   props: {
     events: {
-      type: Object
+      type: Array
     },
     username: {
       type: String,

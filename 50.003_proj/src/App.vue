@@ -65,7 +65,12 @@
           @revert-state="revertState"
           @booked="updateBooked"
           v-if="user==='Admin' &&
-            activeComp.makeBookings"></requestable-calendar>
+            activeComp.makeBookings"></bookable-calendar>
+         <bookings-table  
+          :username="username" 
+          :suggestions="bookableTable"
+          v-if="user==='Admin' &&
+            activeComp.viewBookings"></bookings-table>
         <approve-table  
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
@@ -140,6 +145,7 @@ import RequestableCalendar from "./components/RequestableCalendar.vue";
 import BookableCalendar from './components/BookableCalendar.vue';
 import ApproveTable from "./components/ApproveTable";
 import ViewStatusTable from "./components/ViewStatusTable";
+import BookingsTable from "./components/BookingsTable";
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -169,7 +175,7 @@ export default {
       viewExistingRequests : false,
       requestChangesToCalendar : false,
       //courseListingForViewer : false,
-      viewFinalTimetable : false
+      viewFinalTimetable : false,
       //for all
       makeBookings: false,
       viewBookings: false
@@ -299,7 +305,8 @@ export default {
     RequestableCalendar,
     BookableCalendar,
     ApproveTable,
-    ViewStatusTable
+    ViewStatusTable,
+    BookingsTable
   },
   computed: {
     //TO CHANGE: get from database (main table)
@@ -688,12 +695,12 @@ export default {
     eventCalendarEvents(){
       var selectedEvents = []
       for (var event of this.calendarEventTable){
-        if (event.data.calendarType === "Academic"){
+        if (event.data.calendarType === "Event"){
           selectedEvents.push(event);
         }
       }
       return selectedEvents;
-    }
+    },
     //other database tables
     //TO CHANGE: get from database eventually
     professorTable() {
@@ -803,7 +810,7 @@ export default {
       }
       if(item == "viewSuggestions"){
         this.activeComp.viewSuggestions = true;
-      },
+      }
       if(item == "makeBookings"){
         this.activeComp.makeBookings = true;
       }
