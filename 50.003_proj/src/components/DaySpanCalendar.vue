@@ -187,6 +187,9 @@ export default {
     editable: {
       type: Boolean
     },
+    bookable: {
+      type: Boolean
+    },
     events: {
       type: Array
     },
@@ -441,6 +444,9 @@ export default {
         else if (this.editable){
           eventDialog.addSchedule(day, Schedule.forDay(day), {editedBy: this.username, readonly: false, color: "#1976d2"});
         }
+        else if (this.bookable){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {bookedBy: this.username, readonly: false, color: "#1976d2"});
+        }
         else {
           eventDialog.add(day);
         }
@@ -471,6 +477,9 @@ export default {
         else if (this.editable){
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false, color: "#1976d2"});
         }  
+        else if (this.bookable){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {bookedBy: this.username, readonly: false, color: "#1976d2"});
+        }
         else{
           eventDialog.addAt(dayHour.day, dayHour.hour);
         }
@@ -509,6 +518,9 @@ export default {
         else if (this.editable){
           eventDialog.addSchedule(dayHour.day, Schedule.forTime(dayHour.day, dayHour.hour), {editedBy: this.username, readonly: false, color: "#1976d2"});
         } 
+        else if (this.bookable){
+          eventDialog.addSchedule(day, Schedule.forDay(day), {bookedBy: this.username, readonly: false, color: "#1976d2"});
+        }
         else {
           eventDialog.add( day );
         }
@@ -541,7 +553,7 @@ export default {
     {
       //if suggestible and event chosen is readonly, no action is taken
       //moveEvent.calendarEvent.event.data.readonly
-      if ((this.suggestible || this.requestable || this.editable) && moveEvent.calendarEvent.event.data.readonly){
+      if ((this.suggestible || this.requestable || this.editable || this.bookable) && moveEvent.calendarEvent.event.data.readonly){
         return;
       }
       let calendarEvent = moveEvent.calendarEvent;

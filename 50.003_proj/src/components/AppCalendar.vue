@@ -16,6 +16,7 @@
 			:suggestible="isSuggestible" 
 			:requestable="isRequestable"
 			:editable="isEditable"
+			:bookable="isBookable"
 			:read-only="!isInMode"
 			:username="username"
 			@event-update="updateCalendar"
@@ -217,7 +218,7 @@ export default {
 			type: String,
 			validator: function (value) {
 				//check that it is in either suggestible or requestable mode
-				return ['suggestible', 'requestable', 'editable', 'finalised'].indexOf(value) !== -1
+				return ['suggestible', 'requestable', 'editable', 'bookable', 'finalised'].indexOf(value) !== -1
 				}
 		},
 		isInMode: {
@@ -249,6 +250,9 @@ export default {
 		},
 		isEditable(){
 			return this.mode==="editable";
+		},
+		isBookable(){
+			return this.mode==="bookable";
 		}
 	},
 	mounted(){
