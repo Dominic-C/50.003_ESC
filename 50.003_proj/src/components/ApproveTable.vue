@@ -384,7 +384,7 @@ export default {
           // this.$refs.expandedCalendar.$refs.calendar.rebuild(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)), false, Units.WEEK);
           let state = Calendar.fromInput(JSON.parse(props.item.calendar));
           state.preferToday = false;
-          this.$refs.editCalendar.$refs.calendar.setState(state);
+          this.$refs.expandedCalendar.$refs.calendar.setState(state);
         } else{
           this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(props.item.conflict[0].schedule.dayOfWeek)));
         }
@@ -400,7 +400,7 @@ export default {
         this.$refs.editCalendar.$refs.calendar.setState(state);
       } else{
         this.eventsToShow = this.possibleConflictingEvents.concat(item.conflict);
-        this.$refs.expandedCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(item.conflict[0].schedule.dayOfWeek)));
+        this.$refs.editCalendar.$refs.calendar.viewDay(new Day(this.$termStartDate.clone().day(item.conflict[0].schedule.dayOfWeek)));
       }
     },
     toggleVisible : function(item) {

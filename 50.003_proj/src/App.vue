@@ -59,6 +59,18 @@
           v-if="phase===3 &&
             user==='Professor' &&
             activeComp.requestChangesToCalendar"></requestable-calendar>
+        <bookable-calendar
+          :events="eventCalendarEvents"
+          :username="username"
+          @revert-state="revertState"
+          @booked="updateBooked"
+          v-if="user==='Admin' &&
+            activeComp.makeBookings"></bookable-calendar>
+         <bookings-table  
+          :username="username" 
+          :suggestions="bookableTable"
+          v-if="user==='Admin' &&
+            activeComp.viewBookings"></bookings-table>
         <approve-table  
           :username="username" 
           :possibleConflictingEvents="possibleConflictingEvents"
@@ -127,11 +139,13 @@ import * as moment from 'moment';
 import Colors from 'dayspan-vuetify/src/colors.js';
 import AppHeader from './components/AppHeader.vue';
 import SearchBar from './components/SearchBar.vue';
-import FinalisedCalendar from './components/FinalisedCalendar.vue'
-import SuggestibleCalendar from './components/SuggestibleCalendar.vue'
+import FinalisedCalendar from './components/FinalisedCalendar.vue';
+import SuggestibleCalendar from './components/SuggestibleCalendar.vue';
 import RequestableCalendar from "./components/RequestableCalendar.vue";
+import BookableCalendar from './components/BookableCalendar.vue';
 import ApproveTable from "./components/ApproveTable";
 import ViewStatusTable from "./components/ViewStatusTable";
+import BookingsTable from "./components/BookingsTable";
 import FormSubmit from './components/FormSubmit.vue';
 
 export default {
@@ -148,6 +162,7 @@ export default {
     //TO CHANGE: get from database
     suggestibleTable: [],
     requestableTable: [],
+    bookableTable: [],
     activeComp: {
       // Submit new Course, Export Suggestions
       formSubmitNewCourse : false,
@@ -160,7 +175,10 @@ export default {
       viewExistingRequests : false,
       requestChangesToCalendar : false,
       //courseListingForViewer : false,
-      viewFinalTimetable : false
+      viewFinalTimetable : false,
+      //for all
+      makeBookings: false,
+      viewBookings: false
     },
     mockData:[
       {
@@ -285,8 +303,10 @@ export default {
     FinalisedCalendar,
     SuggestibleCalendar,
     RequestableCalendar,
+    BookableCalendar,
     ApproveTable,
-    ViewStatusTable
+    ViewStatusTable,
+    BookingsTable
   },
   computed: {
     //TO CHANGE: get from database (main table)
@@ -666,7 +686,16 @@ export default {
       //TO CHANGE: iterating through all events to get those selected-- to do through database method eventually
       var selectedEvents = []
       for (var event of this.calendarEventTable){
-        if (event.data.isSelected){
+        if (event.data.isSelected && event.data.calendarType === "Academic"){
+          selectedEvents.push(event);
+        }
+      }
+      return selectedEvents;
+    },
+    eventCalendarEvents(){
+      var selectedEvents = []
+      for (var event of this.calendarEventTable){
+        if (event.data.calendarType === "Event"){
           selectedEvents.push(event);
         }
       }
@@ -750,6 +779,8 @@ export default {
       this.activeComp.requestChangesToCalendar = false;
       //this.activeComp.courseListingForViewer = false;
       this.activeComp.viewSuggestions = false;
+      this.activeComp.makeBookings = false;
+      this.activeComp.viewBookings = false;
 
       if(item == "formSubmitNewCourse"){
         this.activeComp.formSubmitNewCourse = true;
@@ -780,14 +811,20 @@ export default {
       if(item == "viewSuggestions"){
         this.activeComp.viewSuggestions = true;
       }
+      if(item == "makeBookings"){
+        this.activeComp.makeBookings = true;
+      }
+      if(item == "viewBookings"){
+        this.activeComp.viewBookings = true;
+      }
     },
     getColour(){
       let colour = Colors[Math.floor(Colors.length * Math.random())].value;
-      while (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
+      if (this.coloursUsed.length < Colors.length && this.coloursUsed.includes(colour)){
         this.getColour();
       }
       //if colour is black or grey
-      while (colour === "#000000" || colour === '#9E9E9E'){
+      if (colour === "#000000" || colour === '#9E9E9E'){
         this.getColour();
       }
       this.coloursUsed.push(colour);
@@ -923,6 +960,14 @@ export default {
         conflict: this.conflicts
       })
       this.conflicts = [];
+    },
+    updateBooked(calendar){
+      this.bookableTable.push({
+        bookedBy: this.username,
+        calendar: calendar,
+        submittedOn:  moment().format('MMMM D YYYY (dddd) h:mm:ss a'),
+        status: "Booked"
+      })
     }
   },
   // hasLocationConflict(calendar){
